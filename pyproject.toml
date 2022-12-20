@@ -1,6 +1,6 @@
 [tool]
 [tool.poetry]
-name = "easy_finemap"
+name = "easyfinemap"
 version = "0.0.1"
 homepage = "https://github.com/Jianhua-Wang/easy_finemap"
 description = "user-friendly pipeline for GWAS fine-mapping."
@@ -13,10 +13,12 @@ classifiers=[
     'License :: OSI Approved :: MIT License',
     'Natural Language :: English',
     'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
 ]
 packages = [
-    { include = "easy_finemap" },
+    { include = "easyfinemap" },
     { include = "tests", format = "sdist" },
 ]
 
@@ -69,7 +71,7 @@ doc = [
 
 
 [tool.poetry.scripts]
-easy_finemap = 'easy_finemap.cli:app'
+easyfinemap = 'easyfinemap.cli:app'
 
 [tool.black]
 line-length = 120

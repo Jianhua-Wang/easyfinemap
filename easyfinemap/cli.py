@@ -2,7 +2,11 @@
 
 import typer
 
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+app = typer.Typer(context_settings=CONTEXT_SETTINGS, add_completion=False)
 
+
+@app.command()
 def main():
     """Main entrypoint."""
     typer.echo("easy_finemap")
@@ -11,4 +15,4 @@ def main():
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()
