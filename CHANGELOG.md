@@ -4,6 +4,8 @@
 
 ### Added
 
+- merge the overlapped independent loci (optional).
+- 
 
 ### Changed
 
