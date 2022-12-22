@@ -82,7 +82,10 @@ def indep_snps_by_distance(sig_df: pd.DataFrame, distance: int = 500000) -> pd.D
     return lead_snp
 
 
-def indep_snps_by_ld(sig_df: pd.DataFrame, ld_df: pd.DataFrame, r2_threshold: float = 0.8) -> pd.DataFrame:
+def indep_snps_by_ldclumping(sig_df: pd.DataFrame, ld_df: pd.DataFrame, r2_threshold: float = 0.8) -> pd.DataFrame:
+    raise NotImplementedError
+
+def indep_snps_by_conditional(sig_df: pd.DataFrame, ld_df: pd.DataFrame, r2_threshold: float = 0.8) -> pd.DataFrame:
     raise NotImplementedError
 
 

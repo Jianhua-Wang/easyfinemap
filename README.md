@@ -1,10 +1,10 @@
-# easy_finemap
+# easyfinemap
 
 
-[![pypi](https://img.shields.io/pypi/v/easy_finemap.svg)](https://pypi.org/project/easy_finemap/)
-[![python](https://img.shields.io/pypi/pyversions/easy_finemap.svg)](https://pypi.org/project/easy_finemap/)
-[![Build Status](https://github.com/Jianhua-Wang/easy_finemap/actions/workflows/dev.yml/badge.svg)](https://github.com/Jianhua-Wang/easy_finemap/actions/workflows/dev.yml)
-[![codecov](https://codecov.io/gh/Jianhua-Wang/easy_finemap/branch/main/graphs/badge.svg)](https://codecov.io/github/Jianhua-Wang/easy_finemap)
+[![pypi](https://img.shields.io/pypi/v/easyfinemap.svg)](https://pypi.org/project/easyfinemap/)
+[![python](https://img.shields.io/pypi/pyversions/easyfinemap.svg)](https://pypi.org/project/easyfinemap/)
+[![Build Status](https://github.com/Jianhua-Wang/easyfinemap/actions/workflows/dev.yml/badge.svg)](https://github.com/Jianhua-Wang/easyfinemap/actions/workflows/dev.yml)
+[![codecov](https://codecov.io/gh/Jianhua-Wang/easyfinemap/branch/main/graphs/badge.svg)](https://codecov.io/github/Jianhua-Wang/easyfinemap)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
@@ -13,8 +13,8 @@ user-friendly pipeline for GWAS fine-mapping
 
 
 * Documentation: <https://Jianhua-Wang.github.io/easy_finemap>
-* GitHub: <https://github.com/Jianhua-Wang/easy_finemap>
-* PyPI: <https://pypi.org/project/easy_finemap/>
+* GitHub: <https://github.com/Jianhua-Wang/easyfinemap>
+* PyPI: <https://pypi.org/project/easyfinemap/>
 * Free software: MIT
 
 
