@@ -10,34 +10,13 @@ merge the overlapped independent loci (optional).
 
 from easyfinemap.logger import logger
 from easyfinemap.tools import Tools
+from easyfinemap.constant import ColName
 
 import pandas as pd
 
 
-def get_significant_snps(df: pd.DataFrame, pvalue_col: str, pvalue_threshold: float = 5e-8):
-    """
-    Get the significant snps from the input file, filter by pvalue.
 
-    Parameters
-    ----------
-    df : pd.DataFrame
-        The input summary statistics.
-    pvalue_col : str
-        The column name of pvalue.
-    pvalue_threshold : float, optional
-        The pvalue threshold, by default 5e-8
-
-    Returns
-    -------
-    pd.DataFrame
-        The significant snps, sorted by pvalue.
-    """
-    sig_df = df.loc[df[pvalue_col] < pvalue_threshold].copy()
-    sig_df.sort_values(pvalue_col, inplace=True)
-    return sig_df
-
-
-def merge_overlapped_loci(loci_df: pd.DataFrame, chr_col: str = "chr", start_col: str = "start", end_col: str = "end"):
+def merge_overlapped_loci(loci_df: pd.DataFrame):
     """
     Merge the overlapped loci.
     More details: https://stackoverflow.com/questions/57882621/efficient-merge-overlapping-intervals-in-same-pandas-dataframe-with-start-and-fi
@@ -46,12 +25,6 @@ def merge_overlapped_loci(loci_df: pd.DataFrame, chr_col: str = "chr", start_col
     ----------
     loci_df : pd.DataFrame
         The independent loci.
-    chr_col : str, optional
-        The column name of chromosome, by default "chr"
-    start_col : str, optional
-        The column name of start position, by default "start"
-    end_col : str, optional
-        The column name of end position, by default "end"
 
     Returns
     -------
@@ -59,17 +32,26 @@ def merge_overlapped_loci(loci_df: pd.DataFrame, chr_col: str = "chr", start_col
         The merged independent loci.
     """
     merged_loci = loci_df.copy()
-    merged_loci.sort_values([chr_col, start_col, end_col], inplace=True)
-    merged_loci['no_overlap'] = merged_loci[start_col] > merged_loci[end_col].shift().cummax()
-    merged_loci['diff_chr'] = merged_loci[chr_col] != merged_loci[chr_col].shift()
+    merged_loci.sort_values([ColName.CHR, ColName.START, ColName.END], inplace=True)
+    merged_loci['no_overlap'] = merged_loci[ColName.START] > merged_loci[ColName.END].shift().cummax()
+    merged_loci['diff_chr'] = merged_loci[ColName.CHR] != merged_loci[ColName.CHR].shift()
     merged_loci["break"] = merged_loci["no_overlap"] | merged_loci['diff_chr']
     merged_loci['group'] = merged_loci['break'].cumsum()
-    result = merged_loci.groupby("group").agg({chr_col: 'max', start_col: "min", end_col: "max"})
+    merged_loci = merged_loci.sort_values(['group', ColName.LEAD_SNP_P], ascending=True)
+    agg_func = {}
+    for col in loci_df.columns:
+        if col == ColName.START:
+            agg_func[col] = 'min'
+        elif col == ColName.END:
+            agg_func[col] = 'max'
+        else:
+            agg_func[col] = 'first'
+    result = merged_loci.groupby("group").agg(agg_func)
     result.reset_index(drop=True, inplace=True)
     return result
 
 
-def indep_snps_by_distance(sig_df: pd.DataFrame, distance: int = 500000):
+def indep_snps_by_distance(sig_df: pd.DataFrame, distance: int = 500000) -> pd.DataFrame:
     """
     Identify the independent snps by distance only.
 
@@ -88,3 +70,27 @@ def indep_snps_by_distance(sig_df: pd.DataFrame, distance: int = 500000):
     sig_df["locus"] = (sig_df["chr"] * 1e9 + sig_df["pos"] // distance).astype(int)
     return sig_df
 
+def indep_snps_by_ld(sig_df: pd.DataFrame, ld_df: pd.DataFrame, r2_threshold: float = 0.8) -> pd.DataFrame:
+    raise NotImplementedError
+
+def expand_loci(sig_df: pd.DataFrame, range: int = 1000000) -> pd.DataFrame:
+    """
+    Expand the independent lead snps to independent loci by given range.
+
+    Parameters
+    ----------
+    sig_df : pd.DataFrame
+        The independent lead snps.
+    range : int, optional
+        The range, by default 1000000
+
+    Returns
+    -------
+    pd.DataFrame
+        The independent loci.
+    """
+    loci_df = sig_df.copy()
+    loci_df[ColName.START] = loci_df[ColName.LEAD_SNP_BP] - range
+    loci_df[ColName.START] = loci_df[ColName.START].apply(lambda x: 0 if x < 0 else x)
+    loci_df[ColName.END] = loci_df[ColName.LEAD_SNP_BP] + range
+    return loci_df
