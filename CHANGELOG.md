@@ -22,3 +22,14 @@
 
 
 ### Fixed
+
+## [0.0.3] - 2022-12-22
+
+### Added
+
+- extract LD ref plink bfile and clean it.
+
+### Changed
+
+
+### Fixed
