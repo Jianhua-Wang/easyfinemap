@@ -15,7 +15,6 @@ from easyfinemap.constant import ColName
 import pandas as pd
 
 
-
 def merge_overlapped_loci(loci_df: pd.DataFrame):
     """
     Merge the overlapped loci.
@@ -67,11 +66,24 @@ def indep_snps_by_distance(sig_df: pd.DataFrame, distance: int = 500000) -> pd.D
     pd.DataFrame
         The independent snps.
     """
-    sig_df["locus"] = (sig_df["chr"] * 1e9 + sig_df["pos"] // distance).astype(int)
-    return sig_df
+    sig_df.sort_values(ColName.P, inplace=True)
+    lead_snp = []
+    while len(sig_df):
+        lead_snp.append(sig_df.iloc[[0]])
+        sig_df = sig_df[
+            ~(
+                (sig_df[ColName.CHR] == sig_df.iloc[0][ColName.CHR])
+                & (sig_df[ColName.BP] >= sig_df.iloc[0][ColName.BP] - distance)
+                & (sig_df[ColName.BP] <= sig_df.iloc[0][ColName.BP] + distance)
+            )
+        ]  # type: ignore
+    lead_snp = pd.concat(lead_snp, axis=0, ignore_index=True)
+    return lead_snp
+
 
 def indep_snps_by_ld(sig_df: pd.DataFrame, ld_df: pd.DataFrame, r2_threshold: float = 0.8) -> pd.DataFrame:
     raise NotImplementedError
+
 
 def expand_loci(sig_df: pd.DataFrame, range: int = 1000000) -> pd.DataFrame:
     """

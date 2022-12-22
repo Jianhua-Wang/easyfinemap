@@ -40,20 +40,11 @@ class Tools:
         """Check if plink is installed."""
         return self._check_tool("plink")
 
-    @plink.setter
-    def plink(self, value: str):
-        """Set path of plink."""
-        self._plink = value
-
     @property
     def bcftools(self):
         """Check if bcftools is installed."""
         return self._check_tool("bcftools")
 
-    @bcftools.setter
-    def bcftools(self, value: str):
-        """Set path of bcftools."""
-        self._bcftools = value
 
 
 

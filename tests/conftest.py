@@ -1,6 +1,7 @@
 """Define the test suite for the sumstats module."""
 
 import pytest
+import os
 
 import pandas as pd
 
@@ -19,10 +20,6 @@ def loci_data():
 
 @pytest.fixture
 def sig_df():
-    sig_df = {
-        "CHR": [1, 1, 1, 1, 1, 2, 2, 2, 2, 2],
-        "BP": [100, 200, 300, 400, 500, 100, 200, 300, 400, 500],
-        "SNP": ["rs1", "rs2", "rs3", "rs4", "rs5", "rs6", "rs7", "rs8", "rs9", "rs10"],
-        "P": [1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1],
-    }
-    return pd.DataFrame(sig_df)
+    pwd = os.path.dirname(os.path.abspath(__file__))
+    sig_df = pd.read_csv(f"{pwd}/exampledata/sig.txt", sep="\t")
+    return sig_df
