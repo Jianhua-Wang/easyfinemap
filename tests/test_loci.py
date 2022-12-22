@@ -2,7 +2,8 @@
 
 import pytest
 
-from easyfinemap.loci import merge_overlapped_loci, indep_snps_by_distance
+from easyfinemap.loci import merge_overlapped_loci, indep_snps_by_distance, leadsnp2loci
+from easyfinemap.constant import ColName
 
 def test_merge_overlapped_loci(loci_data):
     """Test the merge_overlapped_loci function."""
@@ -20,3 +21,11 @@ def test_indep_snps_by_distance(sig_df):
     indep_snps = indep_snps_by_distance(sig_df)
     assert indep_snps["CHR"].tolist() == [21,22]
     assert indep_snps["BP"].tolist() == [36119111, 18600583]
+
+def test_leadsnp2loci(sig_df):
+    """Test the leadsnp2loci function."""
+    loci1 = leadsnp2loci(sig_df, if_merge=False)
+    loci2 = leadsnp2loci(sig_df, if_merge=True)
+    assert ColName.START in loci1.columns
+    assert len(loci1) == 9
+    assert len(loci2) == 2

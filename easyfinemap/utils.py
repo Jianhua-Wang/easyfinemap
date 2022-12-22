@@ -73,3 +73,5 @@ def make_SNPID_unique(sumstat: pd.DataFrame, replace_rsIDcol: bool = False, remo
         df.sort_values([ColName.CHR, ColName.BP], inplace=True)
         df.reset_index(drop=True, inplace=True)
     return df
+
+

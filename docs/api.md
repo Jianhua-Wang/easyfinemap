@@ -1,1 +1,1 @@
-::: easy_finemap
+::: easyfinemap

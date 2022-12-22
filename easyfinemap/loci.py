@@ -1,16 +1,17 @@
 """Get the independent loci from the input file.
 support three approaches:
-TODO:1. identify the independent lead snps by distance only,
+1. identify the independent lead snps by distance only,
 TODO:2. identify the independent lead snps by LD clumping,
 TODO:3. identify the independent lead snps by conditional analysis.
 
-TODO:than expand the independent lead snps to independent loci by given range.
+than expand the independent lead snps to independent loci by given range.
 merge the overlapped independent loci (optional).
 """
 
 from easyfinemap.logger import logger
 from easyfinemap.tools import Tools
 from easyfinemap.constant import ColName
+from easyfinemap.utils import make_SNPID_unique
 
 import pandas as pd
 
@@ -85,7 +86,7 @@ def indep_snps_by_ld(sig_df: pd.DataFrame, ld_df: pd.DataFrame, r2_threshold: fl
     raise NotImplementedError
 
 
-def expand_loci(sig_df: pd.DataFrame, range: int = 1000000) -> pd.DataFrame:
+def leadsnp2loci(sig_df: pd.DataFrame, range: int = 500000, if_merge: bool = True) -> pd.DataFrame:
     """
     Expand the independent lead snps to independent loci by given range.
 
@@ -95,6 +96,8 @@ def expand_loci(sig_df: pd.DataFrame, range: int = 1000000) -> pd.DataFrame:
         The independent lead snps.
     range : int, optional
         The range, by default 1000000
+    if_merge : bool, optional
+        Whether merge the overlapped loci, by default True
 
     Returns
     -------
@@ -102,7 +105,13 @@ def expand_loci(sig_df: pd.DataFrame, range: int = 1000000) -> pd.DataFrame:
         The independent loci.
     """
     loci_df = sig_df.copy()
+    loci_df = make_SNPID_unique(loci_df)
+    loci_df = loci_df[[ColName.CHR, ColName.BP, ColName.P, ColName.SNPID]]
+    loci_df.columns = [ColName.CHR, ColName.LEAD_SNP_BP, ColName.LEAD_SNP_P, ColName.LEAD_SNP] # type: ignore
     loci_df[ColName.START] = loci_df[ColName.LEAD_SNP_BP] - range
     loci_df[ColName.START] = loci_df[ColName.START].apply(lambda x: 0 if x < 0 else x)
     loci_df[ColName.END] = loci_df[ColName.LEAD_SNP_BP] + range
+    loci_df = loci_df[ColName.loci_cols].copy()
+    if if_merge:
+        loci_df = merge_overlapped_loci(loci_df)
     return loci_df

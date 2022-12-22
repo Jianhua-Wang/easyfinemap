@@ -1,14 +1,16 @@
-name: easy_finemap
+name: easyfinemap
 channels:
+  - bioconda
   - conda-forge
   - defaults
 dependencies:
   - _libgcc_mutex=0.1=conda_forge
   - _openmp_mutex=4.5=2_gnu
   - appdirs=1.4.4=pyh9f0ad1d_0
-  - attrs=22.1.0=pyh71513ae_1
+  - bcftools=1.9=h68d8f2e_9
   - brotlipy=0.7.0=py310h5764c6d_1005
   - bzip2=1.0.8=h7f98852_4
+  - c-ares=1.18.1=h7f98852_0
   - ca-certificates=2022.12.7=ha878542_0
   - cachecontrol=0.12.11=pyhd8ed1ab_0
   - certifi=2022.12.7=pyhd8ed1ab_0
@@ -17,27 +19,43 @@ dependencies:
   - cleo=2.0.1=pyhd8ed1ab_0
   - click=8.1.3=unix_pyhd8ed1ab_2
   - click-default-group=1.2.2=pyhd8ed1ab_1
+  - colorama=0.4.6=pyhd8ed1ab_0
+  - conda=22.11.1=py310hff52083_1
   - conda-lock=1.0.5=pyhd8ed1ab_1
+  - conda-package-handling=2.0.2=pyh38be061_0
+  - conda-package-streaming=0.7.0=pyhd8ed1ab_1
   - crashtest=0.4.1=pyhd8ed1ab_0
   - cryptography=38.0.4=py310h600f1e7_0
+  - curl=7.87.0=hdc1c0ab_0
   - dbus=1.13.6=h5008d03_3
   - distlib=0.3.6=pyhd8ed1ab_0
   - dulwich=0.20.50=py310h1fa729e_0
   - ensureconda=1.4.3=pyhd8ed1ab_0
   - expat=2.5.0=h27087fc_0
   - filelock=3.8.2=pyhd8ed1ab_0
+  - fmt=9.1.0=h924138e_0
   - gettext=0.21.1=h27087fc_0
+  - gsl=2.5=h294904e_1
   - html5lib=1.1=pyh9f0ad1d_0
+  - htslib=1.9=h4da6232_3
+  - icu=70.1=h27087fc_0
   - idna=3.4=pyhd8ed1ab_0
   - importlib_metadata=4.11.4=hd8ed1ab_0
-  - importlib_resources=5.10.1=pyhd8ed1ab_0
+  - importlib_resources=5.10.1=pyhd8ed1ab_1
   - jaraco.classes=3.2.3=pyhd8ed1ab_0
   - jeepney=0.8.0=pyhd8ed1ab_0
   - jinja2=3.1.2=pyhd8ed1ab_1
   - jsonschema=4.17.3=pyhd8ed1ab_0
+  - keyutils=1.6.1=h166bdaf_0
+  - krb5=1.20.1=h81ceb04_0
   - ld_impl_linux-64=2.39=hcc3a1bd_1
+  - libarchive=3.6.2=h3d51595_0
   - libblas=3.9.0=16_linux64_openblas
   - libcblas=3.9.0=16_linux64_openblas
+  - libcurl=7.87.0=hdc1c0ab_0
+  - libdeflate=1.14=h166bdaf_0
+  - libedit=3.1.20191231=he28a2e2_2
+  - libev=4.33=h516909a_1
   - libffi=3.4.2=h7f98852_5
   - libgcc-ng=12.2.0=h65d4601_19
   - libgfortran-ng=12.2.0=h69a702a_19
@@ -46,29 +64,45 @@ dependencies:
   - libgomp=12.2.0=h65d4601_19
   - libiconv=1.17=h166bdaf_0
   - liblapack=3.9.0=16_linux64_openblas
+  - libmamba=1.1.0=hde2b089_3
+  - libmambapy=1.1.0=py310h1428755_3
+  - libnghttp2=1.47.0=hff17c54_1
   - libnsl=2.0.0=h7f98852_0
   - libopenblas=0.3.21=pthreads_h78a6416_3
+  - libsolv=0.7.23=h3eb15da_0
   - libsqlite=3.40.0=h753d276_0
+  - libssh2=1.10.0=hf14f497_3
   - libstdcxx-ng=12.2.0=h46fd767_19
   - libuuid=2.32.1=h7f98852_1000
+  - libxml2=2.10.3=h7463322_0
   - libzlib=1.2.13=h166bdaf_4
   - lockfile=0.12.2=py_1
+  - lz4-c=1.9.3=h9c3ff4c_1
+  - lzo=2.10=h516909a_1000
+  - mamba=1.1.0=py310h51d5547_3
   - markupsafe=2.1.1=py310h5764c6d_2
   - more-itertools=9.0.0=pyhd8ed1ab_0
   - msgpack-python=1.0.4=py310hbf28c38_1
   - ncurses=6.3=h27087fc_1
   - numpy=1.24.0=py310h08bbf29_0
+  - openblas=0.3.21=pthreads_h320a7e8_3
   - openssl=3.0.7=h0b41bf4_1
   - packaging=22.0=pyhd8ed1ab_0
   - pcre2=10.40=hc3806b6_0
+  - perl=5.32.1=2_h7f98852_perl5
   - pexpect=4.8.0=pyh1a96a4e_2
   - pkginfo=1.9.2=pyhd8ed1ab_0
   - pkgutil-resolve-name=1.3.10=pyhd8ed1ab_0
   - platformdirs=2.6.0=pyhd8ed1ab_0
+  - plink=1.90b6.21=hec16e2b_2
+  - plink2=2.00a3.3=hb2a7ceb_0
+  - pluggy=1.0.0=pyhd8ed1ab_5
   - poetry=1.3.1=linux_pyhd8ed1ab_1
   - poetry-core=1.4.0=pyhd8ed1ab_0
   - poetry-plugin-export=1.2.0=pyhd8ed1ab_1
   - ptyprocess=0.7.0=pyhd3deb0d_0
+  - pybind11-abi=4=hd8ed1ab_3
+  - pycosat=0.6.4=py310h5764c6d_1
   - pycparser=2.21=pyhd8ed1ab_0
   - pydantic=1.10.2=py310h5764c6d_1
   - pyopenssl=22.1.0=pyhd8ed1ab_0
@@ -77,8 +111,10 @@ dependencies:
   - python=3.10.8=h4a9ceb5_0_cpython
   - python_abi=3.10=3_cp310
   - pyyaml=6.0=py310h5764c6d_5
-  - rapidfuzz=2.13.6=py310heca2aa9_0
+  - rapidfuzz=2.13.7=py310heca2aa9_0
   - readline=8.1.2=h0f457ee_0
+  - reproc=14.2.4=h0b41bf4_0
+  - reproc-cpp=14.2.4=hcb278e6_0
   - requests=2.28.1=pyhd8ed1ab_1
   - requests-toolbelt=0.10.1=pyhd8ed1ab_0
   - ruamel.yaml=0.17.21=py310h5764c6d_2
@@ -91,6 +127,8 @@ dependencies:
   - toml=0.10.2=pyhd8ed1ab_0
   - tomli=2.0.1=pyhd8ed1ab_0
   - tomlkit=0.11.6=pyha770c72_0
+  - toolz=0.12.0=pyhd8ed1ab_0
+  - tqdm=4.64.1=pyhd8ed1ab_0
   - trove-classifiers=2022.12.1=pyhd8ed1ab_0
   - typing=3.10.0.0=pyhd8ed1ab_0
   - typing-extensions=4.4.0=hd8ed1ab_0
@@ -102,30 +140,66 @@ dependencies:
   - wheel=0.38.4=pyhd8ed1ab_0
   - xz=5.2.6=h166bdaf_0
   - yaml=0.2.5=h7f98852_2
+  - yaml-cpp=0.7.0=h27087fc_2
   - zipp=3.11.0=pyhd8ed1ab_0
+  - zlib=1.2.13=h166bdaf_4
+  - zstandard=0.19.0=py310hdeb6495_1
+  - zstd=1.5.2=h6239696_4
   - pip:
+    - anyio==3.6.2
+    - argon2-cffi==21.3.0
+    - argon2-cffi-bindings==21.2.0
+    - arrow==1.2.3
+    - asttokens==2.2.1
+    - attrs==22.1.0
+    - backcall==0.2.0
+    - beautifulsoup4==4.11.1
     - black==22.12.0
     - bleach==5.0.1
     - bump2version==1.0.1
     - cfgv==3.3.1
-    - colorama==0.4.6
+    - comm==0.1.2
     - commonmark==0.9.1
     - coverage==7.0.0
+    - debugpy==1.6.4
+    - decorator==5.1.1
+    - defusedxml==0.7.1
     - docutils==0.19
-    - easy-finemap==0.0.1
     - easyfinemap==0.0.1
+    - entrypoints==0.4
+    - executing==1.2.0
+    - fastjsonschema==2.16.2
     - flake8==3.9.2
     - flake8-docstrings==1.6.0
+    - fqdn==1.5.1
     - ghp-import==2.1.0
     - griffe==0.25.0
     - identify==2.5.11
     - importlib-metadata==5.2.0
     - iniconfig==1.1.1
+    - ipykernel==6.19.4
+    - ipython==8.7.0
+    - ipython-genutils==0.2.0
+    - ipywidgets==8.0.3
+    - isoduration==20.11.0
     - isort==5.11.3
+    - jedi==0.18.2
+    - jsonpointer==2.3
+    - jupyter==1.0.0
+    - jupyter-client==7.4.8
+    - jupyter-console==6.4.4
+    - jupyter-core==5.1.0
+    - jupyter-events==0.5.0
+    - jupyter-server==2.0.2
+    - jupyter-server-terminals==0.4.3
+    - jupyterlab-pygments==0.2.2
+    - jupyterlab-widgets==3.0.4
     - keyring==23.13.1
     - markdown==3.3.7
+    - matplotlib-inline==0.1.6
     - mccabe==0.6.1
     - mergedeep==1.3.4
+    - mistune==2.0.4
     - mkdocs==1.4.2
     - mkdocs-autorefs==0.4.1
     - mkdocs-include-markdown-plugin==4.0.3
@@ -135,12 +209,25 @@ dependencies:
     - mkdocstrings-python==0.8.2
     - mypy==0.900
     - mypy-extensions==0.4.3
+    - nbclassic==0.4.8
+    - nbclient==0.7.2
+    - nbconvert==7.2.7
+    - nbformat==5.7.1
+    - nest-asyncio==1.5.6
     - nodeenv==1.7.0
+    - notebook==6.5.2
+    - notebook-shim==0.2.2
     - pandas==1.5.2
+    - pandocfilters==1.5.0
+    - parso==0.8.3
     - pathspec==0.10.3
+    - pickleshare==0.7.5
     - pip==20.3.4
-    - pluggy==1.0.0
     - pre-commit==2.20.0
+    - prometheus-client==0.15.0
+    - prompt-toolkit==3.0.36
+    - psutil==5.9.4
+    - pure-eval==0.2.2
     - py==1.11.0
     - pycodestyle==2.7.0
     - pydocstyle==6.1.1
@@ -150,16 +237,33 @@ dependencies:
     - pytest==6.2.5
     - pytest-cov==2.12.1
     - python-dateutil==2.8.2
-    - pytkdocs==0.11.1
+    - python-json-logger==2.0.4
     - pytz==2022.7
     - pyyaml-env-tag==0.1
+    - pyzmq==24.0.1
+    - qtconsole==5.4.0
+    - qtpy==2.3.0
     - readme-renderer==37.3
+    - rfc3339-validator==0.1.4
     - rfc3986==2.0.0
+    - rfc3986-validator==0.1.1
     - rich==12.6.0
+    - send2trash==1.8.0
+    - sniffio==1.3.0
     - snowballstemmer==2.2.0
+    - soupsieve==2.3.2.post1
+    - stack-data==0.6.2
+    - terminado==0.17.1
+    - tinycss2==1.2.1
+    - tornado==6.2
     - tox==3.28.0
-    - tqdm==4.64.1
+    - traitlets==5.8.0
     - twine==3.8.0
     - typer==0.7.0
+    - uri-template==1.2.0
     - watchdog==2.2.0
-prefix: /beegfs/home/wangjianhua/anaconda3/envs/easy_finemap
+    - wcwidth==0.2.5
+    - webcolors==1.12
+    - websocket-client==1.4.2
+    - widgetsnbextension==4.0.4
+prefix: /beegfs/home/wangjianhua/anaconda3/envs/easyfinemap
