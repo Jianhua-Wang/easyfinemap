@@ -5,6 +5,14 @@ import os
 
 import pandas as pd
 
+PWD = os.path.dirname(os.path.abspath(__file__))
+
+
+@pytest.fixture
+def sumstats_data():
+    sumstats_data = pd.read_csv(f"{PWD}/exampledata/noEAF_noMAF.txt.gz", sep="\t")
+    return pd.DataFrame(sumstats_data)
+
 
 @pytest.fixture
 def loci_data():
@@ -18,8 +26,23 @@ def loci_data():
     }
     return pd.DataFrame(loci_data)
 
+
 @pytest.fixture
 def sig_df():
-    pwd = os.path.dirname(os.path.abspath(__file__))
-    sig_df = pd.read_csv(f"{pwd}/exampledata/sig.txt", sep="\t")
+    sig_df = pd.read_csv(f"{PWD}/exampledata/sig.txt", sep="\t")
     return sig_df
+
+
+@pytest.fixture
+def mock_sumstat():
+    mock_data = pd.DataFrame(
+        {
+            "CHR": [1, 1, 1, 1, 1, 2, 2, 2, 2],
+            "BP": [100, 100, 300, 400, 500, 100, 200, 300, 400],
+            "P": [1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1e-5, 1e-4, 1e-3, 1e-2],
+            "SNP": ["rs1", "rs2", "rs3", "rs4", "rs5", "rs6", "rs7", "rs8", "rs9"],
+            "EA": ["A", "T", "G", "A", "A", "A", "A", "A", "A"],
+            "NEA": ["T", "A", "C", "T", "T", "T", "T", "T", "T"],
+        }
+    )
+    return mock_data
