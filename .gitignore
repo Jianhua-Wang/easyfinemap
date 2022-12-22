@@ -115,3 +115,9 @@ site/
 
 # notebook in test dir
 tests/*.ipynb
+
+# testdata LD
+tests/exampledata/EUR*
+
+# tmp data
+tmp*
