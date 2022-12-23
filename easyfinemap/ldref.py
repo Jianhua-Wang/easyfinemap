@@ -69,9 +69,8 @@ class LDRef:
         bim = pd.read_csv(
             bim_file, sep="\t", names=[ColName.CHR, ColName.RSID, "cM", ColName.BP, ColName.EA, ColName.NEA]
         )
-        bim[1] = bim.index  # use number as rsid, make sure it is unique
+        bim[ColName.RSID] = bim.index  # use number as rsid, make sure it is unique
         bim.to_csv(bim_file, sep="\t", index=False, header=False)
-        # TODO: remove duplicated snps.
         cmd = [
             self.plink,
             "--bfile",
@@ -154,7 +153,7 @@ class LDRef:
             self.logger.error(res.stderr)
             raise RuntimeError(res.stderr)
 
-    def intersect(self, sig_snps: pd.DataFrame) -> pd.DataFrame:
+    def intersect(self, sig_snps: pd.DataFrame, use_ref_EAF: bool = False) -> pd.DataFrame:
         """
         Intersect the significant snps with the LD reference.
 
@@ -162,6 +161,8 @@ class LDRef:
         ----------
         sig_snps : pd.DataFrame
             The significant snps.
+        use_ref_EAF : bool, optional
+            Use the EAF in the LD reference, by default False
 
         Returns
         -------

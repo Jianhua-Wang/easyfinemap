@@ -1,14 +1,16 @@
-site_name: easy_finemap
-site_url: https://Jianhua-Wang.github.io/easy_finemap
-repo_url: https://github.com/Jianhua-Wang/easy_finemap
-repo_name: Jianhua-Wang/easy_finemap
+site_name: EasyFinemap
+site_url: https://Jianhua-Wang.github.io/easyfinemap
+repo_url: https://github.com/Jianhua-Wang/easyfinemap
+repo_name: Jianhua-Wang/easyfinemap
+watch: [README.md, CONTRIBUTING.md, CHANGELOG.md, easyfinemap]
 #strict: true
 nav:
-  - Home: index.md
-  - Installation: installation.md
+  - Home:
+    - index.md
+    - Installation: installation.md
   - Usage: usage.md
   - Modules: api.md
-  - Contributing: contributing.md
+  # - Contributing: contributing.md
   - Changelog: changelog.md
 theme:
   name: material
@@ -16,42 +18,68 @@ theme:
   #logo: assets/logo.png
   palette:
     scheme: preference
-    primary: indigo
-    accent: indigo
+    primary: teal
+    accent: teal
   features:
-    - navigation.indexes
+    # - navigation.indexes
+    - navigation.tabs
+    - navigation.top
+    - content.code.annotate
     - navigation.instant
     - navigation.tabs.sticky
 markdown_extensions:
-  - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
-  - pymdownx.critic
-  - pymdownx.caret
-  - pymdownx.mark
-  - pymdownx.tilde
-  - pymdownx.tabbed
-  - attr_list
-  - pymdownx.arithmatex:
-      generic: true
-  - pymdownx.highlight:
-      linenums: false
-  - pymdownx.superfences
-  - pymdownx.inlinehilite
+  - admonition
+  # - callouts
   - pymdownx.details
+  - pymdownx.emoji
+  - pymdownx.magiclink
+  - pymdownx.snippets:
+      check_paths: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist
+  # - pymdownx.emoji
+  #     # emoji_index: !!python/name:materialx.emoji.twemoji
+  #     # emoji_generator: !!python/name:materialx.emoji.to_svg
+  # - pymdownx.critic
+  # - pymdownx.caret
+  # - pymdownx.mark
+  # - pymdownx.tilde
+  # - pymdownx.tabbed
+  # - attr_list
+  # - pymdownx.arithmatex:
+  #     generic: true
+  # - pymdownx.highlight:
+  #     linenums: false
+  # - pymdownx.superfences
+  # - pymdownx.inlinehilite
+  # - pymdownx.details
   - admonition
   - toc:
-      baselevel: 2
+      # baselevel: 2
       permalink: true
-      slugify: !!python/name:pymdownx.slugs.uslugify
+      # slugify: !!python/name:pymdownx.slugs.uslugify
   - meta
 plugins:
   - include-markdown
   - search:
       lang: en
   - mkdocstrings:
-      watch:
-        - easyfinemap
+      handlers:
+        python:
+          import:
+          - https://docs.python.org/3/objects.inv
+          - https://installer.readthedocs.io/en/stable/objects.inv  # demonstration purpose in the docs
+          - https://mkdocstrings.github.io/autorefs/objects.inv
+          options:
+            docstring_style: numpy
+            docstring_options:
+              ignore_init_summary: yes
+            merge_init_into_class: yes
+            show_submodules: yes
+      # watch:
+      #   - easyfinemap
 extra:
   social:
     - icon: fontawesome/brands/twitter
@@ -63,7 +91,7 @@ extra:
       link: https://github.com/waynerv/cookiecutter-pypackage
       name: Facebook
     - icon: fontawesome/brands/github
-      link: https://github.com/Jianhua-Wang/easy_finemap
+      link: https://github.com/Jianhua-Wang/easyfinemap
       name: Github
     - icon: material/email
       link: "mailto:jianhua.mert@gmail.com"
