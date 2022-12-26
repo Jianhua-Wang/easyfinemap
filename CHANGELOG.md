@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.0.4] - 2022-12-26
+
+### Added
+
+- prepare and validate LD reference panel
+
+### Changed
+
+
+### Fixed
+
 ## [0.0.1] - 2022-12-20
 
 ### Added
