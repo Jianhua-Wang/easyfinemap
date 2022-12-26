@@ -1,28 +1,33 @@
 """Prepare LD reference for easyfinemap.
+TODO: 1. validate the LD reference.
+    TODO: 1.1. remove duplicate SNPs.
+    TODO: 1.2. make SNP names unique, chr-bp-sorted(EA,NEA).
 TODO: 1. intersect the significant snps with the LD reference.
 TODO: 2. make a plink file from the intersected snps.
 TODO: 3. calculate LD matrix from the plink file.
 """
 
-from subprocess import run, PIPE
-from pathlib import Path
-import tempfile
 import logging
+import tempfile
+from pathlib import Path
+from subprocess import PIPE, run
+from typing import List, Optional, Union
+import shutil
+import os
+from pathos.multiprocessing import ProcessingPool as Pool
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
-from easyfinemap.constant import ColName
+from easyfinemap.constant import ColName, CHROMS
 from easyfinemap.tools import Tools
 from easyfinemap.utils import get_significant_snps, make_SNPID_unique
-
-import logging
 
 
 class LDRef:
     """Prepare LD reference for easyfinemap."""
 
-    def __init__(self, ldref_path: str, file_type: str = "plink", log_level: str = "DEBUG"):
+    def __init__(self, log_level: str = "DEBUG"):
         """
         Initialize the LDRef class.
 
@@ -38,22 +43,15 @@ class LDRef:
         """
         self.logger = logging.getLogger(f"LDRef")
         self.logger.setLevel(log_level)
-        self.ldref_path = ldref_path
-        tools = Tools()
-        self.plink = tools.plink
-        # TODO: support input files with wildcards.
-        # if "{chrom}" not in self.ldref_path.name:
-        #     raise ValueError("The LD reference file name should contain {chrom}.")
-        self.file_type = file_type
+        self.plink = Tools().plink
         self.tmp_root = Path.cwd() / "tmp" / "ldref"
         if not self.tmp_root.exists():
             self.tmp_root.mkdir(parents=True)
-        # self.ldref_dir = Path(tempfile.mkdtemp())
         self.temp_dir = tempfile.mkdtemp(dir=self.tmp_root)
         self.logger.debug(f"LDRef temp dir: {self.temp_dir}")
         self.temp_dir_path = Path(self.temp_dir)
 
-    def clean(self, prefix: str) -> None:
+    def clean(self, inprefix: str, outprefix: Optional[str] = None, mac: int = 10) -> None:
         """
         Clean the extracted LD reference.
         1. Remove duplicated snps.
@@ -63,18 +61,35 @@ class LDRef:
         ----------
         prefix : str
             The prefix of the extracted LD reference.
+        outprefix : str, optional
+            The prefix of the cleaned LD reference, by default None
+            If None, the cleaned LD reference will be saved to the same directory as the extracted LD reference.
+        mac : int, optional
+            The minor allele count threshold, by default 10
+            SNPs with MAC < mac will be removed.
+
+        Returns
+        -------
+        None
         """
-        prefix = f"{self.temp_dir_path}/{prefix}"
-        bim_file = f"{prefix}.bim"
+        prefix = f"{self.temp_dir_path}/{inprefix.split('/')[-1]}"
+        bim_file = f"{inprefix}.bim"
         bim = pd.read_csv(
             bim_file, sep="\t", names=[ColName.CHR, ColName.RSID, "cM", ColName.BP, ColName.EA, ColName.NEA]
         )
         bim[ColName.RSID] = bim.index  # use number as rsid, make sure it is unique
-        bim.to_csv(bim_file, sep="\t", index=False, header=False)
+        bim.to_csv(f"{prefix}.bim", sep="\t", index=False, header=False)
+
+        if mac <= 0:
+            raise ValueError(f"mac should be > 0, got {mac}.")
         cmd = [
             self.plink,
-            "--bfile",
-            prefix,
+            "--bed",
+            f"{inprefix}.bed",
+            "--fam",
+            f"{inprefix}.fam",
+            "--bim",
+            f"{prefix}.bim",
             "--keep-allele-order",
             "--list-duplicate-vars",
             "ids-only",
@@ -89,10 +104,16 @@ class LDRef:
             raise RuntimeError(res.stderr)
         cmd = [
             self.plink,
-            "--bfile",
-            f"{prefix}",
+            "--bed",
+            f"{inprefix}.bed",
+            "--fam",
+            f"{inprefix}.fam",
+            "--bim",
+            f"{prefix}.bim",
             "--exclude",
             f"{prefix}.dupvar",
+            "--mac",
+            str(mac),
             "--keep-allele-order",
             "--make-bed",
             "--out",
@@ -110,35 +131,109 @@ class LDRef:
         )
         rmdup_bim = make_SNPID_unique(rmdup_bim, replace_rsIDcol=True, remove_duplicates=False)
         rmdup_bim.to_csv(f"{prefix}.clean.bim", sep="\t", index=False, header=False)
+        if outprefix is not None:
+            shutil.move(f"{prefix}.clean.bed", f"{outprefix}.bed")
+            shutil.move(f"{prefix}.clean.bim", f"{outprefix}.bim")
+            shutil.move(f"{prefix}.clean.fam", f"{outprefix}.fam")
 
-    def extract(self, chrom: int, start: int, end: int, outprefix: str, mac: int = 10) -> None:
+    def valid(self, ldref_path: str, outprefix: str, file_type: str = "plink", mac: int = 10, threads: int = 1) -> None:
+        """
+        Validate the LD reference file.
+        TODO:1. format vcfs to plink files.
+        TODO:2. remove duplicated snps.
+        TODO:3. remove snps with MAC < mac.
+        TODO:4. make SNP names unique, chr-bp-sorted(EA,NEA).
+        TODO:5. mark bim file with "#easyfinemap validated" flag in the first line.
+
+        Parameters
+        ----------
+        ldref_path : str
+            The path to the LD reference file.
+        outprefix : str
+            The output prefix.
+        file_type : str, optional
+            The file type of the LD reference file, by default "plink"
+        mac: int, optional
+            The minor allele count threshold, by default 10
+
+        Raises
+        ------
+        ValueError
+            If the file type is not supported.
+
+        Returns
+        -------
+        None
+        """
+        if file_type == "plink":
+            self.file_type = file_type
+        else:
+            raise ValueError(f"Unsupported file type: {file_type}")
+
+        params = [[],[],[]]
+        for chrom in CHROMS:
+            if "{chrom}" in ldref_path:
+                inprefix = ldref_path.replace("{chrom}", str(chrom))
+                if not os.path.exists(f"{inprefix}.bed"):
+                    raise FileNotFoundError(f"{inprefix}.bed not found.")
+                else:
+                    params[0].append(inprefix)
+                    params[1].append(f"{outprefix}.chr{chrom}")
+                    params[2].append(mac)
+            else:
+                inprefix = ldref_path
+                if not os.path.exists(f"{inprefix}.bed"):
+                    raise FileNotFoundError(f"{inprefix}.bed not found.")
+                else:
+                    intermed_prefix = f"{self.temp_dir}/{outprefix.split('/')[-1]}.chr{chrom}"
+                    self.extract(inprefix, intermed_prefix, chrom, mac=mac)
+                    params[0].append(intermed_prefix)
+                    params[1].append(f"{outprefix}.chr{chrom}")
+                    params[2].append(mac)
+
+        with Pool(threads) as p:
+            p.map(self.clean, *params)
+
+    def extract(self, inprefix: str, outprefix: str, chrom: int, start: Optional[int] = None, end: Optional[int] = None, mac: int = 10) -> None:
         """
         Extract the genotypes of given region from the LD reference.
 
         Parameters
         ----------
-        chrom : int
-            The chromosome number.
-        start : int
-            The start position.
-        end : int
-            The end position.
+        inprefix : str
+            The input prefix.
         outprefix : str
             The output prefix.
-        mac : int, optional
+        chrom : int
+            The chromosome number.
+        start : int, optional
+            The start position, by default None
+        end : int, optional
+            The end position, by default None
+        mac: int, optional
             The minor allele count threshold, by default 10
+
+        Returns
+        -------
+        None
         """
-        outprefix = f"{self.temp_dir_path}/{outprefix}"
-        region_file = f"{outprefix}.region"
-        with open(region_file, "w") as f:
-            f.write(f"{chrom}\t{start}\t{end}\tregion")
+        region_file = f"{self.temp_dir}/{outprefix.split('/')[-1]}.region"
+        if start is None:
+            extract_cmd = ["--chr", str(chrom)]
+        else:
+            with open(region_file, "w") as f:
+                f.write(f"{chrom}\t{start}\t{end}\tregion")
+            extract_cmd = ["--extract", "range", region_file]
+
+        if "{chrom}" in inprefix:
+            inprefix = inprefix.replace("{chrom}", str(chrom))
+        if not os.path.exists(f"{inprefix}.bed"):
+            raise FileNotFoundError(f"{inprefix}.bed not found.")
         cmd = [
             self.plink,
             "--bfile",
-            self.ldref_path,
-            "--extract",
-            "range",
-            str(region_file),
+            inprefix,
+            *extract_cmd,
             "--keep-allele-order",
             "--mac",
             str(mac),
@@ -148,9 +243,10 @@ class LDRef:
         ]
         res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
         self.logger.debug(' '.join(cmd))
-        self.logger.debug(f"extract {chrom}:{start}-{end} from {self.ldref_path}")
+        self.logger.debug(f"extract chr{chrom}:{start}-{end} from {inprefix}")
         if res.returncode != 0:
             self.logger.error(res.stderr)
+            self.logger.error(f'see log file: {outprefix}.log for details')
             raise RuntimeError(res.stderr)
 
     def intersect(self, sig_snps: pd.DataFrame, use_ref_EAF: bool = False) -> pd.DataFrame:
@@ -169,4 +265,5 @@ class LDRef:
         pd.DataFrame
             The intersected significant snps.
         """
+
         raise NotImplementedError

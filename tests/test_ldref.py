@@ -13,20 +13,31 @@ class TestLDRef:
 
     def test_init(self):
         """Test the initialization of the LDRef class."""
-        ldref = LDRef(f"{PWD}/exampledata/EUR.chr21-22", file_type="plink")
-        assert ldref.ldref_path == f"{PWD}/exampledata/EUR.chr21-22"
-        assert ldref.file_type == "plink"
+        ldref = LDRef()
         assert ldref.temp_dir_path.exists()
 
-    def test_init_error(self):
-        """Test the initialization of the LDRef class."""
-        with pytest.raises(ValueError):
-            LDRef(f"{PWD}/exampledata/EUR.chr21-22", file_type="notype")
+    def test_valid(self, dirty_ld_panel, clean_ld_panel):
+        """Test the valid method of the LDRef class."""
+        if os.path.exists(f"{clean_ld_panel}.chr1.bim"):
+            os.remove(f"{clean_ld_panel}.chr1.bim")
+        ldref = LDRef()
+        ldref.valid(dirty_ld_panel, clean_ld_panel)
+        assert os.path.exists(f"{clean_ld_panel}.chr1.bim")
 
-    def test_extract(self):
+    def test_extract(self, clean_ld_panel):
         """Test the extract method of the LDRef class."""
-        ldref = LDRef(f"{PWD}/exampledata/EUR.chr21-22", file_type="plink")
-        ldref.extract(chrom=21, start=1000000, end=2000000, outprefix="test")
-        assert (ldref.temp_dir_path / "test.bim").exists()
-        assert (ldref.temp_dir_path / "test.bed").exists()
-        assert (ldref.temp_dir_path / "test.fam").exists()
+        if os.path.exists(f"{PWD}/exampledata/LDREF/extract.bim"):
+            os.remove(f"{PWD}/exampledata/LDREF/extract.bim")
+        ldref = LDRef()
+        ldref.extract(f"{clean_ld_panel}.chr{{chrom}}", f"{PWD}/exampledata/LDREF/extract", chrom=1, start=1000000, end=2000000)
+        assert os.path.exists(f"{PWD}/exampledata/LDREF/extract.bim")
+
+    def test_clean(self):
+        """Test the clean method of the LDRef class."""
+        if os.path.exists(f"{PWD}/exampledata/LDREF/clean.bim"):
+            os.remove(f"{PWD}/exampledata/LDREF/clean.bim")
+        ldref = LDRef()
+        ldref.clean(f"{PWD}/exampledata/LDREF/extract", f"{PWD}/exampledata/LDREF/clean", mac=10)
+        assert os.path.exists(f"{PWD}/exampledata/LDREF/clean.bim")
+        with pytest.raises(ValueError):
+            ldref.clean(f"{PWD}/exampledata/LDREF/extract", f"{PWD}/exampledata/LDREF/clean", mac=0)

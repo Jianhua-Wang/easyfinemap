@@ -47,3 +47,10 @@ def mock_sumstat():
     )
     return mock_data
 
+@pytest.fixture
+def dirty_ld_panel():
+    return f"{PWD}/exampledata/LDREF/hapmap3"
+
+@pytest.fixture
+def clean_ld_panel():
+    return f"{PWD}/exampledata/LDREF/hapmap3.valid"
