@@ -16,4 +16,3 @@ def test_validate_ldref():
     result = runner.invoke(app, ["validate-ldref", "--help"])
     assert result.exit_code == 0
     assert "validate-ldref" in result.stdout
-    result = runner.invoke(app, ["validate-ldref", "tests/exampledata/LDREF/hapmap3", "tests/exampledata/LDREF/hapmap3.valid"])

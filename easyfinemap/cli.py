@@ -7,7 +7,7 @@ import typer
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 app = typer.Typer(context_settings=CONTEXT_SETTINGS, add_completion=False)
 
-# TODO: 1. validate LD reference panel
+# 1. validate LD reference panel
 # TODO: 2. validate GWAS summary statistics
 # TODO: 3. identify lead SNPs
 # TODO: 4. fine-mapping

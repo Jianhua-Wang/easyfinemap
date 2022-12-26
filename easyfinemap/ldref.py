@@ -1,7 +1,7 @@
 """Prepare LD reference for easyfinemap.
-TODO: 1. validate the LD reference.
-    TODO: 1.1. remove duplicate SNPs.
-    TODO: 1.2. make SNP names unique, chr-bp-sorted(EA,NEA).
+1. validate the LD reference.
+    1.1. remove duplicate SNPs.
+    1.2. make SNP names unique, chr-bp-sorted(EA,NEA).
 TODO: 1. intersect the significant snps with the LD reference.
 TODO: 2. make a plink file from the intersected snps.
 TODO: 3. calculate LD matrix from the plink file.
@@ -140,9 +140,9 @@ class LDRef:
         """
         Validate the LD reference file.
         TODO:1. format vcfs to plink files.
-        TODO:2. remove duplicated snps.
-        TODO:3. remove snps with MAC < mac.
-        TODO:4. make SNP names unique, chr-bp-sorted(EA,NEA).
+        2. remove duplicated snps.
+        3. remove snps with MAC < mac.
+        4. make SNP names unique, chr-bp-sorted(EA,NEA).
         TODO:5. mark bim file with "#easyfinemap validated" flag in the first line.
 
         Parameters
