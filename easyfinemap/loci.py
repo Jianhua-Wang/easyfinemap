@@ -1,4 +1,5 @@
 """Get the independent loci from the input file.
+
 support three approaches:
 1. identify the independent lead snps by distance only,
 TODO:2. identify the independent lead snps by LD clumping,
@@ -19,7 +20,9 @@ import pandas as pd
 def merge_overlapped_loci(loci_df: pd.DataFrame):
     """
     Merge the overlapped loci.
-    More details: https://stackoverflow.com/questions/57882621/efficient-merge-overlapping-intervals-in-same-pandas-dataframe-with-start-and-fi
+
+    More details: https://stackoverflow.com/questions/57882621/efficient-merge-overlapping-intervals-in-same-pandas-\
+        dataframe-with-start-and-fi
 
     Parameters
     ----------
@@ -83,9 +86,12 @@ def indep_snps_by_distance(sig_df: pd.DataFrame, distance: int = 500000) -> pd.D
 
 
 def indep_snps_by_ldclumping(sig_df: pd.DataFrame, ld_df: pd.DataFrame, r2_threshold: float = 0.8) -> pd.DataFrame:
+    """Identify the independent snps by LD clumping."""
     raise NotImplementedError
 
+
 def indep_snps_by_conditional(sig_df: pd.DataFrame, ld_df: pd.DataFrame, r2_threshold: float = 0.8) -> pd.DataFrame:
+    """Identify the independent snps by conditional analysis."""
     raise NotImplementedError
 
 
@@ -110,7 +116,7 @@ def leadsnp2loci(sig_df: pd.DataFrame, range: int = 500000, if_merge: bool = Tru
     loci_df = sig_df.copy()
     loci_df = make_SNPID_unique(loci_df)
     loci_df = loci_df[[ColName.CHR, ColName.BP, ColName.P, ColName.SNPID]]
-    loci_df.columns = [ColName.CHR, ColName.LEAD_SNP_BP, ColName.LEAD_SNP_P, ColName.LEAD_SNP] # type: ignore
+    loci_df.columns = [ColName.CHR, ColName.LEAD_SNP_BP, ColName.LEAD_SNP_P, ColName.LEAD_SNP]  # type: ignore
     loci_df[ColName.START] = loci_df[ColName.LEAD_SNP_BP] - range
     loci_df[ColName.START] = loci_df[ColName.START].apply(lambda x: 0 if x < 0 else x)
     loci_df[ColName.END] = loci_df[ColName.LEAD_SNP_BP] + range

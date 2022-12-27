@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.0.5] - 2022-12-26
+
+### Added
+
+- validate GWAS summary statistics
+
+### Changed
+
+
+### Fixed
+
 ## [0.0.4] - 2022-12-26
 
 ### Added

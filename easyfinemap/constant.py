@@ -1,5 +1,6 @@
 """Define constants used in the package."""
 
+
 class ColName:
     """Define column names."""
 
@@ -35,6 +36,7 @@ class ColName:
     LEAD_SNP_NEA = "LEAD_SNP_NEA"
     sumstat_cols = ['CHR', 'BP', 'rsID', 'EA', 'NEA', 'P', 'BETA', 'SE', 'EAF', 'MAF']
     loci_cols = ['CHR', 'START', 'END', 'LEAD_SNP', 'LEAD_SNP_P', 'LEAD_SNP_BP']
+
 
 # only support autosomes
 CHROMS = [i for i in range(1, 23)]
@@ -161,4 +163,3 @@ _optional_cols = {
         "nonzero": False,
     },
 }
-

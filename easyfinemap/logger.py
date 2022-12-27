@@ -6,7 +6,7 @@ from rich.logging import RichHandler
 
 logging.basicConfig(
     level=logging.NOTSET,
-    format="%(name)s - %(levelname)s - %(message)s",
+    format="%(name)s - %(message)s",
     datefmt="[%X]",
     handlers=[RichHandler(rich_tracebacks=True, show_path=False)],
 )

@@ -1,4 +1,5 @@
 """Prepare LD reference for easyfinemap.
+
 1. validate the LD reference.
     1.1. remove duplicate SNPs.
     1.2. make SNP names unique, chr-bp-sorted(EA,NEA).
@@ -8,20 +9,19 @@ TODO: 3. calculate LD matrix from the plink file.
 """
 
 import logging
+import os
+import shutil
 import tempfile
 from pathlib import Path
 from subprocess import PIPE, run
 from typing import List, Optional, Union
-import shutil
-import os
+
+import pandas as pd
 from pathos.multiprocessing import ProcessingPool as Pool
 
-import numpy as np
-import pandas as pd
-
-from easyfinemap.constant import ColName, CHROMS
+from easyfinemap.constant import CHROMS, ColName
 from easyfinemap.tools import Tools
-from easyfinemap.utils import get_significant_snps, make_SNPID_unique
+from easyfinemap.utils import make_SNPID_unique
 
 
 class LDRef:
@@ -41,7 +41,7 @@ class LDRef:
         log_level : str, optional
             The log level, by default "DEBUG"
         """
-        self.logger = logging.getLogger(f"LDRef")
+        self.logger = logging.getLogger("LDRef")
         self.logger.setLevel(log_level)
         self.plink = Tools().plink
         self.tmp_root = Path.cwd() / "tmp" / "ldref"
@@ -54,6 +54,7 @@ class LDRef:
     def clean(self, inprefix: str, outprefix: Optional[str] = None, mac: int = 10) -> None:
         """
         Clean the extracted LD reference.
+
         1. Remove duplicated snps.
         2. Make SNP names unique, chr-bp-sorted(EA,NEA).
 
@@ -99,9 +100,6 @@ class LDRef:
         ]
         res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
         self.logger.debug(' '.join(cmd))
-        if res.returncode != 0:
-            self.logger.error(res.stderr)
-            raise RuntimeError(res.stderr)
         cmd = [
             self.plink,
             "--bed",
@@ -139,6 +137,7 @@ class LDRef:
     def valid(self, ldref_path: str, outprefix: str, file_type: str = "plink", mac: int = 10, threads: int = 1) -> None:
         """
         Validate the LD reference file.
+
         TODO:1. format vcfs to plink files.
         2. remove duplicated snps.
         3. remove snps with MAC < mac.
@@ -170,7 +169,7 @@ class LDRef:
         else:
             raise ValueError(f"Unsupported file type: {file_type}")
 
-        params = [[],[],[]]
+        params: List[List[Union[str, int]]] = [[] for _ in range(3)]
         for chrom in CHROMS:
             if "{chrom}" in ldref_path:
                 inprefix = ldref_path.replace("{chrom}", str(chrom))
@@ -194,7 +193,15 @@ class LDRef:
         with Pool(threads) as p:
             p.map(self.clean, *params)
 
-    def extract(self, inprefix: str, outprefix: str, chrom: int, start: Optional[int] = None, end: Optional[int] = None, mac: int = 10) -> None:
+    def extract(
+        self,
+        inprefix: str,
+        outprefix: str,
+        chrom: int,
+        start: Optional[int] = None,
+        end: Optional[int] = None,
+        mac: int = 10,
+    ) -> None:
         """
         Extract the genotypes of given region from the LD reference.
 
@@ -265,5 +272,4 @@ class LDRef:
         pd.DataFrame
             The intersected significant snps.
         """
-
         raise NotImplementedError
