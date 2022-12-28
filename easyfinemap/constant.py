@@ -19,7 +19,7 @@ class ColName:
     INFO = "INFO"
     START = "START"
     END = "END"
-    SNPID = 'SNPID'
+    SNPID = 'SNPID'  # unique snpid
     LEAD_SNP = "LEAD_SNP"
     LEAD_SNP_P = "LEAD_SNP_P"
     LEAD_SNP_BETA = "LEAD_SNP_BETA"

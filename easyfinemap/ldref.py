@@ -33,11 +33,6 @@ class LDRef:
 
         Parameters
         ----------
-        ldref_path : str
-            The path to the LD reference file.
-        file_type : str, optional
-            The file type of the LD reference file, by default "plink"
-            TODO: support other file types, e.g. vcf.
         log_level : str, optional
             The log level, by default "DEBUG"
         """

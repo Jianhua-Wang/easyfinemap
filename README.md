@@ -20,8 +20,8 @@ user-friendly pipeline for GWAS fine-mapping
 
 
 ## Features
-
-* TODO: Standardize input summary statistics
+* Prepare LD referen for fine-mapping
+* Standardize input summary statistics
 * TODO: Identify independent loci by distance, LD clumping, or conditional analysis
 * TODO: Fine-mapping with or without LD reference
 

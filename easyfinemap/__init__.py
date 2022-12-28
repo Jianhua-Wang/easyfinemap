@@ -2,7 +2,7 @@
 
 from .easyfinemap import EasyFinemap
 from .ldref import LDRef
-from .loci import merge_overlapped_loci
+from .loci import Loci
 
 __author__ = """Jianhua Wang"""
 __email__ = 'jianhua.mert@gmail.com'

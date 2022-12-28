@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.1.5] - 2022-12-27
+
+### Added
+
+- identify lead SNPs by LD clumping
+
+### Changed
+
+
+### Fixed
+
 ## [0.0.5] - 2022-12-26
 
 ### Added
