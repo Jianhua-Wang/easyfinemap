@@ -1,10 +1,10 @@
 """Standarize summary statistics for use with EasyFINEMAP."""
 
 import logging
+
 import pandas as pd
 
-from easyfinemap.constant import ColName, CHROMS
-
+from easyfinemap.constant import CHROMS, ColName
 from easyfinemap.utils import make_SNPID_unique
 
 pd.options.mode.chained_assignment = None  # type: ignore
@@ -17,7 +17,6 @@ class SumStat(pd.DataFrame):
         """Initialize the SumstatAccessor class."""
         super().__init__(*args, **kwargs)
         self.logger = logging.getLogger("Sumstat")
-        self.logger.setLevel("DEBUG")
 
     @property
     def _constructor(self):
@@ -135,7 +134,6 @@ class SumStat(pd.DataFrame):
             pass
         if ColName.MAF in self.columns:
             self[ColName.MAF] = pd.to_numeric(self[ColName.MAF], errors="coerce")
-            # self.dropna(subset=[ColName.MAF], inplace=True)
             self = self[self[ColName.MAF].notnull()]
             self[ColName.MAF] = self[ColName.MAF].astype(float)
             self[ColName.MAF] = self[ColName.MAF].apply(lambda x: min(x, 1 - x))

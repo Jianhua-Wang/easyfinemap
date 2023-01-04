@@ -19,7 +19,7 @@ class TestLDRef:
         if os.path.exists(f"{CWD}/tmp"):
             shutil.rmtree(f"{CWD}/tmp")
         ldref = LDRef()
-        assert ldref.temp_dir_path.exists()
+        assert ldref.tmp_root == f"{CWD}/tmp/ldref"
 
     def test_valid(self, dirty_ld_panel, clean_ld_panel):
         """Test the valid method of the LDRef class."""
@@ -73,11 +73,9 @@ class TestLDRef:
         if os.path.exists(f"{PWD}/exampledata/LDREF/clean.bim"):
             os.remove(f"{PWD}/exampledata/LDREF/clean.bim")
         ldref = LDRef()
-        ldref.clean(f"{PWD}/exampledata/LDREF/extract", f"{PWD}/exampledata/LDREF/clean", mac=10)
+        ldref._clean_per_chr(f"{PWD}/exampledata/LDREF/extract", f"{PWD}/exampledata/LDREF/clean", mac=10)
         assert os.path.exists(f"{PWD}/exampledata/LDREF/clean.bim")
         with pytest.raises(ValueError):
-            ldref.clean(f"{PWD}/exampledata/LDREF/extract", f"{PWD}/exampledata/LDREF/clean", mac=0)
+            ldref._clean_per_chr(f"{PWD}/exampledata/LDREF/extract", f"{PWD}/exampledata/LDREF/clean", mac=0)
         with pytest.raises(RuntimeError):
-            ldref.clean(f"{PWD}/exampledata/LDREF/extract", f"{PWD}/exampledata/LDREF/clean", mac=10000)
-        ldref.clean(f"{PWD}/exampledata/LDREF/extract")
-        assert os.path.exists(f"{ldref.temp_dir_path}/extract.clean.bim")
+            ldref._clean_per_chr(f"{PWD}/exampledata/LDREF/extract", f"{PWD}/exampledata/LDREF/clean", mac=10000)

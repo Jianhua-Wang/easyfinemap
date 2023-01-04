@@ -42,13 +42,15 @@ def test_validate_sumstats():
     assert result.exit_code == 0
     assert "validate-sumstats" in result.stdout
     result = runner.invoke(
-        app, ["validate-sumstats", f"{PWD}/exampledata/noEAF_noMAF.txt.gz", f"{PWD}/exampledata/sumstats.valid.txt"],
+        app,
+        ["validate-sumstats", f"{PWD}/exampledata/noEAF_noMAF.txt.gz", f"{PWD}/exampledata/sumstats.valid.txt"],
     )
     assert result.exit_code == 0
     assert "sumstats.valid.txt" in os.listdir(f"{PWD}/exampledata/")
     os.remove(f"{PWD}/exampledata/sumstats.valid.txt")
     result = runner.invoke(
-        app, ["validate-sumstats", f"{PWD}/exampledata/noEAF_noMAF.txt.gz", f"{PWD}/exampledata/sumstats.valid.txt.gz"],
+        app,
+        ["validate-sumstats", f"{PWD}/exampledata/noEAF_noMAF.txt.gz", f"{PWD}/exampledata/sumstats.valid.txt.gz"],
     )
     assert result.exit_code == 0
     assert "sumstats.valid.txt.gz" in os.listdir(f"{PWD}/exampledata/")

@@ -3,7 +3,7 @@
 1. validate the LD reference.
     1.1. remove duplicate SNPs.
     1.2. make SNP names unique, chr-bp-sorted(EA,NEA).
-TODO: 1. intersect the significant snps with the LD reference.
+2. intersect the significant snps with the LD reference.
 TODO: 2. make a plink file from the intersected snps.
 TODO: 3. calculate LD matrix from the plink file.
 """
@@ -21,34 +21,24 @@ from pathos.multiprocessing import ProcessingPool as Pool
 
 from easyfinemap.constant import CHROMS, ColName
 from easyfinemap.tools import Tools
-from easyfinemap.utils import make_SNPID_unique
+from easyfinemap.utils import io_in_tempdir, make_SNPID_unique
 
 
 class LDRef:
     """Prepare LD reference for easyfinemap."""
 
-    def __init__(self, log_level: str = "DEBUG"):
-        """
-        Initialize the LDRef class.
-
-        Parameters
-        ----------
-        log_level : str, optional
-            The log level, by default "DEBUG"
-        """
+    def __init__(self):
+        """Initialize the LDRef class."""
         self.logger = logging.getLogger("LDRef")
-        self.logger.setLevel(log_level)
         self.plink = Tools().plink
         self.tmp_root = Path.cwd() / "tmp" / "ldref"
         if not self.tmp_root.exists():
             self.tmp_root.mkdir(parents=True)
-        self.temp_dir = tempfile.mkdtemp(dir=self.tmp_root)
-        self.logger.debug(f"LDRef temp dir: {self.temp_dir}")
-        self.temp_dir_path = Path(self.temp_dir)
 
-    def clean(self, inprefix: str, outprefix: Optional[str] = None, mac: int = 10) -> None:
+    @io_in_tempdir(dir='./tmp/ldref')
+    def _clean_per_chr(self, inprefix: str, outprefix: str, mac: int = 10, temp_dir: Optional[str] = None) -> None:
         """
-        Clean the extracted LD reference.
+        Clean the extracted LD reference per chromosome.
 
         1. Remove duplicated snps.
         2. Make SNP names unique, chr-bp-sorted(EA,NEA).
@@ -58,20 +48,23 @@ class LDRef:
         prefix : str
             The prefix of the extracted LD reference.
         outprefix : str, optional
-            The prefix of the cleaned LD reference, by default None
-            If None, the cleaned LD reference will be saved to the same directory as the extracted LD reference.
+            The prefix of the cleaned LD reference.
         mac : int, optional
             The minor allele count threshold, by default 10
             SNPs with MAC < mac will be removed.
+        temp_dir : Optional[str], optional
+            The temp dir, by default None
 
         Returns
         -------
         None
         """
-        prefix = f"{self.temp_dir_path}/{inprefix.split('/')[-1]}"
+        prefix = f"{temp_dir}/{inprefix.split('/')[-1]}"
         bim_file = f"{inprefix}.bim"
         bim = pd.read_csv(
-            bim_file, sep="\t", names=[ColName.CHR, ColName.RSID, "cM", ColName.BP, ColName.EA, ColName.NEA]
+            bim_file,
+            delim_whitespace=True,
+            names=[ColName.CHR, ColName.RSID, "cM", ColName.BP, ColName.EA, ColName.NEA],
         )
         bim[ColName.RSID] = bim.index  # use number as rsid, make sure it is unique
         bim.to_csv(f"{prefix}.bim", sep="\t", index=False, header=False)
@@ -124,12 +117,20 @@ class LDRef:
         )
         rmdup_bim = make_SNPID_unique(rmdup_bim, replace_rsIDcol=True, remove_duplicates=False)
         rmdup_bim.to_csv(f"{prefix}.clean.bim", sep="\t", index=False, header=False)
-        if outprefix is not None:
-            shutil.move(f"{prefix}.clean.bed", f"{outprefix}.bed")
-            shutil.move(f"{prefix}.clean.bim", f"{outprefix}.bim")
-            shutil.move(f"{prefix}.clean.fam", f"{outprefix}.fam")
+        shutil.move(f"{prefix}.clean.bed", f"{outprefix}.bed")
+        shutil.move(f"{prefix}.clean.bim", f"{outprefix}.bim")
+        shutil.move(f"{prefix}.clean.fam", f"{outprefix}.fam")
 
-    def valid(self, ldref_path: str, outprefix: str, file_type: str = "plink", mac: int = 10, threads: int = 1) -> None:
+    @io_in_tempdir(dir='./tmp/ldref')
+    def valid(
+        self,
+        ldref_path: str,
+        outprefix: str,
+        file_type: str = "plink",
+        mac: int = 10,
+        threads: int = 1,
+        temp_dir: Optional[str] = None,
+    ) -> None:
         """
         Validate the LD reference file.
 
@@ -149,6 +150,11 @@ class LDRef:
             The file type of the LD reference file, by default "plink"
         mac: int, optional
             The minor allele count threshold, by default 10
+            SNPs with MAC < mac will be removed.
+        threads : int, optional
+            The number of threads to use, by default 1
+        temp_dir : Optional[str], optional
+            The path to the temporary directory, by default None
 
         Raises
         ------
@@ -179,20 +185,22 @@ class LDRef:
                 if not os.path.exists(f"{inprefix}.bed"):
                     raise FileNotFoundError(f"{inprefix}.bed not found.")
                 else:
-                    intermed_prefix = f"{self.temp_dir}/{outprefix.split('/')[-1]}.chr{chrom}"
+                    intermed_prefix = f"{temp_dir}/{outprefix.split('/')[-1]}.chr{chrom}"
                     self.extract(inprefix, intermed_prefix, chrom, mac=mac)
                     params[0].append(intermed_prefix)
                     params[1].append(f"{outprefix}.chr{chrom}")
                     params[2].append(mac)
 
         with Pool(threads) as p:
-            p.map(self.clean, *params)
+            p.map(self._clean_per_chr, *params)
 
+    @io_in_tempdir(dir="./tmp/ldref")
     def extract(
         self,
         inprefix: str,
         outprefix: str,
         chrom: int,
+        temp_dir: Optional[str] = None,
         start: Optional[int] = None,
         end: Optional[int] = None,
         mac: int = 10,
@@ -208,6 +216,8 @@ class LDRef:
             The output prefix.
         chrom : int
             The chromosome number.
+        temp_dir : str
+            The temporary directory.
         start : int, optional
             The start position, by default None
         end : int, optional
@@ -219,7 +229,7 @@ class LDRef:
         -------
         None
         """
-        region_file = f"{self.temp_dir}/{outprefix.split('/')[-1]}.region"
+        region_file = f"{temp_dir}/{outprefix.split('/')[-1]}.region"
         if start is None:
             extract_cmd = ["--chr", str(chrom)]
         else:
@@ -251,20 +261,82 @@ class LDRef:
             self.logger.error(f'see log file: {outprefix}.log for details')
             raise RuntimeError(res.stderr)
 
-    def intersect(self, sig_snps: pd.DataFrame, use_ref_EAF: bool = False) -> pd.DataFrame:
+    @io_in_tempdir(dir="./tmp/ldref")
+    def intersect(
+        self,
+        sumstats: pd.DataFrame,
+        ldref: str,
+        out_plink: str,
+        use_ref_EAF: bool = False,
+        temp_dir: Optional[str] = None,
+    ) -> pd.DataFrame:
         """
         Intersect the significant snps with the LD reference.
 
         Parameters
         ----------
-        sig_snps : pd.DataFrame
+        sumstats : pd.DataFrame
             The significant snps.
+        ldref : str
+            The path to the LD reference file.
+        out_plink : str
+            The output prefix.
         use_ref_EAF : bool, optional
             Use the EAF in the LD reference, by default False
+        temp_dir : Optional[str], optional
+            The path to the temporary directory, by default None
 
         Returns
         -------
         pd.DataFrame
             The intersected significant snps.
         """
-        raise NotImplementedError
+        if not os.path.exists(f"{ldref}.bim"):
+            raise FileNotFoundError(f"{ldref}.bim not found.")
+        bim = pd.read_csv(
+            f"{ldref}.bim",
+            delim_whitespace=True,
+            names=[ColName.CHR, ColName.RSID, "cM", ColName.BP, ColName.EA, ColName.NEA],
+        )
+        overlap_sumstat = sumstats[sumstats[ColName.SNPID].isin(bim[ColName.RSID])].copy()
+        overlap_sumstat.reset_index(drop=True, inplace=True)
+        overlap_sumstat[ColName.SNPID].to_csv(f"{temp_dir}/overlap_snpid.txt", index=False, header=False)
+        cmd = [
+            self.plink,
+            "--bfile",
+            ldref,
+            "--extract",
+            f"{temp_dir}/overlap_snpid.txt",
+            "--keep-allele-order",
+            "--make-bed",
+            "--out",
+            out_plink,
+        ]
+        res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+        self.logger.debug(' '.join(cmd))
+        self.logger.debug(f"intersect {sumstats.shape[0]} SNPs with {ldref}")
+        if res.returncode != 0:
+            self.logger.error(res.stderr)
+            self.logger.error(f'see log file: {out_plink}.log for details')
+            raise RuntimeError(res.stderr)
+        if use_ref_EAF:
+            cmd = [
+                self.plink,
+                "--bfile",
+                out_plink,
+                "--freq",
+                "--out",
+                f"{temp_dir}/freq",
+            ]
+            res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+            self.logger.debug(' '.join(cmd))
+            self.logger.debug(f"calculate EAF of {out_plink}")
+            if res.returncode != 0:
+                self.logger.error(res.stderr)
+                self.logger.error(f'see log file: {temp_dir}/freq.log for details')
+                raise RuntimeError(res.stderr)
+            freq = pd.read_csv(f"{temp_dir}/freq.frq", delim_whitespace=True)
+            freq['A2_frq'] = 1 - freq['MAF']
+            overlap_sumstat['EAF'] = freq['A2_frq'].where(freq['A2'] == overlap_sumstat['EA'], freq['MAF'])
+            overlap_sumstat['MAF'] = freq['MAF']
+        return overlap_sumstat

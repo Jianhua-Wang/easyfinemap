@@ -1,18 +1,17 @@
 """Tools for LD matrix and fine-mapping."""
 
+import logging
 import shutil
 import sys
 from typing import Optional, Union
 
-from easyfinemap.logger import logger
-
 
 class Tools:
     """check if tools are installed and return their path."""
-    def __init__(self, log_level: str = "WARNING"):
+
+    def __init__(self):
         """Initialize."""
-        self.logger = logger
-        self.logger.setLevel(log_level)
+        self.logger = logging.getLogger("Tools")
 
     def _check_tool(self, tool: str) -> Optional[str]:
         """
@@ -44,8 +43,3 @@ class Tools:
     def bcftools(self):
         """Check if bcftools is installed."""
         return self._check_tool("bcftools")
-
-
-
-
-

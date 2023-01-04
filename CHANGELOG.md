@@ -5,6 +5,7 @@
 ### Added
 
 - identify lead SNPs by LD clumping
+- add temp dir decorator
 
 ### Changed
 

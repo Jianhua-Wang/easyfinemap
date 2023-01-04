@@ -1,9 +1,10 @@
 """Console script for easy_finemap."""
 
 from pathlib import Path
-import typer
 
 import pandas as pd
+import typer
+
 from easyfinemap.ldref import LDRef
 from easyfinemap.sumstat import SumStat
 

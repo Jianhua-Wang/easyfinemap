@@ -1,5 +1,11 @@
 """Utils for easyfinemap."""
 
+import logging
+import os
+import shutil
+import tempfile
+from functools import wraps
+
 import pandas as pd
 
 from easyfinemap.constant import ColName
@@ -74,3 +80,39 @@ def make_SNPID_unique(sumstat: pd.DataFrame, replace_rsIDcol: bool = False, remo
         df.sort_values([ColName.CHR, ColName.BP], inplace=True)
         df.reset_index(drop=True, inplace=True)
     return df
+
+
+def io_in_tempdir(dir='./tmp'):
+    """
+    Make tempdir for process.
+
+    Parameters
+    ----------
+    dir : str, optional
+        The tempdir, by default './tmp'
+
+    Returns
+    -------
+    decorator
+        The decorator of io in tempdir.
+    """
+
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            temp_dir = tempfile.mkdtemp(dir=dir)
+            logger = logging.getLogger("IO")
+            logger.debug(f"Tempdir: {temp_dir}")
+            try:
+                result = func(*args, temp_dir=temp_dir, **kwargs)
+            except Exception:
+                raise
+            else:
+                if logging.getLogger().getEffectiveLevel() >= logging.INFO:
+                    shutil.rmtree(temp_dir)
+                pass
+            return result  # type: ignore
+
+        return wrapper
+
+    return decorator

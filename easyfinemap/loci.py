@@ -10,39 +10,28 @@ merge the overlapped independent loci (optional).
 """
 
 import logging
-from pathlib import Path
 import tempfile
+from pathlib import Path
 from subprocess import PIPE, run
+from typing import List, Optional, Union
 
 import pandas as pd
 
 from easyfinemap.constant import ColName
-from easyfinemap.logger import logger
 from easyfinemap.tools import Tools
-from easyfinemap.utils import make_SNPID_unique
+from easyfinemap.utils import io_in_tempdir, make_SNPID_unique
 
 
 class Loci:
     """Identify the independent loci."""
 
-    def __init__(self, log_level: str = "DEBUG"):
-        """
-        Initialize the Loci class.
-
-        Parameters
-        ----------
-        log_level : str, optional
-            The log level, by default "DEBUG"
-        """
+    def __init__(self):
+        """Initialize the Loci class."""
         self.logger = logging.getLogger("Loci")
-        self.logger.setLevel(log_level)
         self.plink = Tools().plink
         self.tmp_root = Path.cwd() / "tmp" / "loci"
         if not self.tmp_root.exists():
             self.tmp_root.mkdir(parents=True)
-        self.temp_dir = tempfile.mkdtemp(dir=self.tmp_root)
-        self.logger.debug(f"Loci temp dir: {self.temp_dir}")
-        self.temp_dir_path = Path(self.temp_dir)
 
     def identify_indep_loci(
         self,
@@ -153,10 +142,22 @@ class Loci:
         -------
         pd.DataFrame
         """
-        raise NotImplementedError
+        clumped_snps = []
+        for chrom in sig_df[ColName.CHR].unique():
+            sig_df_chr = sig_df[sig_df[ColName.CHR] == chrom]
+            clumped_snps.append(Loci().clump_per_chr(sig_df_chr, ldref, clump_p1, clump_kb, clump_r2))  # type: ignore
+        clumped_snps = pd.concat(clumped_snps, axis=0, ignore_index=True)
+        return clumped_snps
 
+    @io_in_tempdir(dir="./tmp/loci")
     def clump_per_chr(
-        self, sig_df: pd.DataFrame, ldref: str, clump_p1: float, clump_kb: int, clump_r2: float
+        self,
+        sig_df: pd.DataFrame,
+        ldref: str,
+        clump_p1: float,
+        clump_kb: int,
+        clump_r2: float,
+        temp_dir: Optional[str] = None,
     ) -> pd.DataFrame:
         """
         LD clumping per chromosome.
@@ -173,6 +174,8 @@ class Loci:
             The kb threshold.
         clump_r2 : float
             The r2 threshold.
+        temp_dir : Optional[str], optional
+            The temporary directory, by default None
 
         Returns
         -------
@@ -180,10 +183,9 @@ class Loci:
             The clumped snps.
         """
         chrom = sig_df[ColName.CHR].unique()[0]
-        sig_df = sig_df[[ColName.SNPID, ColName.P]]
-        clump_p_file = self.temp_dir_path / f"clump_p_{chrom}.txt"
-        sig_df.to_csv(clump_p_file, sep="\t", index=False)
-        clump_outfile = self.temp_dir_path / f"clump_{chrom}.clumped"
+        clump_p_file = f"{temp_dir}/clump_p_{chrom}.txt"
+        sig_df[[ColName.SNPID, ColName.P]].to_csv(clump_p_file, sep="\t", index=False)
+        clump_outfile = f"{temp_dir}/clump_{chrom}.clumped"
         cmd = [
             self.plink,
             "--bfile",
@@ -201,21 +203,66 @@ class Loci:
             "--clump-field",
             ColName.P,
             "--out",
-            f"{self.temp_dir}/clump_{chrom}",
+            f"{temp_dir}/clump_{chrom}",
         ]
         res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
         if res.returncode != 0:
             self.logger.error(res.stderr)
             raise RuntimeError(res.stderr)
-        # else:
-        #     clump_df = pd.read_csv(clump_outfile, sep="\t")
-        #     clump_df = clump_df[[ColName.SNPID, ColName.P]]
-        #     return clump_df
+        else:
+            clump_snps = pd.read_csv(clump_outfile, delim_whitespace=True, usecols=["SNP"])
+            clump_snps = clump_snps["SNP"].to_list()
+            clump_snps = sig_df[sig_df[ColName.SNPID].isin(clump_snps)]
+            return clump_snps
 
     @staticmethod
     def indep_snps_by_conditional(sig_df: pd.DataFrame, ld_df: pd.DataFrame, r2_threshold: float = 0.8) -> pd.DataFrame:
         """Identify the independent snps by conditional analysis."""
         raise NotImplementedError
+
+    def cojo_per_chr(self, sig_df: pd.DataFrame, ldref: str, temp_dir: Optional[str] = None) -> pd.DataFrame:
+        """
+        Conditional analysis per chromosome.
+
+        Parameters
+        ----------
+        sig_df : pd.DataFrame
+            The significant snps.
+        ldref : str
+            The LD reference file, (plink bfile format, containing wildcard {chrom}), e.g. EUR.chr{chrom}.
+        temp_dir : Optional[str], optional
+            The temporary directory, by default None
+
+        Returns
+        -------
+        pd.DataFrame
+            The conditional snps.
+        """
+        chrom = sig_df[ColName.CHR].unique()[0]
+        cojo_p_file = f"{temp_dir}/cojo_p_{chrom}.txt"
+        sig_df[[ColName.SNPID, ColName.P]].to_csv(cojo_p_file, sep="\t", index=False)
+        cojo_outfile = f"{temp_dir}/cojo_{chrom}.cojo"
+        cmd = [
+            self.plink,
+            "--bfile",
+            ldref.format(chrom=chrom),
+            "--cojo-file",
+            cojo_p_file,
+            "--cojo-slct",
+            "--cojo-p",
+            "1",
+            "--out",
+            f"{temp_dir}/cojo_{chrom}",
+        ]
+        res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+        if res.returncode != 0:
+            self.logger.error(res.stderr)
+            raise RuntimeError(res.stderr)
+        else:
+            cojo_snps = pd.read_csv(cojo_outfile, delim_whitespace=True, usecols=["SNP"])
+            cojo_snps = cojo_snps["SNP"].to_list()
+            cojo_snps = sig_df[sig_df[ColName.SNPID].isin(cojo_snps)]
+            return cojo_snps
 
     @staticmethod
     def leadsnp2loci(sig_df: pd.DataFrame, range: int = 500000, if_merge: bool = True) -> pd.DataFrame:
@@ -227,7 +274,7 @@ class Loci:
         sig_df : pd.DataFrame
             The independent lead snps.
         range : int, optional
-            The range, by default 1000000
+            The range, by default 500000
         if_merge : bool, optional
             Whether merge the overlapped loci, by default True
 
