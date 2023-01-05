@@ -6,6 +6,7 @@
 
 - identify lead SNPs by LD clumping
 - add temp dir decorator
+- identify lead SNPs by conditional analysis
 
 ### Changed
 

@@ -43,3 +43,23 @@ class Tools:
     def bcftools(self):
         """Check if bcftools is installed."""
         return self._check_tool("bcftools")
+
+    @property
+    def gcta(self):
+        """Check if gcta is installed."""
+        return self._check_tool("gcta64")
+
+    @property
+    def finemap(self):
+        """Check if finemap is installed."""
+        return self._check_tool("finemap")
+
+    @property
+    def paintor(self):
+        """Check if paintor is installed."""
+        return self._check_tool("PAINTOR")
+
+    @property
+    def caviarbf(self):
+        """Check if caviarbf is installed."""
+        return self._check_tool("caviarbf")

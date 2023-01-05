@@ -1,174 +1,187 @@
 name: easyfinemap
 channels:
+  - dnachun
   - bioconda
-  - conda-forge
   - defaults
+  - conda-forge
 dependencies:
   - _libgcc_mutex=0.1=conda_forge
-  - _openmp_mutex=4.5=2_gnu
-  - appdirs=1.4.4=pyh9f0ad1d_0
+  - _openmp_mutex=4.5=2_kmp_llvm
+  - _r-mutex=1.0.1=anacondar_1
+  - attrs=22.1.0=py310h06a4308_0
   - bcftools=1.9=h68d8f2e_9
+  - binutils_impl_linux-64=2.38=h2a08ee3_1
+  - binutils_linux-64=2.38.0=hc2dff05_0
+  - blas=2.116=openblas
+  - blas-devel=3.9.0=16_linux64_openblas
   - brotlipy=0.7.0=py310h5764c6d_1005
-  - bzip2=1.0.8=h7f98852_4
+  - bwidget=1.9.14=ha770c72_1
+  - bzip2=1.0.8=h7b6447c_0
   - c-ares=1.18.1=h7f98852_0
   - ca-certificates=2022.12.7=ha878542_0
   - cachecontrol=0.12.11=pyhd8ed1ab_0
+  - cairo=1.16.0=hb05425b_3
+  - caviarbf=1.0=h2bc3f7f_0
   - certifi=2022.12.7=pyhd8ed1ab_0
   - cffi=1.15.1=py310h255011f_3
   - charset-normalizer=2.1.1=pyhd8ed1ab_0
   - cleo=2.0.1=pyhd8ed1ab_0
-  - click=8.1.3=unix_pyhd8ed1ab_2
-  - click-default-group=1.2.2=pyhd8ed1ab_1
-  - colorama=0.4.6=pyhd8ed1ab_0
-  - conda=22.11.1=py310hff52083_1
-  - conda-lock=1.0.5=pyhd8ed1ab_1
-  - conda-package-handling=2.0.2=pyh38be061_0
-  - conda-package-streaming=0.7.0=pyhd8ed1ab_1
   - crashtest=0.4.1=pyhd8ed1ab_0
-  - cryptography=38.0.4=py310h600f1e7_0
-  - curl=7.87.0=hdc1c0ab_0
-  - dbus=1.13.6=h5008d03_3
+  - curl=7.86.0=h5eee18b_0
+  - dbus=1.13.6=he372182_0
   - distlib=0.3.6=pyhd8ed1ab_0
   - dulwich=0.20.50=py310h1fa729e_0
-  - ensureconda=1.4.3=pyhd8ed1ab_0
   - expat=2.5.0=h27087fc_0
-  - filelock=3.8.2=pyhd8ed1ab_0
-  - fmt=9.1.0=h924138e_0
-  - gettext=0.21.1=h27087fc_0
+  - finemap=1.4.1=0
+  - fontconfig=2.14.1=h52c9d5c_1
+  - freetype=2.10.4=h0708190_1
+  - fribidi=1.0.10=h36c2ea0_0
+  - gcc_impl_linux-64=11.2.0=h1234567_1
+  - gcc_linux-64=11.2.0=h5c386dc_0
+  - gcta=1.93.2beta=h9ee0642_1
+  - gfortran_impl_linux-64=11.2.0=h1234567_1
+  - gfortran_linux-64=11.2.0=hc2dff05_0
+  - glib=2.69.1=he621ea3_2
+  - graphite2=1.3.14=h295c915_1
   - gsl=2.5=h294904e_1
+  - gxx_impl_linux-64=11.2.0=h1234567_1
+  - gxx_linux-64=11.2.0=hc2dff05_0
+  - harfbuzz=4.3.0=hd55b92a_0
   - html5lib=1.1=pyh9f0ad1d_0
   - htslib=1.9=h4da6232_3
-  - icu=70.1=h27087fc_0
+  - icu=58.2=hf484d3e_1000
   - idna=3.4=pyhd8ed1ab_0
   - importlib_metadata=4.11.4=hd8ed1ab_0
-  - importlib_resources=5.10.1=pyhd8ed1ab_1
+  - importlib_resources=5.10.2=pyhd8ed1ab_0
   - jaraco.classes=3.2.3=pyhd8ed1ab_0
   - jeepney=0.8.0=pyhd8ed1ab_0
-  - jinja2=3.1.2=pyhd8ed1ab_1
+  - jpeg=9e=h166bdaf_2
   - jsonschema=4.17.3=pyhd8ed1ab_0
+  - kernel-headers_linux-64=2.6.32=he073ed8_15
+  - keyring=23.13.1=py310hff52083_0
   - keyutils=1.6.1=h166bdaf_0
-  - krb5=1.20.1=h81ceb04_0
-  - ld_impl_linux-64=2.39=hcc3a1bd_1
-  - libarchive=3.6.2=h3d51595_0
+  - krb5=1.19.3=h3790be6_0
+  - ld_impl_linux-64=2.38=h1181459_1
+  - lerc=3.0=h295c915_0
   - libblas=3.9.0=16_linux64_openblas
   - libcblas=3.9.0=16_linux64_openblas
-  - libcurl=7.87.0=hdc1c0ab_0
-  - libdeflate=1.14=h166bdaf_0
+  - libcurl=7.86.0=h91b91d3_0
+  - libdeflate=1.8=h7f8727e_5
   - libedit=3.1.20191231=he28a2e2_2
   - libev=4.33=h516909a_1
-  - libffi=3.4.2=h7f98852_5
+  - libffi=3.4.2=h6a678d5_6
+  - libgcc-devel_linux-64=11.2.0=h1234567_1
   - libgcc-ng=12.2.0=h65d4601_19
-  - libgfortran-ng=12.2.0=h69a702a_19
-  - libgfortran5=12.2.0=h337968e_19
-  - libglib=2.74.1=h606061b_1
+  - libgfortran-ng=11.2.0=h00389a5_1
+  - libgfortran5=11.2.0=h1234567_1
   - libgomp=12.2.0=h65d4601_19
-  - libiconv=1.17=h166bdaf_0
   - liblapack=3.9.0=16_linux64_openblas
-  - libmamba=1.1.0=hde2b089_3
-  - libmambapy=1.1.0=py310h1428755_3
-  - libnghttp2=1.47.0=hff17c54_1
+  - liblapacke=3.9.0=16_linux64_openblas
+  - libnghttp2=1.46.0=hce63b2e_0
   - libnsl=2.0.0=h7f98852_0
   - libopenblas=0.3.21=pthreads_h78a6416_3
-  - libsolv=0.7.23=h3eb15da_0
-  - libsqlite=3.40.0=h753d276_0
-  - libssh2=1.10.0=hf14f497_3
+  - libpng=1.6.37=hbc83047_0
+  - libssh2=1.10.0=ha56f1ee_2
+  - libstdcxx-devel_linux-64=11.2.0=h1234567_1
   - libstdcxx-ng=12.2.0=h46fd767_19
-  - libuuid=2.32.1=h7f98852_1000
-  - libxml2=2.10.3=h7463322_0
-  - libzlib=1.2.13=h166bdaf_4
+  - libtiff=4.4.0=hecacb30_2
+  - libuuid=1.41.5=h5eee18b_0
+  - libwebp-base=1.2.4=h166bdaf_0
+  - libxcb=1.15=h7f8727e_0
+  - libxml2=2.9.14=h74e7548_0
+  - llvm-openmp=14.0.6=h9e868ea_0
   - lockfile=0.12.2=py_1
   - lz4-c=1.9.3=h9c3ff4c_1
-  - lzo=2.10=h516909a_1000
-  - mamba=1.1.0=py310h51d5547_3
-  - markupsafe=2.1.1=py310h5764c6d_2
+  - make=4.3=hd18ef5c_1
   - more-itertools=9.0.0=pyhd8ed1ab_0
   - msgpack-python=1.0.4=py310hbf28c38_1
-  - ncurses=6.3=h27087fc_1
-  - numpy=1.24.0=py310h08bbf29_0
+  - ncurses=6.3=h5eee18b_3
   - openblas=0.3.21=pthreads_h320a7e8_3
-  - openssl=3.0.7=h0b41bf4_1
+  - openssl=1.1.1s=h0b41bf4_1
   - packaging=22.0=pyhd8ed1ab_0
-  - pcre2=10.40=hc3806b6_0
+  - paintor=3.1=h2bc3f7f_0
+  - pango=1.50.7=h05da053_0
+  - pcre=8.45=h9c3ff4c_0
+  - pcre2=10.37=h032f7d1_0
   - perl=5.32.1=2_h7f98852_perl5
   - pexpect=4.8.0=pyh1a96a4e_2
-  - pkginfo=1.9.2=pyhd8ed1ab_0
+  - pixman=0.40.0=h36c2ea0_0
   - pkgutil-resolve-name=1.3.10=pyhd8ed1ab_0
-  - platformdirs=2.6.0=pyhd8ed1ab_0
   - plink=1.90b6.21=hec16e2b_2
-  - plink2=2.00a3.3=hb2a7ceb_0
-  - pluggy=1.0.0=pyhd8ed1ab_5
   - poetry=1.3.1=linux_pyhd8ed1ab_1
   - poetry-core=1.4.0=pyhd8ed1ab_0
   - poetry-plugin-export=1.2.0=pyhd8ed1ab_1
   - ptyprocess=0.7.0=pyhd3deb0d_0
-  - pybind11-abi=4=hd8ed1ab_3
-  - pycosat=0.6.4=py310h5764c6d_1
   - pycparser=2.21=pyhd8ed1ab_0
-  - pydantic=1.10.2=py310h5764c6d_1
-  - pyopenssl=22.1.0=pyhd8ed1ab_0
-  - pyrsistent=0.19.2=py310h5764c6d_0
+  - pyopenssl=23.0.0=pyhd8ed1ab_0
   - pysocks=1.7.1=pyha2e5f31_6
-  - python=3.10.8=h4a9ceb5_0_cpython
-  - python_abi=3.10=3_cp310
-  - pyyaml=6.0=py310h5764c6d_5
+  - python=3.10.8=h7a1cb2a_1
+  - python_abi=3.10=2_cp310
+  - r-base=4.2.0=h1ae530e_0
+  - r-codetools=0.2_18=r42hc72bb7e_1
+  - r-foreach=1.5.2=r42hc72bb7e_1
+  - r-glmnet=4.1_2=r42h8da6f51_1
+  - r-iterators=1.0.14=r42hc72bb7e_1
+  - r-lattice=0.20_45=r42h06615bd_1
+  - r-matrix=1.5_3=r42h5f7b363_0
+  - r-rcpp=1.0.9=r42h7525677_2
+  - r-rcppeigen=0.3.3.9.3=r42h9f5de39_0
+  - r-shape=1.4.6=r42ha770c72_1
+  - r-survival=3.4_0=r42h06615bd_1
   - rapidfuzz=2.13.7=py310heca2aa9_0
-  - readline=8.1.2=h0f457ee_0
-  - reproc=14.2.4=h0b41bf4_0
-  - reproc-cpp=14.2.4=hcb278e6_0
+  - readline=8.2=h5eee18b_0
   - requests=2.28.1=pyhd8ed1ab_1
   - requests-toolbelt=0.10.1=pyhd8ed1ab_0
-  - ruamel.yaml=0.17.21=py310h5764c6d_2
-  - ruamel.yaml.clib=0.2.7=py310h1fa729e_1
   - secretstorage=3.3.3=py310hff52083_1
-  - setuptools=65.6.3=pyhd8ed1ab_0
-  - shellingham=1.5.0=pyhd8ed1ab_0
+  - shellingham=1.5.0.post1=pyhd8ed1ab_0
   - six=1.16.0=pyh6c4a22f_0
-  - tk=8.6.12=h27826a3_0
-  - toml=0.10.2=pyhd8ed1ab_0
+  - sqlite=3.40.0=h5082296_0
+  - sysroot_linux-64=2.12=he073ed8_15
+  - tk=8.6.12=h1ccaba5_0
+  - tktable=2.10=hb7b940f_3
   - tomli=2.0.1=pyhd8ed1ab_0
   - tomlkit=0.11.6=pyha770c72_0
-  - toolz=0.12.0=pyhd8ed1ab_0
-  - tqdm=4.64.1=pyhd8ed1ab_0
-  - trove-classifiers=2022.12.1=pyhd8ed1ab_0
+  - trove-classifiers=2022.12.22=pyhd8ed1ab_0
   - typing=3.10.0.0=pyhd8ed1ab_0
   - typing-extensions=4.4.0=hd8ed1ab_0
   - typing_extensions=4.4.0=pyha770c72_0
-  - tzdata=2022g=h191b570_0
+  - tzdata=2022g=h04d1e81_0
   - urllib3=1.26.13=pyhd8ed1ab_0
   - virtualenv=20.17.1=py310hff52083_0
   - webencodings=0.5.1=py_1
-  - wheel=0.38.4=pyhd8ed1ab_0
-  - xz=5.2.6=h166bdaf_0
-  - yaml=0.2.5=h7f98852_2
-  - yaml-cpp=0.7.0=h27087fc_2
+  - wheel=0.37.1=pyhd3eb1b0_0
+  - xz=5.2.8=h5eee18b_0
   - zipp=3.11.0=pyhd8ed1ab_0
-  - zlib=1.2.13=h166bdaf_4
-  - zstandard=0.19.0=py310hdeb6495_1
-  - zstd=1.5.2=h6239696_4
+  - zlib=1.2.13=h5eee18b_0
+  - zstd=1.5.2=ha4553b6_0
   - pip:
     - anyio==3.6.2
     - argon2-cffi==21.3.0
     - argon2-cffi-bindings==21.2.0
     - arrow==1.2.3
     - asttokens==2.2.1
-    - attrs==22.1.0
     - backcall==0.2.0
     - beautifulsoup4==4.11.1
     - black==22.12.0
     - bleach==5.0.1
     - bump2version==1.0.1
     - cfgv==3.3.1
+    - click==8.1.3
+    - colorama==0.4.6
     - comm==0.1.2
     - commonmark==0.9.1
     - coverage==7.0.0
+    - cryptography==38.0.4
     - debugpy==1.6.4
     - decorator==5.1.1
     - defusedxml==0.7.1
+    - dill==0.3.6
     - docutils==0.19
-    - easyfinemap==0.0.3
+    - easyfinemap==0.0.5
     - entrypoints==0.4
     - executing==1.2.0
     - fastjsonschema==2.16.2
+    - filelock==3.8.2
     - flake8==3.9.2
     - flake8-docstrings==1.6.0
     - fqdn==1.5.1
@@ -184,6 +197,7 @@ dependencies:
     - isoduration==20.11.0
     - isort==5.11.3
     - jedi==0.18.2
+    - jinja2==3.1.2
     - jsonpointer==2.3
     - jupyter==1.0.0
     - jupyter-client==7.4.8
@@ -194,8 +208,8 @@ dependencies:
     - jupyter-server-terminals==0.4.3
     - jupyterlab-pygments==0.2.2
     - jupyterlab-widgets==3.0.4
-    - keyring==23.13.1
     - markdown==3.3.7
+    - markupsafe==2.1.1
     - matplotlib-inline==0.1.6
     - mccabe==0.6.1
     - mergedeep==1.3.4
@@ -207,6 +221,7 @@ dependencies:
     - mkdocs-material-extensions==1.1.1
     - mkdocstrings==0.19.1
     - mkdocstrings-python==0.8.2
+    - multiprocess==0.70.14
     - mypy==0.900
     - mypy-extensions==0.4.3
     - nbclassic==0.4.8
@@ -217,12 +232,19 @@ dependencies:
     - nodeenv==1.7.0
     - notebook==6.5.2
     - notebook-shim==0.2.2
+    - numpy==1.24.0
     - pandas==1.5.2
     - pandocfilters==1.5.0
     - parso==0.8.3
+    - pathos==0.3.0
     - pathspec==0.10.3
     - pickleshare==0.7.5
     - pip==20.3.4
+    - pkginfo==1.9.2
+    - platformdirs==2.6.0
+    - pluggy==1.0.0
+    - pox==0.3.2
+    - ppft==1.7.6.6
     - pre-commit==2.20.0
     - prometheus-client==0.15.0
     - prompt-toolkit==3.0.36
@@ -234,11 +256,13 @@ dependencies:
     - pyflakes==2.3.1
     - pygments==2.13.0
     - pymdown-extensions==9.9
+    - pyrsistent==0.19.2
     - pytest==6.2.5
     - pytest-cov==2.12.1
     - python-dateutil==2.8.2
     - python-json-logger==2.0.4
     - pytz==2022.7
+    - pyyaml==6.0
     - pyyaml-env-tag==0.1
     - pyzmq==24.0.1
     - qtconsole==5.4.0
@@ -249,14 +273,17 @@ dependencies:
     - rfc3986-validator==0.1.1
     - rich==12.6.0
     - send2trash==1.8.0
+    - setuptools==65.6.3
     - sniffio==1.3.0
     - snowballstemmer==2.2.0
     - soupsieve==2.3.2.post1
     - stack-data==0.6.2
     - terminado==0.17.1
     - tinycss2==1.2.1
+    - toml==0.10.2
     - tornado==6.2
     - tox==3.28.0
+    - tqdm==4.64.1
     - traitlets==5.8.0
     - twine==3.8.0
     - typer==0.7.0
@@ -266,4 +293,4 @@ dependencies:
     - webcolors==1.12
     - websocket-client==1.4.2
     - widgetsnbextension==4.0.4
-prefix: /beegfs/home/wangjianhua/anaconda3/envs/easyfinemap
+prefix: /beegfs/home/wangjianhua/mambaforge/envs/easyfinemap
