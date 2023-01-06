@@ -16,7 +16,7 @@ app = typer.Typer(context_settings=CONTEXT_SETTINGS, add_completion=False)
 
 # 1. validate LD reference panel
 # 2. validate GWAS summary statistics
-# TODO: 3. identify lead SNPs
+# 3. identify lead SNPs
 # TODO: 4. fine-mapping
 
 

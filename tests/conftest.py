@@ -13,7 +13,7 @@ PWD = os.path.dirname(os.path.abspath(__file__))
 def sumstats_data():
     """Load the example sumstats data."""
     sumstats_data = pd.read_csv(f"{PWD}/exampledata/noEAF_noMAF.txt.gz", sep="\t")
-    return pd.DataFrame(sumstats_data)
+    return sumstats_data
 
 
 @pytest.fixture

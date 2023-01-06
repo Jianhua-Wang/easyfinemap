@@ -19,7 +19,7 @@ class TestLDRef:
         if os.path.exists(f"{CWD}/tmp"):
             shutil.rmtree(f"{CWD}/tmp")
         ldref = LDRef()
-        assert ldref.tmp_root == f"{CWD}/tmp/ldref"
+        assert str(ldref.tmp_root) == f"{CWD}/tmp/ldref"
 
     def test_valid(self, dirty_ld_panel, clean_ld_panel):
         """Test the valid method of the LDRef class."""
