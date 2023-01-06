@@ -1,11 +1,11 @@
 # Changelog
 
-## [0.1.5] - 2022-12-27
+## [0.1.0] - 2023-01-06
 
 ### Added
 
-- identify lead SNPs by LD clumping
 - add temp dir decorator
+- identify lead SNPs by LD clumping
 - identify lead SNPs by conditional analysis
 
 ### Changed
