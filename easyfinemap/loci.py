@@ -405,6 +405,10 @@ class Loci:
             The cojo collinear, by default 0.9
         diff_freq : float, optional
             The difference frequency, by default 0.2
+        sig_threshold : float, optional
+            The significance threshold, by default 5e-8
+        use_ref_EAF : bool, optional
+            Whether to use the reference EAF, by default False
         temp_dir : Optional[str], optional
             The temporary directory, by default None
 
