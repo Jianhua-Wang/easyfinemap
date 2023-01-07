@@ -14,13 +14,13 @@ Perform fine-mapping for a locus using the following methods:
 
 import logging
 from pathlib import Path
+from subprocess import PIPE, run
 from typing import List, Optional
-from subprocess import run, PIPE
 
 import pandas as pd
 
-from easyfinemap.ldref import LDRef
 from easyfinemap.constant import ColName
+from easyfinemap.ldref import LDRef
 from easyfinemap.loci import Loci
 from easyfinemap.sumstat import SumStat
 from easyfinemap.tools import Tools

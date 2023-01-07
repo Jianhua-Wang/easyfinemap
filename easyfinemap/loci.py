@@ -20,9 +20,9 @@ from rich.progress import Progress
 
 from easyfinemap.constant import ColName
 from easyfinemap.ldref import LDRef
+from easyfinemap.sumstat import SumStat
 from easyfinemap.tools import Tools
 from easyfinemap.utils import get_significant_snps, io_in_tempdir, make_SNPID_unique
-from easyfinemap.sumstat import SumStat
 
 
 class Loci:
@@ -43,8 +43,7 @@ class Loci:
         sig_threshold: float = 5e-8,
         loci_extend: int = 500,
         if_merge: bool = False,
-        leadsnp_file: Optional[Path] = None,
-        loci_file: Optional[Path] = None,
+        outprefix: Optional[str] = None,
         ldref: Optional[str] = None,
         method: str = "distance",
         distance: int = 500,
@@ -56,7 +55,6 @@ class Loci:
         diff_freq: float = 0.2,
         use_ref_EAF: bool = False,
         threads: int = 1,
-
     ) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """
         Identify the independent loci.
@@ -71,10 +69,8 @@ class Loci:
             The range to extend the independent lead snps to independent loci, by default 500, unit: kb
         if_merge : bool, optional
             Whether to merge the overlapped independent loci, by default False
-        leadsnp_file : Optional[str], optional
-            The output file of the independent lead snps, by default None
-        loci_file : Optional[str], optional
-            The output file of the independent loci, by default None
+        outperfix : Optional[str], optional
+            The output prefix, by default None
         ldref : Optional[str], optional
             The LD reference file, by default None
         method : str, optional
@@ -83,7 +79,7 @@ class Loci:
         distance : int, optional
             The distance threshold to identify the independent loci, by default 500, unit: kb
         clump_kb : int, optional
-            The distance threshold for LD clumping, by default 500, unit: kb
+            The distance threshold for LD clumping, by default 10000, unit: kb
         clump_r2 : float, optional
             The r2 threshold for LD clumping, by default 0.1
         sample_size : Optional[int], optional
@@ -134,11 +130,16 @@ class Loci:
                 )
         else:
             raise ValueError(f"Unsupported method: {method}")
+        if if_merge and ColName.COJO_BETA in lead_snp.columns:
+            logging.warning("The loci identified by cojo may not need merge.")
         loci = self.leadsnp2loci(lead_snp, loci_extend, if_merge)
-        if loci_file:
+        if outprefix:
+            loci_file = f"{outprefix}.loci.txt"
             loci.to_csv(loci_file, sep="\t", index=False)
-        if leadsnp_file:
+            self.logger.info(f"Save the independent loci to {loci_file}")
+            leadsnp_file = f"{outprefix}.leadsnp.txt"
             lead_snp.to_csv(leadsnp_file, sep="\t", index=False)
+            self.logger.info(f"Save the independent lead snps to {leadsnp_file}")
         return lead_snp, loci
 
     @staticmethod
@@ -329,7 +330,7 @@ class Loci:
             The sample size.
         sig_threshold : float, optional
             The significance threshold, by default 5e-8
-        cojo_window : int, optional
+        cojo_window_kb : int, optional
             The cojo window, by default 10000, in kb
         cojo_collinear : float, optional
             The cojo collinear, by default 0.9
@@ -339,7 +340,7 @@ class Loci:
             Whether to use the reference EAF, by default False
         threads : int, optional
             The number of threads, by default 1
-        TODO: accelerate the process by running cojo in loci identified by distance
+            TODO: accelerate the process by running cojo in loci identified by distance
         """
         logger = logging.getLogger('COJO')
         if not use_ref_EAF and ColName.EAF not in sumstats.columns:
@@ -348,8 +349,21 @@ class Loci:
         logger.debug(f"Number of significant snps: {len(sig_df)}")
         logger.debug(f"Number of chromosomes: {len(sig_df[ColName.CHR].unique())}")
         args_list = []
+        loci = Loci()
+        # cojo_snps = []
         for chrom in sig_df[ColName.CHR].unique():
             in_df = sumstats[sumstats[ColName.CHR] == chrom]
+            #     cojo_snp = loci.cojo_slct(
+            #         in_df,  # type: ignore
+            #         ldref.format(chrom=chrom),
+            #         sample_size,
+            #         cojo_window_kb,
+            #         cojo_collinear,
+            #         diff_freq,
+            #         sig_threshold,
+            #         use_ref_EAF,
+            #     )
+            #     cojo_snps.append(cojo_snp)
             args_list.append(
                 (
                     in_df,
@@ -363,8 +377,6 @@ class Loci:
                 )
             )
         with ProcessPoolExecutor(max_workers=threads) as executor:
-            loci = Loci()
-            cojo_snps = executor.map(loci.cojo_slct, *zip(*args_list))
             results = []
             with Progress(auto_refresh=False) as progress:
                 task = progress.add_task("Run cojo-slct", total=len(args_list))
@@ -372,7 +384,7 @@ class Loci:
                     progress.update(task, advance=1)
                     progress.refresh()
                     results.append(_)
-        cojo_snps = pd.concat(cojo_snps, axis=0, ignore_index=True)
+        cojo_snps = pd.concat(results, axis=0, ignore_index=True)
         return cojo_snps
 
     @io_in_tempdir(dir="./tmp/loci")
@@ -399,7 +411,7 @@ class Loci:
             The LD reference file, (plink bfile format, containing wildcard {chrom}), e.g. EUR.chr{chrom}.
         sample_size : int
             The sample size of the input sumstatistics.
-        cojo_window : int, optional
+        cojo_window_kb : int, optional
             The cojo window, by default 10000, unit: kb
         cojo_collinear : float, optional
             The cojo collinear, by default 0.9
@@ -459,6 +471,7 @@ class Loci:
             "--out",
             cojo_outfile,
         ]
+        self.logger.debug(f"Run cojo-slct: {' '.join(cmd)}")
         res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
         if res.returncode != 0:
             self.logger.error(res.stderr)
@@ -493,7 +506,7 @@ class Loci:
             The range, by default 500, unit: kb
         if_merge : bool, optional
             Whether merge the overlapped loci, by default False
-        TODO: use custom blocks as loci boundaries
+            TODO: use custom blocks as loci boundaries
 
         Returns
         -------
@@ -510,7 +523,5 @@ class Loci:
         loci_df[ColName.END] = loci_df[ColName.LEAD_SNP_BP] + range
         loci_df = loci_df[ColName.loci_cols].copy()
         if if_merge:
-            if ColName.COJO_BETA in loci_df.columns:
-                logging.warning("The loci identified by cojo may not need merge.")
             loci_df = Loci.merge_overlapped_loci(loci_df)
         return loci_df

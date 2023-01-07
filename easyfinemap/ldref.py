@@ -13,7 +13,7 @@ import os
 import shutil
 import tempfile
 from pathlib import Path
-from subprocess import PIPE, run, check_output
+from subprocess import PIPE, check_output, run
 from typing import List, Optional, Union
 
 import pandas as pd

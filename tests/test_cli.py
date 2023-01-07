@@ -55,12 +55,24 @@ def test_validate_sumstats():
     assert result.exit_code == 0
     assert "sumstats.valid.txt.gz" in os.listdir(f"{PWD}/exampledata/")
     os.remove(f"{PWD}/exampledata/sumstats.valid.txt.gz")
-    # with pytest.raises(FileNotFoundError):
-    #     result = runner.invoke(
-    #         app,
-    #         [
-    #             "validate-sumstats",
-    #             f"{PWD}/exampledata/noEAF_noMAF.1.txt.gz",
-    #             f"{PWD}/exampledata/sumstats.valid.txt.gz",
-    #         ],
-    #     )
+    result = runner.invoke(
+        app,
+        [
+            "validate-sumstats",
+            f"{PWD}/exampledata/noEAF_noMAF.1.txt.gz",
+            f"{PWD}/exampledata/sumstats.valid.txt.gz",
+        ],
+    )
+    assert result.exit_code == 1
+
+
+def test_get_loci():
+    """Test the get-loci command."""
+    result = runner.invoke(app, ["get-loci", "--help"])
+    assert result.exit_code == 0
+    assert "get-loci" in result.stdout
+    result = runner.invoke(app, ["get-loci", f"{PWD}/exampledata/noEAF_noMAF.txt.gz", f"{PWD}/exampledata/distance"])
+    assert result.exit_code == 0
+    assert os.path.exists(f"{PWD}/exampledata/distance.loci.txt")
+    result = runner.invoke(app, ["get-loci", "None_file", f"{PWD}/exampledata/distance"])
+    assert result.exit_code == 1

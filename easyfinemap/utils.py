@@ -101,8 +101,8 @@ def io_in_tempdir(dir='./tmp'):
         @wraps(func)
         def wrapper(*args, **kwargs):
             temp_dir = tempfile.mkdtemp(dir=dir)
-            logger = logging.getLogger("IO")
-            logger.debug(f"Tempdir: {temp_dir}")
+            # logger = logging.getLogger("IO")
+            # logger.debug(f"Tempdir: {temp_dir}")
             try:
                 result = func(*args, temp_dir=temp_dir, **kwargs)
             except Exception:
