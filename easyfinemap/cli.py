@@ -7,11 +7,13 @@ from pathlib import Path
 
 import pandas as pd
 import typer
+from rich.console import Console
 
 from easyfinemap.ldref import LDRef
 from easyfinemap.loci import Loci
 from easyfinemap.sumstat import SumStat
-from easyfinemap.utils import get_significant_snps, make_SNPID_unique
+from easyfinemap import __version__
+
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 app = typer.Typer(context_settings=CONTEXT_SETTINGS, add_completion=False)
@@ -30,7 +32,23 @@ class LociMethod(str, Enum):
     conditional = "conditional"
 
 
-logger = logging.getLogger('CLI')
+@app.callback(invoke_without_command=True, no_args_is_help=True)
+def main(
+    version: bool = typer.Option(False, '--version', '-V', help='Show version.'),
+    verbose: bool = typer.Option(False, '--verbose', '-v', help='Show verbose info.'),
+):
+    """EasyFinemap: A user-friendly tool for fine-mapping."""
+    console = Console()
+    console.rule("[bold blue]EasyFinemap[/bold blue]")
+    console.print(f"Version: {__version__}", justify="center")
+    console.print("Author: Jianhua Wang", justify="center")
+    console.print("Email: jianhua.mert@gmail.com", justify="center")
+    if version:
+        typer.echo(f'EasyFinemap version: {__version__}')
+        raise typer.Exit()
+    if verbose:
+        logging.getLogger().setLevel(logging.DEBUG)
+        logging.info('Verbose mode is on.')
 
 
 @app.command()
@@ -66,7 +84,7 @@ def validate_sumstats(
             valid_sumstats.to_csv(output, sep="\t", index=False)
         typer.echo(f"Saved the validated summary statistics to {output}.")
     else:
-        logger.error(f"No such file of {sumstats_path}.")
+        logging.error(f"No such file of {sumstats_path}.")
         sys.exit(1)
 
 
@@ -92,13 +110,8 @@ def get_loci(
     diff_freq: float = typer.Option(0.2, "--diff-freq", help="The difference in allele frequency threshold."),
     use_ref_eaf: bool = typer.Option(False, "--use-ref-eaf", help="Whether to use the reference panel EAF."),
     threads: int = typer.Option(1, "--threads", "-t", help="The number of threads."),
-    verbose: bool = typer.Option(False, "--verbose", "-v", help="Whether to print the log."),
 ) -> None:
     """Get the loci from the GWAS summary statistics file."""
-    if verbose:
-        logger.setLevel(logging.DEBUG)
-    else:
-        logger.setLevel(logging.INFO)
     if sumstats_path.exists():
         sumstats = pd.read_csv(sumstats_path, sep="\t")
         Loci().identify_indep_loci(
@@ -120,7 +133,7 @@ def get_loci(
             threads=threads,
         )
     else:
-        logger.error(f"No such file of {sumstats_path}.")
+        logging.error(f"No such file of {sumstats_path}.")
         sys.exit(1)
 
 

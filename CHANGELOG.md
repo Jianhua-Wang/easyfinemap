@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.2] - 2023-01-07
+
+### Added
+
+- update summary statistics using cojo-cond
+- make ld matrix using plink --r2
+- fine-mapping tools: FINEMAP
+
+### Changed
+
+
+### Fixed
+
 ## [0.1.1] - 2023-01-07
 
 ### Added

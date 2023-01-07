@@ -154,6 +154,6 @@ class SumStat(pd.DataFrame):
         self = self.check_snpid()
         self = self.check_eaf()
         self = self.check_maf()
-        self[ColName.Z] = self[ColName.BETA] / self[ColName.SE]
+        # self[ColName.Z] = self[ColName.BETA] / self[ColName.SE]
         self.reset_index(drop=True, inplace=True)
         return self

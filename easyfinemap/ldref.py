@@ -4,14 +4,14 @@
     1.1. remove duplicate SNPs.
     1.2. make SNP names unique, chr-bp-sorted(EA,NEA).
 2. intersect the significant snps with the LD reference.
-TODO: 2. make a plink file from the intersected snps.
-TODO: 3. calculate LD matrix from the plink file.
+3. make a plink file from the intersected snps.
+TODO: 4. calculate LD matrix from the plink file.
+TODO: 5. perform conditional analysis in conditional mode.
 """
 
 import logging
 import os
 import shutil
-import tempfile
 from pathlib import Path
 from subprocess import PIPE, check_output, run
 from typing import List, Optional, Union
@@ -31,6 +31,7 @@ class LDRef:
         """Initialize the LDRef class."""
         self.logger = logging.getLogger("LDRef")
         self.plink = Tools().plink
+        self.gcta = Tools().gcta
         self.tmp_root = Path.cwd() / "tmp" / "ldref"
         if not self.tmp_root.exists():
             self.tmp_root.mkdir(parents=True)
@@ -337,8 +338,8 @@ class LDRef:
                 f"{temp_dir}/freq",
             ]
             res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
-            self.logger.debug(' '.join(cmd))
             self.logger.debug(f"calculate EAF of {out_plink}")
+            self.logger.debug(f"calculate EAF: {' '.join(cmd)}")
             # if res.returncode != 0:
             #     self.logger.error(res.stderr)
             #     self.logger.error(f'see log file: {temp_dir}/freq.log for details')
@@ -348,3 +349,139 @@ class LDRef:
             overlap_sumstat['EAF'] = freq['A2_frq'].where(freq['A2'] == overlap_sumstat['EA'], freq['MAF'])
             overlap_sumstat['MAF'] = freq['MAF']
         return overlap_sumstat
+
+    @io_in_tempdir('./tmp/ldref')
+    def make_ld(self, ldref: str, outprefix: str):
+        """
+        Make the LD matrix.
+
+        Parameters
+        ----------
+        ldref : str
+            The path to the LD reference file.
+        outprefix : str
+            The output prefix.
+
+        Raises
+        ------
+        RuntimeError
+            If the return code is not 0.
+
+        Returns
+        -------
+        None
+        """
+        self.logger.info("Making the LD matrix")
+        cmd = [
+            self.plink,
+            "--bfile",
+            ldref,
+            "--r2",
+            "square",
+            "spaces",
+            "--threads",
+            "1",
+            "--out",
+            outprefix,
+        ]
+        res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+        self.logger.debug(f"get LD matrix: {' '.join(cmd)}")
+        if res.returncode != 0:
+            self.logger.error(res.stderr)
+            raise RuntimeError(res.stderr)
+        else:
+            self.logger.debug("LD matrix is made")
+
+    @io_in_tempdir('./tmp/ldref')
+    def cojo_cond(
+        self,
+        sumstats: pd.DataFrame,
+        cond_snps: pd.DataFrame,
+        ldref: str,
+        sample_size: int,
+        use_ref_EAF: bool = False,
+        temp_dir: Optional[str] = None,
+    ) -> pd.DataFrame:
+        """
+        Conditional analysis. Update the beta, se, pval of the conditional SNPs.
+
+        Parameters
+        ----------
+        sumstats : pd.DataFrame
+            The summary statistics.
+        cond_snps : pd.DataFrame
+            The conditional SNPs.
+        ldref : str
+            The path to the LD reference file.
+        sample_size : int
+            The sample size.
+        use_ref_EAF : bool, optional
+            Whether to use the EAF in the LD reference file, by default False
+        temp_dir : Optional[str], optional
+            The path to the temporary directory, by default None
+
+        Raises
+        ------
+        ValueError
+            If the EAF is not in the sumstats and use_ref_EAF is False.
+
+        Returns
+        -------
+        pd.DataFrame
+            The updated summary statistics.
+        """
+        if not use_ref_EAF and ColName.EAF not in sumstats.columns:
+            raise ValueError(f"{ColName.EAF} is not in the sumstats, please set use_ref_EAF to True")
+        chrom = sumstats[ColName.CHR].iloc[0]
+        ld = LDRef()
+        all_sumstats = pd.concat([sumstats, cond_snps], ignore_index=True)
+        all_sumstats.drop_duplicates(subset=[ColName.SNPID], inplace=True)
+        all_sumstats.sort_values(by=[ColName.CHR, ColName.BP], inplace=True)
+        all_sumstats.reset_index(drop=True, inplace=True)
+        cojo_input = ld.intersect(all_sumstats, ldref, f"{temp_dir}/cojo_input_{chrom}", use_ref_EAF)
+        cojo_input[ColName.N] = sample_size
+        cojo_input = cojo_input[
+            [ColName.SNPID, ColName.EA, ColName.NEA, ColName.EAF, ColName.BETA, ColName.SE, ColName.P, ColName.N]
+        ]
+        cojo_input.rename(
+            columns={
+                ColName.SNPID: "SNP",
+                ColName.EA: "A1",
+                ColName.NEA: "A2",
+                ColName.EAF: "freq",
+                ColName.BETA: "b",
+                ColName.SE: "se",
+                ColName.P: "p",
+                ColName.N: "N",
+            },
+            inplace=True,
+        )
+        cojo_p_file = f"{temp_dir}/cojo_input_{chrom}.ma"
+        cojo_input.to_csv(cojo_p_file, sep=" ", index=False)
+        with open(f"{temp_dir}/cojo_cond_{chrom}.snps", "w") as f:
+            f.write('\n'.join(cond_snps[ColName.SNPID].tolist()))
+        cojo_outfile = f"{temp_dir}/cojo_{chrom}.cond"
+        cmd = [
+            self.gcta,
+            "--bfile",
+            ldref,
+            "--cojo-file",
+            cojo_p_file,
+            "--cojo-cond",
+            f"{temp_dir}/cojo_cond_{chrom}.snps",
+            "--out",
+            cojo_outfile,
+        ]
+        res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+        if res.returncode != 0:
+            self.logger.error(res.stderr)
+            raise RuntimeError(res.stderr)
+        else:
+            cond_res = pd.read_csv(f"{cojo_outfile}.cma.cojo", sep="\t", usecols=["SNP", "bC", "bC_se", "pC"])
+            cond_res.rename(
+                columns={"SNP": ColName.SNPID, "bC": ColName.COJO_BETA, "bC_se": ColName.COJO_SE, "pC": ColName.COJO_P},
+                inplace=True,
+            )
+            output = sumstats.merge(cond_res, on=ColName.SNPID, how="left")
+            output = output.dropna(subset=[ColName.COJO_P, ColName.COJO_BETA, ColName.COJO_SE])
+            return output

@@ -24,7 +24,7 @@ from easyfinemap.ldref import LDRef
 from easyfinemap.loci import Loci
 from easyfinemap.sumstat import SumStat
 from easyfinemap.tools import Tools
-from easyfinemap.utils import get_significant_snps, io_in_tempdir, make_SNPID_unique
+from easyfinemap.utils import get_significant_snps, io_in_tempdir
 
 
 class EasyFinemap(object):
@@ -45,97 +45,83 @@ class EasyFinemap(object):
             self.tmp_root.mkdir(parents=True)
 
     @io_in_tempdir('./tmp/finemapping')
-    def cojo_cond(
+    def run_finemap(
         self,
         sumstats: pd.DataFrame,
-        ldref: str,
-        cond_snps: List[str],
-        out: str,
+        ld_matrix: str,
         sample_size: int,
-        use_ref_EAF: bool = False,
+        max_causal: int = 1,
         temp_dir: Optional[str] = None,
-    ) -> pd.DataFrame:
+    ) -> pd.Series:
         """
-        Conditional analysis. Update the beta, se, pval of the conditional SNPs.
-
-        Using cojo-cond in GCTA.
-        Condition on the SNPs in cond_snps.
+        Run FINEMAP.
 
         Parameters
         ----------
         sumstats : pd.DataFrame
             Summary statistics.
-        ldref : str
-            LD reference file.
-        cond_snps : List[str]
-            SNPs to condition on.
-        out : str
-            Output file.
+        ld_matrix : str
+            Path to LD matrix.
         sample_size : int
             Sample size.
-        use_ref_EAF : bool, optional
-            Use the EAF in the LD reference file, by default False
+        max_causal : int, optional
+            Maximum number of causal variants, by default 1
+        temp_dir : Optional[str], optional
+            Path to tempdir, by default None
 
         Returns
         -------
-        pd.DataFrame
-            Conditional summary statistics.
+        pd.Series
+            The result of FINEMAP.
         """
-        if not use_ref_EAF and ColName.EAF not in sumstats.columns:
-            raise ValueError(f"{ColName.EAF} is not in the sumstats, please set use_ref_EAF to True")
-        chrom = sumstats[ColName.CHR].iloc[0]
-        ld = LDRef()
-        cojo_input = ld.intersect(sumstats, ldref, f"{temp_dir}/cojo_input_{chrom}", use_ref_EAF)
-        cojo_input[ColName.N] = sample_size
-        cojo_input = cojo_input[
-            [ColName.SNPID, ColName.EA, ColName.NEA, ColName.EAF, ColName.BETA, ColName.SE, ColName.P, ColName.N]
+        finemap_input = sumstats.copy()
+        finemap_input[ColName.MAF] = finemap_input[ColName.MAF].replace(0, 0.00001)
+        finemap_input = finemap_input[
+            [ColName.SNPID, ColName.CHR, ColName.BP, ColName.EA, ColName.NEA, ColName.MAF, ColName.BETA, ColName.SE]
         ]
-        cojo_input.rename(
+        finemap_input.rename(
             columns={
-                ColName.SNPID: "SNP",
-                ColName.EA: "A1",
-                ColName.NEA: "A2",
-                ColName.EAF: "freq",
-                ColName.BETA: "b",
+                ColName.SNPID: "rsid",
+                ColName.CHR: "chromosome",
+                ColName.BP: "position",
+                ColName.MAF: "maf",
+                ColName.BETA: "beta",
                 ColName.SE: "se",
-                ColName.P: "p",
-                ColName.N: "N",
+                ColName.EA: "allele1",
+                ColName.NEA: "allele2",
             },
             inplace=True,
         )
-        cojo_p_file = f"{temp_dir}/cojo_input_{chrom}.ma"
-        cojo_input.to_csv(cojo_p_file, sep=" ", index=False)
-        with open(f"{temp_dir}/cojo_cond_{chrom}.snps", "w") as f:
-            f.write('\n'.join(cond_snps))
-        cojo_outfile = f"{temp_dir}/cojo_{chrom}.cond"
+        finemap_input.to_csv(f"{temp_dir}/finemap.z", sep=" ", index=False)
+        with open(f"{temp_dir}/finemap.master", "w") as f:
+            master_content = [
+                f"{temp_dir}/finemap.z",
+                ld_matrix,
+                f"{temp_dir}/finemap.snp",
+                f"{temp_dir}/finemap.config",
+                f"{temp_dir}/finemap.cred",
+                f"{temp_dir}/finemap.log",
+                str(sample_size),
+            ]
+            f.write("z;ld;snp;config;cred;log;n_samples\n")
+            f.write(";".join(master_content))
         cmd = [
-            self.gcta,
-            "--bfile",
-            ldref,
-            "--cojo-file",
-            cojo_p_file,
-            "--cojo-cond",
-            f"{temp_dir}/cojo_cond_{chrom}.snps",
-            "--out",
-            cojo_outfile,
+            self.finemap,
+            "--sss",
+            "--in-files",
+            f"{temp_dir}/finemap.master",
+            "--n-causal-snps",
+            str(max_causal),
         ]
         res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+        self.logger.debug(f"run FINEMAP: {' '.join(cmd)}")
         if res.returncode != 0:
             self.logger.error(res.stderr)
             raise RuntimeError(res.stderr)
         else:
-            cond_res = pd.read_csv(f"{cojo_outfile}.cond.cma.cojo", sep="\t")
-            return cond_res
-
-    @io_in_tempdir('./tmp/finemapping')
-    def make_ld(self, sumstat: pd.DataFrame, ldref: LDRef, out: str):
-        """Make the LD matrix."""
-        self.logger.info("Making the LD matrix")
-
-    def run_finemap(self, sumstat: pd.DataFrame, ldref: LDRef, out: str):
-        """Run FINEMAP."""
-        self.logger.info("Running FINEMAP")
-        raise NotImplementedError
+            finemap_res = pd.read_csv(f"{temp_dir}/finemap.config", sep=" ", usecols=["config", "prob"])
+            finemap_res = pd.Series(finemap_res["prob"].values, index=finemap_res["config"].values)  # type: ignore
+            return finemap_res
 
     def run_paintor(self, sumstat: pd.DataFrame, ldref: LDRef, out: str):
         """Run PAINTOR."""
@@ -155,6 +141,13 @@ class EasyFinemap(object):
     ) -> None:
         """
         Finemap a locus.
+
+        1. Check if LD is needed, abf, susie, polyfun+susie do not need LD.
+        2. If LD is needed, intersect the locus with the LD reference and make the LD matrix.
+        3. Run the finemapping method.
+        4. Get the finemapping results.
+        5. Merge the finemapping results with the input sumstats.
+        6. Return the credible set or full summary statistics with posterior probabilities.
 
         Parameters
         ----------

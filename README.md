@@ -20,11 +20,7 @@ user-friendly pipeline for GWAS fine-mapping
 
 
 ## Features
-* Prepare LD referen for fine-mapping
+* Prepare LD reference for fine-mapping
 * Standardize input summary statistics
-* TODO: Identify independent loci by distance, LD clumping, or conditional analysis
+* Identify independent loci by distance, LD clumping, or conditional analysis
 * TODO: Fine-mapping with or without LD reference
-
-## Credits
-
-This package was created with [Cookiecutter](https://github.com/audreyr/cookiecutter) and the [waynerv/cookiecutter-pypackage](https://github.com/waynerv/cookiecutter-pypackage) project template.

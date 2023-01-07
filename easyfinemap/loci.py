@@ -16,13 +16,13 @@ from subprocess import PIPE, run
 from typing import List, Optional, Tuple, Union
 
 import pandas as pd
-from rich.progress import Progress
+from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn, TimeElapsedColumn
 
 from easyfinemap.constant import ColName
 from easyfinemap.ldref import LDRef
 from easyfinemap.sumstat import SumStat
 from easyfinemap.tools import Tools
-from easyfinemap.utils import get_significant_snps, io_in_tempdir, make_SNPID_unique
+from easyfinemap.utils import get_significant_snps, io_in_tempdir
 
 
 class Loci:
@@ -55,7 +55,7 @@ class Loci:
         diff_freq: float = 0.2,
         use_ref_EAF: bool = False,
         threads: int = 1,
-    ) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    ) -> Union[Tuple[pd.DataFrame, pd.DataFrame], None]:
         """
         Identify the independent loci.
 
@@ -130,9 +130,10 @@ class Loci:
                 )
         else:
             raise ValueError(f"Unsupported method: {method}")
-        if if_merge and ColName.COJO_BETA in lead_snp.columns:
-            logging.warning("The loci identified by cojo may not need merge.")
         loci = self.leadsnp2loci(lead_snp, loci_extend, if_merge)
+        if if_merge and ColName.COJO_BETA in lead_snp.columns:
+            self.logger.warning("The loci identified by cojo may not need merge.")
+            lead_snp = lead_snp[lead_snp[ColName.SNPID].isin(loci[ColName.LEAD_SNP])]
         if outprefix:
             loci_file = f"{outprefix}.loci.txt"
             loci.to_csv(loci_file, sep="\t", index=False)
@@ -140,7 +141,8 @@ class Loci:
             leadsnp_file = f"{outprefix}.leadsnp.txt"
             lead_snp.to_csv(leadsnp_file, sep="\t", index=False)
             self.logger.info(f"Save the independent lead snps to {leadsnp_file}")
-        return lead_snp, loci
+        else:
+            return lead_snp, loci
 
     @staticmethod
     def merge_overlapped_loci(loci_df: pd.DataFrame):
@@ -350,20 +352,8 @@ class Loci:
         logger.debug(f"Number of chromosomes: {len(sig_df[ColName.CHR].unique())}")
         args_list = []
         loci = Loci()
-        # cojo_snps = []
         for chrom in sig_df[ColName.CHR].unique():
             in_df = sumstats[sumstats[ColName.CHR] == chrom]
-            #     cojo_snp = loci.cojo_slct(
-            #         in_df,  # type: ignore
-            #         ldref.format(chrom=chrom),
-            #         sample_size,
-            #         cojo_window_kb,
-            #         cojo_collinear,
-            #         diff_freq,
-            #         sig_threshold,
-            #         use_ref_EAF,
-            #     )
-            #     cojo_snps.append(cojo_snp)
             args_list.append(
                 (
                     in_df,
@@ -378,7 +368,13 @@ class Loci:
             )
         with ProcessPoolExecutor(max_workers=threads) as executor:
             results = []
-            with Progress(auto_refresh=False) as progress:
+            with Progress(
+                TextColumn("{task.description}"),
+                BarColumn(),
+                MofNCompleteColumn(),
+                TimeElapsedColumn(),
+                auto_refresh=False,
+            ) as progress:
                 task = progress.add_task("Run cojo-slct", total=len(args_list))
                 for _ in executor.map(loci.cojo_slct, *zip(*args_list)):
                     progress.update(task, advance=1)

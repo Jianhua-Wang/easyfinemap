@@ -10,7 +10,7 @@ nav:
     - Installation: installation.md
   - Usage: usage.md
   - Modules:
-    - easyfinemap: api/easyfinemap.md
+    - EasyFinemap: api/easyfinemap.md
     - SumStat: api/Sumstat.md
     - LDRef: api/LDRef.md
     - Loci: api/Loci.md
