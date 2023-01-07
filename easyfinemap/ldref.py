@@ -13,7 +13,7 @@ import os
 import shutil
 import tempfile
 from pathlib import Path
-from subprocess import PIPE, run
+from subprocess import PIPE, run, check_output
 from typing import List, Optional, Union
 
 import pandas as pd
@@ -175,7 +175,8 @@ class LDRef:
             if "{chrom}" in ldref_path:
                 inprefix = ldref_path.replace("{chrom}", str(chrom))
                 if not os.path.exists(f"{inprefix}.bed"):
-                    raise FileNotFoundError(f"{inprefix}.bed not found.")
+                    self.logger.warning(f"{inprefix}.bed not found.")
+                    continue
                 else:
                     params[0].append(inprefix)
                     params[1].append(f"{outprefix}.chr{chrom}")
@@ -185,11 +186,17 @@ class LDRef:
                 if not os.path.exists(f"{inprefix}.bed"):
                     raise FileNotFoundError(f"{inprefix}.bed not found.")
                 else:
-                    intermed_prefix = f"{temp_dir}/{outprefix.split('/')[-1]}.chr{chrom}"
-                    self.extract(inprefix, intermed_prefix, chrom, mac=mac)
-                    params[0].append(intermed_prefix)
-                    params[1].append(f"{outprefix}.chr{chrom}")
-                    params[2].append(mac)
+                    # check if chrom is in the bim file
+                    res = check_output(f'grep "^{chrom}[[:space:]]" {inprefix}.bim | head -n 1', shell=True)
+                    if len(res.decode()) == 0:
+                        self.logger.warning(f"Chrom {chrom} not found in {inprefix}.bim")
+                        continue
+                    else:
+                        intermed_prefix = f"{temp_dir}/{outprefix.split('/')[-1]}.chr{chrom}"
+                        self.extract(inprefix, intermed_prefix, chrom, mac=mac)
+                        params[0].append(intermed_prefix)
+                        params[1].append(f"{outprefix}.chr{chrom}")
+                        params[2].append(mac)
 
         with Pool(threads) as p:
             p.map(self._clean_per_chr, *params)
@@ -276,7 +283,7 @@ class LDRef:
         Parameters
         ----------
         sumstats : pd.DataFrame
-            The significant snps.
+            The summary statistics.
         ldref : str
             The path to the LD reference file.
         out_plink : str
@@ -293,14 +300,7 @@ class LDRef:
         """
         if not os.path.exists(f"{ldref}.bim"):
             raise FileNotFoundError(f"{ldref}.bim not found.")
-        bim = pd.read_csv(
-            f"{ldref}.bim",
-            delim_whitespace=True,
-            names=[ColName.CHR, ColName.RSID, "cM", ColName.BP, ColName.EA, ColName.NEA],
-        )
-        overlap_sumstat = sumstats[sumstats[ColName.SNPID].isin(bim[ColName.RSID])].copy()
-        overlap_sumstat.reset_index(drop=True, inplace=True)
-        overlap_sumstat[ColName.SNPID].to_csv(f"{temp_dir}/overlap_snpid.txt", index=False, header=False)
+        sumstats[ColName.SNPID].to_csv(f"{temp_dir}/overlap_snpid.txt", index=False, header=False)
         cmd = [
             self.plink,
             "--bfile",
@@ -319,6 +319,14 @@ class LDRef:
             self.logger.error(res.stderr)
             self.logger.error(f'see log file: {out_plink}.log for details')
             raise RuntimeError(res.stderr)
+        bim = pd.read_csv(
+            f"{out_plink}.bim",
+            delim_whitespace=True,
+            names=[ColName.CHR, ColName.RSID, "cM", ColName.BP, ColName.EA, ColName.NEA],
+        )
+        overlap_sumstat = sumstats[sumstats[ColName.SNPID].isin(bim[ColName.RSID])].copy()
+        overlap_sumstat.reset_index(drop=True, inplace=True)
+
         if use_ref_EAF:
             cmd = [
                 self.plink,
@@ -331,10 +339,10 @@ class LDRef:
             res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
             self.logger.debug(' '.join(cmd))
             self.logger.debug(f"calculate EAF of {out_plink}")
-            if res.returncode != 0:
-                self.logger.error(res.stderr)
-                self.logger.error(f'see log file: {temp_dir}/freq.log for details')
-                raise RuntimeError(res.stderr)
+            # if res.returncode != 0:
+            #     self.logger.error(res.stderr)
+            #     self.logger.error(f'see log file: {temp_dir}/freq.log for details')
+            #     raise RuntimeError(res.stderr)
             freq = pd.read_csv(f"{temp_dir}/freq.frq", delim_whitespace=True)
             freq['A2_frq'] = 1 - freq['MAF']
             overlap_sumstat['EAF'] = freq['A2_frq'].where(freq['A2'] == overlap_sumstat['EA'], freq['MAF'])

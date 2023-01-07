@@ -493,6 +493,7 @@ class Loci:
             The range, by default 500, unit: kb
         if_merge : bool, optional
             Whether merge the overlapped loci, by default False
+        TODO: use custom blocks as loci boundaries
 
         Returns
         -------

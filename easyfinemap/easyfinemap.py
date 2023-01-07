@@ -141,3 +141,54 @@ class EasyFinemap(object):
         """Run PAINTOR."""
         self.logger.info("Running PAINTOR")
         raise NotImplementedError
+
+    def finemap_locus(
+        self,
+        locus: pd.DataFrame,
+        sumstat: pd.DataFrame,
+        ldref: str,
+        out: str,
+        method: str,
+        sample_size: int,
+        use_ref_EAF: bool = False,
+        temp_dir: Optional[str] = None,
+    ) -> None:
+        """
+        Finemap a locus.
+
+        Parameters
+        ----------
+        locus : Loci
+            Locus to finemap.
+        sumstat : SumStat
+            Summary statistics.
+        ldref : LDRef
+            LD reference.
+        out : str
+            Output file.
+        method : str
+            Method to use.
+        sample_size : int
+            Sample size.
+        use_ref_EAF : bool, optional
+            Use the EAF in the LD reference file, by default False
+        temp_dir : Optional[str], optional
+            Temporary directory, by default None
+
+        Returns
+        -------
+        pd.DataFrame
+            Finemapping results.
+        """
+        if method not in ["finemap", "paintor", "caviarbf", "susie", "polyfun+susie"]:
+            raise ValueError(f"Method {method} not supported")
+        if method == "finemap":
+            raise NotImplementedError
+        elif method == "paintor":
+            raise NotImplementedError
+        elif method == "caviarbf":
+            raise NotImplementedError
+        elif method == "susie":
+            raise NotImplementedError
+        elif method == "polyfun+susie":
+            raise NotImplementedError

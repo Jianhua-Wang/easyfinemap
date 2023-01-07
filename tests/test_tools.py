@@ -9,6 +9,10 @@ def test_tools():
     tools = Tools()
     assert tools.plink
     assert tools.bcftools
+    assert tools.gcta
+    assert tools.finemap
+    assert tools.paintor
+    assert tools.caviarbf
     try:
         tools._check_tool("notool")
     except ValueError:

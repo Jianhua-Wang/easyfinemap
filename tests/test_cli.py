@@ -26,14 +26,14 @@ def test_validate_ldref():
         app,
         [
             "validate-ldref",
-            f"{PWD}/exampledata/LDREF/hapmap3",
-            f"{PWD}/exampledata/LDREF/hapmap3.valid",
+            f"{PWD}/exampledata/LDREF/EUR.chr21-22",
+            f"{PWD}/exampledata/LDREF/EUR.valid",
             "--file-type",
             "plink",
         ],
     )
     assert result.exit_code == 0
-    assert "hapmap3.valid.chr1.bim" in os.listdir(f"{PWD}/exampledata/LDREF")
+    assert "EUR.valid.chr21.bim" in os.listdir(f"{PWD}/exampledata/LDREF")
 
 
 def test_validate_sumstats():

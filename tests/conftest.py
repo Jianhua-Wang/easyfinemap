@@ -59,10 +59,10 @@ def mock_sumstat():
 @pytest.fixture
 def dirty_ld_panel():
     """Load the example dirty ld panel data."""
-    return f"{PWD}/exampledata/LDREF/hapmap3"
+    return f"{PWD}/exampledata/LDREF/EUR.chr21-22"
 
 
 @pytest.fixture
 def clean_ld_panel():
     """Load the example clean ld panel data."""
-    return f"{PWD}/exampledata/LDREF/hapmap3.valid"
+    return f"{PWD}/exampledata/LDREF/EUR.valid"
