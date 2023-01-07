@@ -390,7 +390,7 @@
   
     <li class="md-nav__item">
       <a href="../easyfinemap/" class="md-nav__link">
-        easyfinemap
+        EasyFinemap
       </a>
     </li>
   
@@ -863,8 +863,8 @@
         <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="n">temp_dir</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="nb">dir</span><span class="p">)</span>
-            <span class="c1"># logger = logging.getLogger(&quot;IO&quot;)</span>
-            <span class="c1"># logger.debug(f&quot;Tempdir: {temp_dir}&quot;)</span>
+            <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;IO&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tempdir: </span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">temp_dir</span><span class="o">=</span><span class="n">temp_dir</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>

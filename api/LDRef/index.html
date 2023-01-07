@@ -390,7 +390,7 @@
   
     <li class="md-nav__item">
       <a href="../easyfinemap/" class="md-nav__link">
-        easyfinemap
+        EasyFinemap
       </a>
     </li>
   
@@ -454,6 +454,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#easyfinemap.ldref.LDRef.cojo_cond" class="md-nav__link">
+    cojo_cond()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#easyfinemap.ldref.LDRef.extract" class="md-nav__link">
     extract()
   </a>
@@ -463,6 +470,13 @@
         <li class="md-nav__item">
   <a href="#easyfinemap.ldref.LDRef.intersect" class="md-nav__link">
     intersect()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#easyfinemap.ldref.LDRef.make_ld" class="md-nav__link">
+    make_ld()
   </a>
   
 </li>
@@ -578,6 +592,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#easyfinemap.ldref.LDRef.cojo_cond" class="md-nav__link">
+    cojo_cond()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#easyfinemap.ldref.LDRef.extract" class="md-nav__link">
     extract()
   </a>
@@ -587,6 +608,13 @@
         <li class="md-nav__item">
   <a href="#easyfinemap.ldref.LDRef.intersect" class="md-nav__link">
     intersect()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#easyfinemap.ldref.LDRef.make_ld" class="md-nav__link">
+    make_ld()
   </a>
   
 </li>
@@ -638,10 +666,12 @@
 <span class="normal">33</span>
 <span class="normal">34</span>
 <span class="normal">35</span>
-<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">36</span>
+<span class="normal">37</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Initialize the LDRef class.&quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;LDRef&quot;</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">plink</span> <span class="o">=</span> <span class="n">Tools</span><span class="p">()</span><span class="o">.</span><span class="n">plink</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">gcta</span> <span class="o">=</span> <span class="n">Tools</span><span class="p">()</span><span class="o">.</span><span class="n">gcta</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">tmp_root</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;tmp&quot;</span> <span class="o">/</span> <span class="s2">&quot;ldref&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmp_root</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tmp_root</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -659,6 +689,323 @@
 
 
 
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="easyfinemap.ldref.LDRef.cojo_cond" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">cojo_cond</span><span class="p">(</span><span class="n">sumstats</span><span class="p">,</span> <span class="n">cond_snps</span><span class="p">,</span> <span class="n">ldref</span><span class="p">,</span> <span class="n">sample_size</span><span class="p">,</span> <span class="n">use_ref_EAF</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">temp_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#easyfinemap.ldref.LDRef.cojo_cond" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Conditional analysis. Update the beta, se, pval of the conditional SNPs.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>sumstats</code></td>
+          <td>
+                <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
+          </td>
+          <td><p>The summary statistics.</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>cond_snps</code></td>
+          <td>
+                <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
+          </td>
+          <td><p>The conditional SNPs.</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>ldref</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>The path to the LD reference file.</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>sample_size</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+          </td>
+          <td><p>The sample size.</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>use_ref_EAF</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a>, optional</code>
+          </td>
+          <td><p>Whether to use the EAF in the LD reference file, by default False</p></td>
+          <td>
+                <code>False</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>temp_dir</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" title="typing.Optional" href="https://docs.python.org/3/library/typing.html#typing.Optional">Optional</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>], optional</code>
+          </td>
+          <td><p>The path to the temporary directory, by default None</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/exceptions.html#ValueError">ValueError</a></code>
+          </td>
+          <td><p>If the EAF is not in the sumstats and use_ref_EAF is False.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
+          </td>
+          <td><p>The updated summary statistics.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+      <details class="quote">
+        <summary>Source code in <code>easyfinemap/ldref.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">395</span>
+<span class="normal">396</span>
+<span class="normal">397</span>
+<span class="normal">398</span>
+<span class="normal">399</span>
+<span class="normal">400</span>
+<span class="normal">401</span>
+<span class="normal">402</span>
+<span class="normal">403</span>
+<span class="normal">404</span>
+<span class="normal">405</span>
+<span class="normal">406</span>
+<span class="normal">407</span>
+<span class="normal">408</span>
+<span class="normal">409</span>
+<span class="normal">410</span>
+<span class="normal">411</span>
+<span class="normal">412</span>
+<span class="normal">413</span>
+<span class="normal">414</span>
+<span class="normal">415</span>
+<span class="normal">416</span>
+<span class="normal">417</span>
+<span class="normal">418</span>
+<span class="normal">419</span>
+<span class="normal">420</span>
+<span class="normal">421</span>
+<span class="normal">422</span>
+<span class="normal">423</span>
+<span class="normal">424</span>
+<span class="normal">425</span>
+<span class="normal">426</span>
+<span class="normal">427</span>
+<span class="normal">428</span>
+<span class="normal">429</span>
+<span class="normal">430</span>
+<span class="normal">431</span>
+<span class="normal">432</span>
+<span class="normal">433</span>
+<span class="normal">434</span>
+<span class="normal">435</span>
+<span class="normal">436</span>
+<span class="normal">437</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span>
+<span class="normal">445</span>
+<span class="normal">446</span>
+<span class="normal">447</span>
+<span class="normal">448</span>
+<span class="normal">449</span>
+<span class="normal">450</span>
+<span class="normal">451</span>
+<span class="normal">452</span>
+<span class="normal">453</span>
+<span class="normal">454</span>
+<span class="normal">455</span>
+<span class="normal">456</span>
+<span class="normal">457</span>
+<span class="normal">458</span>
+<span class="normal">459</span>
+<span class="normal">460</span>
+<span class="normal">461</span>
+<span class="normal">462</span>
+<span class="normal">463</span>
+<span class="normal">464</span>
+<span class="normal">465</span>
+<span class="normal">466</span>
+<span class="normal">467</span>
+<span class="normal">468</span>
+<span class="normal">469</span>
+<span class="normal">470</span>
+<span class="normal">471</span>
+<span class="normal">472</span>
+<span class="normal">473</span>
+<span class="normal">474</span>
+<span class="normal">475</span>
+<span class="normal">476</span>
+<span class="normal">477</span>
+<span class="normal">478</span>
+<span class="normal">479</span>
+<span class="normal">480</span>
+<span class="normal">481</span>
+<span class="normal">482</span>
+<span class="normal">483</span>
+<span class="normal">484</span>
+<span class="normal">485</span>
+<span class="normal">486</span>
+<span class="normal">487</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/ldref&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">cojo_cond</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">cond_snps</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">ldref</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">sample_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">use_ref_EAF</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">temp_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Conditional analysis. Update the beta, se, pval of the conditional SNPs.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sumstats : pd.DataFrame</span>
+<span class="sd">        The summary statistics.</span>
+<span class="sd">    cond_snps : pd.DataFrame</span>
+<span class="sd">        The conditional SNPs.</span>
+<span class="sd">    ldref : str</span>
+<span class="sd">        The path to the LD reference file.</span>
+<span class="sd">    sample_size : int</span>
+<span class="sd">        The sample size.</span>
+<span class="sd">    use_ref_EAF : bool, optional</span>
+<span class="sd">        Whether to use the EAF in the LD reference file, by default False</span>
+<span class="sd">    temp_dir : Optional[str], optional</span>
+<span class="sd">        The path to the temporary directory, by default None</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the EAF is not in the sumstats and use_ref_EAF is False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        The updated summary statistics.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">use_ref_EAF</span> <span class="ow">and</span> <span class="n">ColName</span><span class="o">.</span><span class="n">EAF</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sumstats</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ColName</span><span class="o">.</span><span class="n">EAF</span><span class="si">}</span><span class="s2"> is not in the sumstats, please set use_ref_EAF to True&quot;</span><span class="p">)</span>
+    <span class="n">chrom</span> <span class="o">=</span> <span class="n">sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">ld</span> <span class="o">=</span> <span class="n">LDRef</span><span class="p">()</span>
+    <span class="n">all_sumstats</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">sumstats</span><span class="p">,</span> <span class="n">cond_snps</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">all_sumstats</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">all_sumstats</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">all_sumstats</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">cojo_input</span> <span class="o">=</span> <span class="n">ld</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">all_sumstats</span><span class="p">,</span> <span class="n">ldref</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/cojo_input_</span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">use_ref_EAF</span><span class="p">)</span>
+    <span class="n">cojo_input</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">N</span><span class="p">]</span> <span class="o">=</span> <span class="n">sample_size</span>
+    <span class="n">cojo_input</span> <span class="o">=</span> <span class="n">cojo_input</span><span class="p">[</span>
+        <span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">EA</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">NEA</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">EAF</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">BETA</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">SE</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">P</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">N</span><span class="p">]</span>
+    <span class="p">]</span>
+    <span class="n">cojo_input</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+        <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+            <span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">:</span> <span class="s2">&quot;SNP&quot;</span><span class="p">,</span>
+            <span class="n">ColName</span><span class="o">.</span><span class="n">EA</span><span class="p">:</span> <span class="s2">&quot;A1&quot;</span><span class="p">,</span>
+            <span class="n">ColName</span><span class="o">.</span><span class="n">NEA</span><span class="p">:</span> <span class="s2">&quot;A2&quot;</span><span class="p">,</span>
+            <span class="n">ColName</span><span class="o">.</span><span class="n">EAF</span><span class="p">:</span> <span class="s2">&quot;freq&quot;</span><span class="p">,</span>
+            <span class="n">ColName</span><span class="o">.</span><span class="n">BETA</span><span class="p">:</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span>
+            <span class="n">ColName</span><span class="o">.</span><span class="n">SE</span><span class="p">:</span> <span class="s2">&quot;se&quot;</span><span class="p">,</span>
+            <span class="n">ColName</span><span class="o">.</span><span class="n">P</span><span class="p">:</span> <span class="s2">&quot;p&quot;</span><span class="p">,</span>
+            <span class="n">ColName</span><span class="o">.</span><span class="n">N</span><span class="p">:</span> <span class="s2">&quot;N&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">cojo_p_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/cojo_input_</span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">.ma&quot;</span>
+    <span class="n">cojo_input</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">cojo_p_file</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/cojo_cond_</span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">.snps&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cond_snps</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
+    <span class="n">cojo_outfile</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/cojo_</span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">.cond&quot;</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gcta</span><span class="p">,</span>
+        <span class="s2">&quot;--bfile&quot;</span><span class="p">,</span>
+        <span class="n">ldref</span><span class="p">,</span>
+        <span class="s2">&quot;--cojo-file&quot;</span><span class="p">,</span>
+        <span class="n">cojo_p_file</span><span class="p">,</span>
+        <span class="s2">&quot;--cojo-cond&quot;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/cojo_cond_</span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">.snps&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;--out&quot;</span><span class="p">,</span>
+        <span class="n">cojo_outfile</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">universal_newlines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cond_res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cojo_outfile</span><span class="si">}</span><span class="s2">.cma.cojo&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;SNP&quot;</span><span class="p">,</span> <span class="s2">&quot;bC&quot;</span><span class="p">,</span> <span class="s2">&quot;bC_se&quot;</span><span class="p">,</span> <span class="s2">&quot;pC&quot;</span><span class="p">])</span>
+        <span class="n">cond_res</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;SNP&quot;</span><span class="p">:</span> <span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">,</span> <span class="s2">&quot;bC&quot;</span><span class="p">:</span> <span class="n">ColName</span><span class="o">.</span><span class="n">COJO_BETA</span><span class="p">,</span> <span class="s2">&quot;bC_se&quot;</span><span class="p">:</span> <span class="n">ColName</span><span class="o">.</span><span class="n">COJO_SE</span><span class="p">,</span> <span class="s2">&quot;pC&quot;</span><span class="p">:</span> <span class="n">ColName</span><span class="o">.</span><span class="n">COJO_P</span><span class="p">},</span>
+            <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">sumstats</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">cond_res</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">COJO_P</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">COJO_BETA</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">COJO_SE</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">output</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
 
 <div class="doc doc-object doc-function">
 
@@ -778,8 +1125,7 @@
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/ldref.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">204</span>
-<span class="normal">205</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">205</span>
 <span class="normal">206</span>
 <span class="normal">207</span>
 <span class="normal">208</span>
@@ -843,7 +1189,8 @@
 <span class="normal">266</span>
 <span class="normal">267</span>
 <span class="normal">268</span>
-<span class="normal">269</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s2">&quot;./tmp/ldref&quot;</span><span class="p">)</span>
+<span class="normal">269</span>
+<span class="normal">270</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s2">&quot;./tmp/ldref&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">extract</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">inprefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1013,8 +1360,7 @@
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/ldref.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">271</span>
-<span class="normal">272</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">272</span>
 <span class="normal">273</span>
 <span class="normal">274</span>
 <span class="normal">275</span>
@@ -1092,7 +1438,8 @@
 <span class="normal">347</span>
 <span class="normal">348</span>
 <span class="normal">349</span>
-<span class="normal">350</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s2">&quot;./tmp/ldref&quot;</span><span class="p">)</span>
+<span class="normal">350</span>
+<span class="normal">351</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s2">&quot;./tmp/ldref&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -1161,8 +1508,8 @@
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/freq&quot;</span><span class="p">,</span>
         <span class="p">]</span>
         <span class="n">res</span> <span class="o">=</span> <span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">universal_newlines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;calculate EAF of </span><span class="si">{</span><span class="n">out_plink</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;calculate EAF: </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="c1"># if res.returncode != 0:</span>
         <span class="c1">#     self.logger.error(res.stderr)</span>
         <span class="c1">#     self.logger.error(f&#39;see log file: {temp_dir}/freq.log for details&#39;)</span>
@@ -1172,6 +1519,179 @@
         <span class="n">overlap_sumstat</span><span class="p">[</span><span class="s1">&#39;EAF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">freq</span><span class="p">[</span><span class="s1">&#39;A2_frq&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">freq</span><span class="p">[</span><span class="s1">&#39;A2&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">overlap_sumstat</span><span class="p">[</span><span class="s1">&#39;EA&#39;</span><span class="p">],</span> <span class="n">freq</span><span class="p">[</span><span class="s1">&#39;MAF&#39;</span><span class="p">])</span>
         <span class="n">overlap_sumstat</span><span class="p">[</span><span class="s1">&#39;MAF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">freq</span><span class="p">[</span><span class="s1">&#39;MAF&#39;</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">overlap_sumstat</span>
+</code></pre></div></td></tr></table></div>
+      </details>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="easyfinemap.ldref.LDRef.make_ld" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">make_ld</span><span class="p">(</span><span class="n">ldref</span><span class="p">,</span> <span class="n">outprefix</span><span class="p">)</span></code>
+
+<a href="#easyfinemap.ldref.LDRef.make_ld" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Make the LD matrix.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>ldref</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>The path to the LD reference file.</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>outprefix</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>The output prefix.</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError">RuntimeError</a></code>
+          </td>
+          <td><p>If the return code is not 0.</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>None</code>
+          </td>
+          <td></td>
+        </tr>
+    </tbody>
+  </table>
+
+      <details class="quote">
+        <summary>Source code in <code>easyfinemap/ldref.py</code></summary>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span>
+<span class="normal">356</span>
+<span class="normal">357</span>
+<span class="normal">358</span>
+<span class="normal">359</span>
+<span class="normal">360</span>
+<span class="normal">361</span>
+<span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span>
+<span class="normal">367</span>
+<span class="normal">368</span>
+<span class="normal">369</span>
+<span class="normal">370</span>
+<span class="normal">371</span>
+<span class="normal">372</span>
+<span class="normal">373</span>
+<span class="normal">374</span>
+<span class="normal">375</span>
+<span class="normal">376</span>
+<span class="normal">377</span>
+<span class="normal">378</span>
+<span class="normal">379</span>
+<span class="normal">380</span>
+<span class="normal">381</span>
+<span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span>
+<span class="normal">385</span>
+<span class="normal">386</span>
+<span class="normal">387</span>
+<span class="normal">388</span>
+<span class="normal">389</span>
+<span class="normal">390</span>
+<span class="normal">391</span>
+<span class="normal">392</span>
+<span class="normal">393</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/ldref&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">make_ld</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ldref</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">outprefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make the LD matrix.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ldref : str</span>
+<span class="sd">        The path to the LD reference file.</span>
+<span class="sd">    outprefix : str</span>
+<span class="sd">        The output prefix.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    RuntimeError</span>
+<span class="sd">        If the return code is not 0.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Making the LD matrix&quot;</span><span class="p">)</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plink</span><span class="p">,</span>
+        <span class="s2">&quot;--bfile&quot;</span><span class="p">,</span>
+        <span class="n">ldref</span><span class="p">,</span>
+        <span class="s2">&quot;--r2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;square&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;spaces&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;--threads&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;--out&quot;</span><span class="p">,</span>
+        <span class="n">outprefix</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">universal_newlines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;get LD matrix: </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;LD matrix is made&quot;</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -1310,8 +1830,7 @@ SNPs with MAC &lt; mac will be removed.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/ldref.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">124</span>
-<span class="normal">125</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">125</span>
 <span class="normal">126</span>
 <span class="normal">127</span>
 <span class="normal">128</span>
@@ -1388,7 +1907,8 @@ SNPs with MAC &lt; mac will be removed.</p></td>
 <span class="normal">199</span>
 <span class="normal">200</span>
 <span class="normal">201</span>
-<span class="normal">202</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s1">&#39;./tmp/ldref&#39;</span><span class="p">)</span>
+<span class="normal">202</span>
+<span class="normal">203</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s1">&#39;./tmp/ldref&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">valid</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">ldref_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
