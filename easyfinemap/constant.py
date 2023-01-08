@@ -28,6 +28,7 @@ class ColName:
     LEAD_SNP_BP = "LEAD_SNP_BP"
     # posterior probability
     PP_FINEMAP = "PP_FINEMAP"
+    PP_ABF = "PP_ABF"
     sumstat_cols = ['CHR', 'BP', 'rsID', 'EA', 'NEA', 'P', 'BETA', 'SE', 'EAF', 'MAF']
     loci_cols = ['CHR', 'START', 'END', 'LEAD_SNP', 'LEAD_SNP_P', 'LEAD_SNP_BP']
 

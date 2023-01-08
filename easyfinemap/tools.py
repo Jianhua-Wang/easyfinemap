@@ -31,8 +31,8 @@ class Tools:
         if tool_path:
             return tool_path
         else:
-            self.logger.error(f"{tool} is not installed. Please install it first or make sure it is in your PATH.")
-            raise ValueError(f"{tool} is not installed. Please install it first or make sure it is in your PATH.")
+            self.logger.error(f"{tool} is not installed. Please install it first and make sure it is in your PATH.")
+            raise ValueError(f"{tool} is not installed. Please install it first and make sure it is in your PATH.")
 
     @property
     def plink(self):
