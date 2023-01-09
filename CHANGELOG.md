@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.1.3] - 2023-01-09
+
+### Added
+
+- output credible sets
+
+### Changed
+
+
+### Fixed
+
 ## [0.1.2] - 2023-01-07
 
 ### Added

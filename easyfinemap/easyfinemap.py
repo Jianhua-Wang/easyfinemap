@@ -5,27 +5,30 @@ Perform fine-mapping for a locus using the following methods:
 2. LD-based
     2.1. without annotation
         2.1.1. FINEMAP
-        2.1.2. PAINTOR
-        2.1.3. CAVIARBF
-        2.1.4. SuSiE
+        TODO: 2.1.2. PAINTOR
+        TODO: 2.1.3. CAVIARBF
+        TODO: 2.1.4. SuSiE
     2.2. with annotation
-        2.2.1. PolyFun+SuSiE
+        TODO: 2.2.1. PolyFun+SuSiE
+3. TODO: Support multiple causal variant
 """
 
 import logging
+from pathos.pools import _ProcessPool as Pool
 from pathlib import Path
 from subprocess import PIPE, run
 from typing import List, Optional
 
-import pandas as pd
 import numpy as np
+import pandas as pd
+from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn, TimeElapsedColumn
 
 from easyfinemap.constant import ColName
 from easyfinemap.ldref import LDRef
 from easyfinemap.loci import Loci
 from easyfinemap.sumstat import SumStat
 from easyfinemap.tools import Tools
-from easyfinemap.utils import get_significant_snps, io_in_tempdir
+from easyfinemap.utils import io_in_tempdir
 
 
 class EasyFinemap(object):
@@ -41,17 +44,17 @@ class EasyFinemap(object):
         self.plink = tool.plink
         self.bcftools = tool.bcftools
         self.caviarbf = tool.caviarbf
-        self.tmp_root = Path.cwd() / "tmp" / "finemapping"
+        self.tmp_root = Path.cwd() / "tmp" / "easyfinemap"
         if not self.tmp_root.exists():
             self.tmp_root.mkdir(parents=True)
 
-    def run_abf(self, sumstats: pd.DataFrame, var_prior: float = 0.2) -> pd.Series:
+    def run_abf(self, sumstats: pd.DataFrame, var_prior: float = 0.2, max_causal: int = 1, **kwargs) -> pd.Series:
         """
         Run ABF.
 
         calculate the approximate Bayes factor (ABF) from BETA and SE, using the
         formula:
-        SNP_BF = sqrt(BETA/(BETA + W^2))EXP(W^2/(BETA + W^2)*(BETA^2/SE^2)/2)
+        SNP_BF = sqrt(SE/(SE + W^2))EXP(W^2/(SE + W^2)*(BETA^2/SE^2)/2)
         where W is variance prior, usually set to 0.15 for quantitative traits
         and 0.2 for binary traits.
         the posterior probability of each variant being causal is calculated
@@ -70,16 +73,18 @@ class EasyFinemap(object):
         pd.Series
             The result of ABF.
         """
+        if max_causal > 1:
+            self.logger.warning("ABF only supports 1 causal variant. Set max_causal to 1.")
+            max_causal = 1
         df = sumstats.copy()
         df["W2"] = var_prior**2
-        df[ColName.BETA] = df[ColName.BETA].abs()
-        df["SNP_BF"] = np.sqrt((df[ColName.BETA] / (df[ColName.BETA] + df["W2"]))) * np.exp(
-            df["W2"] / (df[ColName.BETA] + df["W2"]) * (df[ColName.BETA] ** 2 / df[ColName.SE] ** 2) / 2
+        df["SNP_BF"] = np.sqrt((df[ColName.SE] ** 2 / (df[ColName.SE] ** 2 + df["W2"]))) * np.exp(
+            df["W2"] / (df[ColName.BETA] ** 2 + df["W2"]) * (df[ColName.BETA] ** 2 / df[ColName.SE] ** 2) / 2
         )
         df[ColName.PP_ABF] = df["SNP_BF"] / df["SNP_BF"].sum()
         return pd.Series(data=df[ColName.PP_ABF].values, index=df[ColName.SNPID].tolist())
 
-    @io_in_tempdir('./tmp/finemapping')
+    @io_in_tempdir('./tmp/easyfinemap')
     def run_finemap(
         self,
         sumstats: pd.DataFrame,
@@ -87,6 +92,7 @@ class EasyFinemap(object):
         sample_size: int,
         max_causal: int = 1,
         temp_dir: Optional[str] = None,
+        **kwargs,
     ) -> pd.Series:
         """
         Run FINEMAP.
@@ -109,6 +115,8 @@ class EasyFinemap(object):
         pd.Series
             The result of FINEMAP.
         """
+        if ColName.MAF not in sumstats.columns:
+            raise ValueError(f"{ColName.MAF} is required for FINEMAP.")
         finemap_input = sumstats.copy()
         finemap_input[ColName.MAF] = finemap_input[ColName.MAF].replace(0, 0.00001)
         finemap_input = finemap_input[
@@ -154,8 +162,11 @@ class EasyFinemap(object):
             self.logger.error(res.stderr)
             raise RuntimeError(res.stderr)
         else:
-            finemap_res = pd.read_csv(f"{temp_dir}/finemap.config", sep=" ", usecols=["config", "prob"])
-            finemap_res = pd.Series(finemap_res["prob"].values, index=finemap_res["config"].values)  # type: ignore
+            if max_causal == 1:
+                finemap_res = pd.read_csv(f"{temp_dir}/finemap.config", sep=" ", usecols=["config", "prob"])
+                finemap_res = pd.Series(finemap_res["prob"].values, index=finemap_res["config"].values)  # type: ignore
+            else:
+                raise NotImplementedError
             return finemap_res
 
     def run_paintor(self, sumstat: pd.DataFrame, ldref: LDRef, out: str):
@@ -172,6 +183,7 @@ class EasyFinemap(object):
         sample_size: int,
         use_ref_EAF: bool = False,
         cond_snps_wind_kb: int = 1000,
+        **kwargs,
     ) -> pd.DataFrame:
         """Conditional sumstat."""
         if lead_snp is None:
@@ -203,6 +215,7 @@ class EasyFinemap(object):
         ldref: str,
         outprefix: str,
         use_ref_EAF: bool = False,
+        **kwargs,
     ) -> pd.DataFrame:
         """Prepare LD matrix."""
         if ldref is None:
@@ -217,34 +230,31 @@ class EasyFinemap(object):
         finemap_res: pd.DataFrame,
         credible_threshold: Optional[float] = None,
         credible_method: Optional[str] = None,
+        **kwargs,
     ) -> pd.DataFrame:
         """Get credible set."""
         if credible_threshold is None:
             return finemap_res
         else:
             if credible_method:
-                credible_set = finemap_res.sort_values(credible_method, ascending=False)
-                credible_set = credible_set[credible_set[credible_method].cumsum() >= credible_threshold]
+                pp_col = f"PP_{credible_method.upper()}"
+                credible_set = finemap_res.sort_values(pp_col, ascending=False)
+                credible_set = finemap_res.sort_values(by=pp_col, ascending=False)
+                credible_set = credible_set[credible_set[pp_col].shift().fillna(0).cumsum() <= 0.95]
             else:
                 raise ValueError("Must specify credible set method when credible threshold is specified")
-        return credible_set
+        return credible_set.reset_index(drop=True)
 
-    @io_in_tempdir('./tmp/finemapping')
+    @io_in_tempdir('./tmp/easyfinemap')
     def finemap_locus(
         self,
         sumstats: pd.DataFrame,
         methods: List[str],
-        var_prior: float = 0.2,
-        conditonal: bool = False,
-        sample_size: Optional[int] = None,
-        max_causal: int = 1,
-        credible_threshold: Optional[float] = None,
-        credible_set_method: Optional[str] = None,
-        use_ref_EAF: bool = False,
-        out: Optional[str] = None,
+        lead_snp: str,
+        conditional: bool = False,
         temp_dir: Optional[str] = None,
         **kwargs,
-    ) -> Optional[pd.DataFrame]:
+    ) -> pd.DataFrame:
         """
         Finemap a locus.
 
@@ -255,8 +265,8 @@ class EasyFinemap(object):
         5. Merge the finemapping results with the input sumstats.
         6. Return the credible set or full summary statistics with posterior probabilities.
         """
-        if conditonal:
-            cond_res = self.cond_sumstat(**kwargs)
+        if conditional:
+            cond_res = self.cond_sumstat(sumstats=sumstats, lead_snp=lead_snp, **kwargs)
             fm_input = cond_res.copy()
             fm_input[ColName.BETA] = cond_res[ColName.COJO_BETA]
             fm_input[ColName.SE] = cond_res[ColName.COJO_SE]
@@ -271,58 +281,89 @@ class EasyFinemap(object):
             out_sumstats = sumstats.copy()
 
         allowed_methods = ["abf", "finemap"]
-        if methods == ["all"]:
+        if "all" in methods:
             methods = allowed_methods
         for method in methods:
             if method == "abf":
-                if max_causal > 1:
-                    raise ValueError("ABF only supports single causal variant")
-                abf_pp = self.run_abf(fm_input, var_prior)
+                abf_pp = self.run_abf(sumstats=fm_input, **kwargs)
                 out_sumstats[ColName.PP_ABF] = out_sumstats[ColName.SNPID].map(abf_pp)
-            if method in ["finemap", "paintor"]:
-                if sample_size is None:
-                    raise ValueError("Sample size is required for conditional finemapping")
-                if ColName.MAF not in fm_input.columns and not use_ref_EAF:
-                    raise ValueError("MAF is required for conditional finemapping, please set use_ref_EAF to True")
+            elif method in ["finemap", "paintor"]:
                 fm_input_ol = self.prepare_ld_matrix(sumstats=fm_input, outprefix=f"{temp_dir}/intersc", **kwargs)
+                ld_matrix = f"{temp_dir}/intersc.ld"
                 if method == "finemap":
-                    if max_causal > 1:
-                        raise NotImplementedError
-                    finemap_pp = self.run_finemap(fm_input_ol, f"{temp_dir}/intersc.ld", sample_size, max_causal)
+                    finemap_pp = self.run_finemap(sumstats=fm_input_ol, ld_matrix=ld_matrix, **kwargs)
                     out_sumstats[ColName.PP_FINEMAP] = out_sumstats[ColName.SNPID].map(finemap_pp)
                 elif method == "paintor":
                     raise NotImplementedError
             else:
                 raise ValueError(f"Method {method} is not supported")
 
-        if credible_threshold is not None:
-            if credible_set_method is None:
-                raise ValueError("Credible set method is required")
-            if credible_set_method == "abf":
-                credible_set = out_sumstats[out_sumstats[ColName.PP_ABF] >= credible_threshold]
-            elif credible_set_method == "finemap":
-                credible_set = out_sumstats[out_sumstats[ColName.PP_FINEMAP] >= credible_threshold]
-            else:
-                raise ValueError(f"Method {credible_set_method} is not supported")
-            credible_set.to_csv(out, sep="\t", index=False)
+        credible_set = self.get_credset(finemap_res=out_sumstats, **kwargs)
+        credible_set[ColName.LEAD_SNP] = lead_snp
+        return credible_set
 
     def finemap_all_loci(
         self,
         sumstats: pd.DataFrame,
+        loci: pd.DataFrame,
+        lead_snps: pd.DataFrame,
         methods: List[str],
         var_prior: float = 0.2,
-        lead_snp: Optional[str] = None,
-        lead_snps: Optional[pd.DataFrame] = None,
-        conditonal: bool = False,
+        conditional: bool = False,
         sample_size: Optional[int] = None,
         ldref: Optional[str] = None,
         cond_snps_wind_kb: int = 1000,
         max_causal: int = 1,
         credible_threshold: Optional[float] = None,
-        credible_set_method: Optional[str] = None,
+        credible_method: Optional[str] = None,
         use_ref_EAF: bool = False,
-        out: Optional[str] = None,
-        temp_dir: Optional[str] = None,
+        outfile: Optional[str] = None,
+        threads: int = 1,
     ):
         """Perform finemapping for all loci."""
-        raise NotImplementedError
+        sumstats = SumStat(sumstats)
+        sumstats = sumstats.standarize()
+        if credible_threshold and credible_method is None and methods != ["all"] and len(methods) == 1:
+            credible_method = methods[0]
+        kwargs_list = []
+        for chrom, start, end, lead_snp in loci[[ColName.CHR, ColName.START, ColName.END, ColName.LEAD_SNP]].values:
+            locus_sumstats = sumstats.loc[
+                (sumstats[ColName.CHR] == chrom) & (sumstats[ColName.BP] >= start) & (sumstats[ColName.BP] <= end)
+            ]
+            kwargs = {
+                "sumstats": locus_sumstats,
+                "lead_snp": lead_snp,
+                "lead_snps": lead_snps,
+                "methods": methods,
+                "var_prior": var_prior,
+                "conditional": conditional,
+                "sample_size": sample_size,
+                "ldref": ldref.format(chrom=chrom) if ldref else None,
+                "cond_snps_wind_kb": cond_snps_wind_kb,
+                "max_causal": max_causal,
+                "credible_threshold": credible_threshold,
+                "credible_method": credible_method,
+                "use_ref_EAF": use_ref_EAF,
+            }
+            kwargs_list.append(kwargs)
+        ef = EasyFinemap()
+        output = []
+        with Progress(
+            TextColumn("{task.description}"),
+            BarColumn(),
+            MofNCompleteColumn(),
+            TimeElapsedColumn(),
+            auto_refresh=True,
+        ) as progress:
+            with Pool(threads) as p:
+                task = progress.add_task("Perform Fine-mapping...", total=len(loci))
+                results = [p.apply_async(ef.finemap_locus, kwds=kwargs) for kwargs in kwargs_list]
+                for res in results:
+                    progress.update(task, advance=1)
+                    progress.refresh()
+                    output.append(res.get())
+        output = pd.concat(output, ignore_index=True)
+        if outfile:
+            output.to_csv(outfile, sep="\t", index=False)
+        else:
+            return output

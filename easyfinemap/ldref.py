@@ -351,7 +351,7 @@ class LDRef:
         return overlap_sumstat
 
     @io_in_tempdir('./tmp/ldref')
-    def make_ld(self, ldref: str, outprefix: str):
+    def make_ld(self, ldref: str, outprefix: str, **kwargs,):
         """
         Make the LD matrix.
 
