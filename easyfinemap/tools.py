@@ -2,8 +2,7 @@
 
 import logging
 import shutil
-import sys
-from typing import Optional, Union
+from typing import Optional
 
 
 class Tools:

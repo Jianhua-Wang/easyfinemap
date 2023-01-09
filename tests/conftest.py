@@ -1,10 +1,10 @@
 """Define the test suite for the sumstats module."""
 
-import pytest
 import os
 
 import numpy as np
 import pandas as pd
+import pytest
 
 PWD = os.path.dirname(os.path.abspath(__file__))
 

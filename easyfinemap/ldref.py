@@ -16,6 +16,7 @@ from pathlib import Path
 from subprocess import PIPE, check_output, run
 from typing import List, Optional, Union
 
+import numpy as np
 import pandas as pd
 from pathos.multiprocessing import ProcessingPool as Pool
 
@@ -391,6 +392,10 @@ class LDRef:
             raise RuntimeError(res.stderr)
         else:
             self.logger.debug("LD matrix is made")
+            run(["sed", "-i", "s/nan/1e-6/g", f"{outprefix}.ld"])
+            # matrix = np.loadtxt(f"{outprefix}.ld")
+            # matrix[np.isnan(matrix)] = 1e-6
+            # np.savetxt(f"{outprefix}.ld", matrix)
 
     @io_in_tempdir('./tmp/ldref')
     def cojo_cond(

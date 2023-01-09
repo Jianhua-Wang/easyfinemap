@@ -4,18 +4,17 @@ import logging
 import sys
 from enum import Enum
 from pathlib import Path
-from typing import Optional, List
+from typing import List, Optional
 
 import pandas as pd
 import typer
 from rich.console import Console
 
+from easyfinemap import __version__
+from easyfinemap.easyfinemap import EasyFinemap
 from easyfinemap.ldref import LDRef
 from easyfinemap.loci import Loci
 from easyfinemap.sumstat import SumStat
-from easyfinemap.easyfinemap import EasyFinemap
-from easyfinemap import __version__
-
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 app = typer.Typer(context_settings=CONTEXT_SETTINGS, add_completion=False)

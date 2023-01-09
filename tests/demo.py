@@ -1,30 +1,36 @@
-from rich.progress import Progress, TextColumn, BarColumn, MofNCompleteColumn, TimeElapsedColumn
-from concurrent.futures import ProcessPoolExecutor
-import time
-from pathos.pools import _ProcessPool as Pool
+import numpy as np
+import pandas as pd
+import logging
+from easyfinemap.loci import Loci
+from easyfinemap.constant import ColName
+from easyfinemap.utils import get_significant_snps, make_SNPID_unique
+from easyfinemap import LDRef
+from easyfinemap.sumstat import SumStat
+from easyfinemap.easyfinemap import EasyFinemap
 
-def func(x, y, **kwargs):
-    time.sleep(2)
-    print(kwargs.get('a', 1))
-    return x + y
+from pathlib import Path
 
+# l = Loci()
+# df = pd.read_csv('./exampledata/noEAF_noMAF.txt.gz', sep='\t')
+# leadsnp, indep_loci = l.identify_indep_loci(
+#     df,
+#     method='conditional',
+#     ldref='./exampledata/LDREF/EUR.valid.chr{chrom}',
+#     sample_size=1000,
+#     use_ref_EAF=True,
+#     threads=2,
+# )
 
-args = [[1, 2], [2, 3], [3, 4], [4, 5], [5, 6]]
-args = [{'x': i, 'y': i+1, 'a': 2} for i in range(5)]
+df = pd.read_csv('./exampledata/noEAF_noMAF.txt.gz',sep='\t')
+df = SumStat(df)
+df = df.standarize()
 
-out = []
-with Progress(
-    TextColumn("{task.description}"),
-    BarColumn(),
-    MofNCompleteColumn(),
-    TimeElapsedColumn(),
-    auto_refresh=False,
-) as progress:
-    task = progress.add_task("Perform Fine-mapping...", total=len(args))
-    with Pool(2) as p:
-        results = [p.apply_async(func, kwds=kwargs) for kwargs in args]
-        for result in results:
-            progress.advance(task)
-            out.append(result.get())
-            progress.refresh()
-print(out)
+indep_loci = pd.read_csv('exampledata/conditional.loci.txt', sep='\t')
+
+chrom, start, end = indep_loci.loc[0, ['CHR', 'START', 'END']]
+sub_df = df.loc[(df[ColName.CHR] == chrom) & (df[ColName.BP] >= start) & (df[ColName.BP] <= end)].copy()
+ld = LDRef()
+sub_df_ol = ld.intersect(sub_df, f'./exampledata/LDREF/EUR.valid.chr{chrom}', './tmp/intersc', use_ref_EAF=True)
+ld.make_ld('./tmp/intersc', './tmp/ld')
+ef = EasyFinemap()
+finemap_pp = ef.run_paintor(sub_df_ol, ld_matrix='./tmp/ld.ld')

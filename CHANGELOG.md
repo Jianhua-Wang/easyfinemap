@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.1.4] - 2023-01-10
+
+### Added
+
+- add PAINTOR
+
+### Changed
+
+
+### Fixed
+
 ## [0.1.3] - 2023-01-09
 
 ### Added
