@@ -830,9 +830,7 @@
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/ldref.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">400</span>
-<span class="normal">401</span>
-<span class="normal">402</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">402</span>
 <span class="normal">403</span>
 <span class="normal">404</span>
 <span class="normal">405</span>
@@ -922,7 +920,9 @@
 <span class="normal">489</span>
 <span class="normal">490</span>
 <span class="normal">491</span>
-<span class="normal">492</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/ldref&#39;</span><span class="p">)</span>
+<span class="normal">492</span>
+<span class="normal">493</span>
+<span class="normal">494</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/ldref&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">cojo_cond</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -1552,6 +1552,7 @@
   <div class="doc doc-contents ">
   
       <p>Make the LD matrix.</p>
+<p>TODO: Calculate LD matrix using plink-pandas, because plink1.9 --ld contains bug.</p>
 
   <p><strong>Parameters:</strong></p>
   <table>
@@ -1666,10 +1667,14 @@
 <span class="normal">392</span>
 <span class="normal">393</span>
 <span class="normal">394</span>
-<span class="normal">395</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/ldref&#39;</span><span class="p">)</span>
+<span class="normal">395</span>
+<span class="normal">396</span>
+<span class="normal">397</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/ldref&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">make_ld</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ldref</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">outprefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Make the LD matrix.</span>
+
+<span class="sd">    TODO: Calculate LD matrix using plink-pandas, because plink1.9 --ld contains bug.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
