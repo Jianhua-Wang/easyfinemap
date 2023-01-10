@@ -854,7 +854,9 @@
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/loci.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">244</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
 <span class="normal">245</span>
 <span class="normal">246</span>
 <span class="normal">247</span>
@@ -916,9 +918,7 @@
 <span class="normal">303</span>
 <span class="normal">304</span>
 <span class="normal">305</span>
-<span class="normal">306</span>
-<span class="normal">307</span>
-<span class="normal">308</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s2">&quot;./tmp/loci&quot;</span><span class="p">)</span>
+<span class="normal">306</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s2">&quot;./tmp/loci&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">clump_per_chr</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sig_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -1127,7 +1127,9 @@
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/loci.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">386</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">384</span>
+<span class="normal">385</span>
+<span class="normal">386</span>
 <span class="normal">387</span>
 <span class="normal">388</span>
 <span class="normal">389</span>
@@ -1229,9 +1231,7 @@
 <span class="normal">485</span>
 <span class="normal">486</span>
 <span class="normal">487</span>
-<span class="normal">488</span>
-<span class="normal">489</span>
-<span class="normal">490</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s2">&quot;./tmp/loci&quot;</span><span class="p">)</span>
+<span class="normal">488</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s2">&quot;./tmp/loci&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">cojo_slct</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -1405,16 +1405,6 @@
           <td><p>Whether to merge the overlapped independent loci, by default False</p></td>
           <td>
                 <code>False</code>
-          </td>
-        </tr>
-        <tr>
-          <td><code>outperfix</code></td>
-          <td>
-                <code><a class="autorefs autorefs-external" title="typing.Optional" href="https://docs.python.org/3/library/typing.html#typing.Optional">Optional</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>], optional</code>
-          </td>
-          <td><p>The output prefix, by default None</p></td>
-          <td>
-              <em>required</em>
           </td>
         </tr>
         <tr>
@@ -1654,9 +1644,7 @@ choose from ["distance", "clumping", "conditional"]</p></td>
 <span class="normal">140</span>
 <span class="normal">141</span>
 <span class="normal">142</span>
-<span class="normal">143</span>
-<span class="normal">144</span>
-<span class="normal">145</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">identify_indep_loci</span><span class="p">(</span>
+<span class="normal">143</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">identify_indep_loci</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">sig_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5e-8</span><span class="p">,</span>
@@ -1688,8 +1676,6 @@ choose from ["distance", "clumping", "conditional"]</p></td>
 <span class="sd">        The range to extend the independent lead snps to independent loci, by default 500, unit: kb</span>
 <span class="sd">    if_merge : bool, optional</span>
 <span class="sd">        Whether to merge the overlapped independent loci, by default False</span>
-<span class="sd">    outperfix : Optional[str], optional</span>
-<span class="sd">        The output prefix, by default None</span>
 <span class="sd">    ldref : Optional[str], optional</span>
 <span class="sd">        The LD reference file, by default None</span>
 <span class="sd">    method : str, optional</span>
@@ -1893,7 +1879,9 @@ TODO: accelerate the process by running cojo in loci identified by distance</p><
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/loci.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">310</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
 <span class="normal">311</span>
 <span class="normal">312</span>
 <span class="normal">313</span>
@@ -1965,9 +1953,7 @@ TODO: accelerate the process by running cojo in loci identified by distance</p><
 <span class="normal">379</span>
 <span class="normal">380</span>
 <span class="normal">381</span>
-<span class="normal">382</span>
-<span class="normal">383</span>
-<span class="normal">384</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">382</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">indep_snps_by_conditional</span><span class="p">(</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">ldref</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -2120,7 +2106,9 @@ TODO: accelerate the process by running cojo in loci identified by distance</p><
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/loci.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">181</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
 <span class="normal">182</span>
 <span class="normal">183</span>
 <span class="normal">184</span>
@@ -2148,9 +2136,7 @@ TODO: accelerate the process by running cojo in loci identified by distance</p><
 <span class="normal">206</span>
 <span class="normal">207</span>
 <span class="normal">208</span>
-<span class="normal">209</span>
-<span class="normal">210</span>
-<span class="normal">211</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">209</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">indep_snps_by_distance</span><span class="p">(</span><span class="n">sig_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Identify the independent snps by distance only.</span>
@@ -2289,7 +2275,9 @@ TODO: accelerate the process by running cojo in loci identified by distance</p><
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/loci.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">213</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
 <span class="normal">214</span>
 <span class="normal">215</span>
 <span class="normal">216</span>
@@ -2316,9 +2304,7 @@ TODO: accelerate the process by running cojo in loci identified by distance</p><
 <span class="normal">237</span>
 <span class="normal">238</span>
 <span class="normal">239</span>
-<span class="normal">240</span>
-<span class="normal">241</span>
-<span class="normal">242</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">240</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">indep_snps_by_ldclumping</span><span class="p">(</span>
     <span class="n">sig_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">ldref</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">clump_p1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5e-8</span><span class="p">,</span> <span class="n">clump_kb</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">clump_r2</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
@@ -2437,7 +2423,9 @@ TODO: use custom blocks as loci boundaries</p></td>
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/loci.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">492</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">490</span>
+<span class="normal">491</span>
+<span class="normal">492</span>
 <span class="normal">493</span>
 <span class="normal">494</span>
 <span class="normal">495</span>
@@ -2466,9 +2454,7 @@ TODO: use custom blocks as loci boundaries</p></td>
 <span class="normal">518</span>
 <span class="normal">519</span>
 <span class="normal">520</span>
-<span class="normal">521</span>
-<span class="normal">522</span>
-<span class="normal">523</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">521</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">leadsnp2loci</span><span class="p">(</span><span class="n">lead_snps</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">if_merge</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Expand the independent lead snps to independent loci by given range.</span>
@@ -2568,7 +2554,9 @@ TODO: use custom blocks as loci boundaries</p></td>
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/loci.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">147</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
 <span class="normal">148</span>
 <span class="normal">149</span>
 <span class="normal">150</span>
@@ -2598,9 +2586,7 @@ TODO: use custom blocks as loci boundaries</p></td>
 <span class="normal">174</span>
 <span class="normal">175</span>
 <span class="normal">176</span>
-<span class="normal">177</span>
-<span class="normal">178</span>
-<span class="normal">179</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">177</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">merge_overlapped_loci</span><span class="p">(</span><span class="n">loci_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Merge the overlapped loci.</span>
