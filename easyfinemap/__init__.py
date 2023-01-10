@@ -11,7 +11,7 @@ from .sumstat import SumStat
 
 __author__ = """Jianhua Wang"""
 __email__ = 'jianhua.mert@gmail.com'
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 
 logging.basicConfig(
