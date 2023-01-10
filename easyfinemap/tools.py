@@ -62,3 +62,8 @@ class Tools:
     def caviarbf(self):
         """Check if caviarbf is installed."""
         return self._check_tool("caviarbf")
+
+    @property
+    def model_search(self):
+        """Check if model_search is installed."""
+        return self._check_tool("model_search")

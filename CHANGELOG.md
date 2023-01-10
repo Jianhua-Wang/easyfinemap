@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.0] - 2023-01-10
+
+### Added
+
+- add CAVIARBF
+
+### Changed
+
+
+### Fixed
+
 ## [0.1.4] - 2023-01-10
 
 ### Added

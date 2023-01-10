@@ -356,6 +356,8 @@ class LDRef:
         """
         Make the LD matrix.
 
+        TODO: Calculate LD matrix using plink-pandas, because plink1.9 --ld contains bug.
+
         Parameters
         ----------
         ldref : str

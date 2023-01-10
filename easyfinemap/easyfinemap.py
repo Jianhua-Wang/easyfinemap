@@ -2,15 +2,17 @@
 
 Perform fine-mapping for a locus using the following methods:
 1. LD-free
+    1.1. aBF
 2. LD-based
     2.1. without annotation
         2.1.1. FINEMAP
-        TODO: 2.1.2. PAINTOR
-        TODO: 2.1.3. CAVIARBF
+        2.1.2. PAINTOR
+        2.1.3. CAVIARBF
         TODO: 2.1.4. SuSiE
     2.2. with annotation
         TODO: 2.2.1. PolyFun+SuSiE
-3. TODO: Support multiple causal variant
+3. Support multiple causal variant
+4. Support conditional mode
 """
 
 import logging
@@ -44,6 +46,7 @@ class EasyFinemap(object):
         self.plink = tool.plink
         self.bcftools = tool.bcftools
         self.caviarbf = tool.caviarbf
+        self.model_search = tool.model_search
         self.tmp_root = Path.cwd() / "tmp" / "easyfinemap"
         if not self.tmp_root.exists():
             self.tmp_root.mkdir(parents=True)
@@ -175,14 +178,14 @@ class EasyFinemap(object):
 
     @io_in_tempdir('./tmp/easyfinemap')
     def run_paintor(
-        self, sumstat: pd.DataFrame, ld_matrix: str, max_causal: int = 1, temp_dir: Optional[str] = None, **kwargs
+        self, sumstats: pd.DataFrame, ld_matrix: str, max_causal: int = 1, temp_dir: Optional[str] = None, **kwargs
     ):
         """
         Run PAINTOR.
 
         Parameters
         ----------
-        sumstat : pd.DataFrame
+        sumstats : pd.DataFrame
             Summary statistics.
         ld_matrix : str
             Path to LD matrix.
@@ -196,7 +199,7 @@ class EasyFinemap(object):
         pd.Series
             The result of PAINTOR.
         """
-        paintor_input = sumstat.copy()
+        paintor_input = sumstats.copy()
         paintor_input["coding"] = 1  # TODO: support paintor annotation mode
         paintor_input["Zscore"] = paintor_input[ColName.BETA] / paintor_input[ColName.SE]
         input_prefix = "paintor.processed"
@@ -239,6 +242,74 @@ class EasyFinemap(object):
             )
             paintor_res = pd.Series(paintor_res["Posterior_Prob"].values, index=paintor_res["SNPID"].tolist())
             return paintor_res
+
+    @io_in_tempdir('./tmp/easyfinemap')
+    def run_caviarbf(
+        self, sumstats: pd.DataFrame, ld_matrix: str, max_causal: int = 1, temp_dir: Optional[str] = None, **kwargs
+    ):
+        """
+        Run CAVIAR-BF.
+
+        Parameters
+        ----------
+        sumstats : pd.DataFrame
+            Summary statistics.
+        ld_matrix : str
+            Path to LD matrix.
+        max_causal : int, optional
+            Maximum number of causal variants, by default 1
+        temp_dir : Optional[str], optional
+            Path to tempdir, by default None
+
+        Returns
+        -------
+        pd.Series
+            The result of CAVIAR-BF.
+        """
+        caviar_input = sumstats.copy()
+        caviar_input[ColName.Z] = caviar_input[ColName.BETA] / caviar_input[ColName.SE]
+        caviar_input[[ColName.SNPID, ColName.Z]].to_csv(f"{temp_dir}/caviar.input", sep=" ", index=False, header=False)
+        n_variants = caviar_input.shape[0]
+        cmd = [
+            self.caviarbf,
+            "-z",
+            f"{temp_dir}/caviar.input",
+            "-r",
+            ld_matrix,
+            "-t",
+            "0",
+            "-a",
+            "0.1281429",
+            "-n",
+            str(n_variants),
+            "-c",
+            str(max_causal),
+            "-o",
+            f"{temp_dir}/caviar.output",
+        ]
+        self.logger.debug(f"run CAVIAR-BF: {' '.join(cmd)}")
+        run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+        cmd = [
+            self.model_search,
+            "-i",
+            f"{temp_dir}/caviar.output",
+            "-m",
+            str(n_variants),
+            "-p",
+            "0",
+            "-o",
+            f"{temp_dir}/caviar.prior0",
+        ]
+        self.logger.debug(f"run CAVIAR-BF: {' '.join(cmd)}")
+        res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+        if res.returncode != 0:
+            self.logger.error(res.stderr)
+            raise RuntimeError(res.stderr)
+        else:
+            caviar_res = pd.read_csv(f"{temp_dir}/caviar.prior0.marginal", sep=" ", header=None)
+            caviar_res.sort_values(by=0, inplace=True)  # type: ignore
+            caviar_res = pd.Series(caviar_res[1].values, index=caviar_input[ColName.SNPID].tolist())
+            return caviar_res
 
     def cond_sumstat(
         self,
@@ -420,6 +491,9 @@ class EasyFinemap(object):
                 on=ColName.SNPID,
                 how="left",
             )
+            max_causal = kwargs.get("max_causal", 1)
+            if max_causal > 1:
+                self.logger.warning("Conditional finemapping does not support multiple causal variants")
         else:
             fm_input = sumstats.copy()
             out_sumstats = sumstats.copy()
@@ -427,19 +501,24 @@ class EasyFinemap(object):
         allowed_methods = ["abf", "finemap"]
         if "all" in methods:
             methods = allowed_methods
+        fm_input_ol = fm_input.copy()
         for method in methods:
             if method == "abf":
                 abf_pp = self.run_abf(sumstats=fm_input, **kwargs)
                 out_sumstats[ColName.PP_ABF] = out_sumstats[ColName.SNPID].map(abf_pp)
-            elif method in ["finemap", "paintor"]:
-                fm_input_ol = self.prepare_ld_matrix(sumstats=fm_input, outprefix=f"{temp_dir}/intersc", **kwargs)
+            elif method in ["finemap", "paintor", "caviarbf"]:
                 ld_matrix = f"{temp_dir}/intersc.ld"
+                if not os.path.exists(ld_matrix):
+                    fm_input_ol = self.prepare_ld_matrix(sumstats=fm_input, outprefix=f"{temp_dir}/intersc", **kwargs)
                 if method == "finemap":
                     finemap_pp = self.run_finemap(sumstats=fm_input_ol, ld_matrix=ld_matrix, **kwargs)
                     out_sumstats[ColName.PP_FINEMAP] = out_sumstats[ColName.SNPID].map(finemap_pp)
                 elif method == "paintor":
                     paintor_pp = self.run_paintor(sumstats=fm_input_ol, ld_matrix=ld_matrix, **kwargs)
                     out_sumstats[ColName.PP_PAINTOR] = out_sumstats[ColName.SNPID].map(paintor_pp)
+                elif method == "caviafbf":
+                    caviarbf_pp = self.run_caviarbf(sumstats=fm_input_ol, ld_matrix=ld_matrix, **kwargs)
+                    out_sumstats[ColName.PP_CAVIARBF] = out_sumstats[ColName.SNPID].map(caviarbf_pp)
             else:
                 raise ValueError(f"Method {method} is not supported")
 
