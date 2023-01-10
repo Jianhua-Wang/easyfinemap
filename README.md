@@ -23,4 +23,12 @@ user-friendly pipeline for GWAS fine-mapping
 * Prepare LD reference for fine-mapping
 * Standardize input summary statistics
 * Identify independent loci by distance, LD clumping, or conditional analysis
-* TODO: Fine-mapping with or without LD reference
+* Fine-mapping with or without LD reference
+
+## Finemapping approaches
+* LD-free
+    * aBF
+* LD-based
+    * FINEMAP
+    * CAVIARBF
+    * PAINTOR

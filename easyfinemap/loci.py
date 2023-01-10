@@ -69,8 +69,6 @@ class Loci:
             The range to extend the independent lead snps to independent loci, by default 500, unit: kb
         if_merge : bool, optional
             Whether to merge the overlapped independent loci, by default False
-        outperfix : Optional[str], optional
-            The output prefix, by default None
         ldref : Optional[str], optional
             The LD reference file, by default None
         method : str, optional

@@ -498,7 +498,7 @@ class EasyFinemap(object):
             fm_input = sumstats.copy()
             out_sumstats = sumstats.copy()
 
-        allowed_methods = ["abf", "finemap"]
+        allowed_methods = ["abf", "finemap", "paintor", "caviarbf"]
         if "all" in methods:
             methods = allowed_methods
         fm_input_ol = fm_input.copy()
@@ -516,7 +516,7 @@ class EasyFinemap(object):
                 elif method == "paintor":
                     paintor_pp = self.run_paintor(sumstats=fm_input_ol, ld_matrix=ld_matrix, **kwargs)
                     out_sumstats[ColName.PP_PAINTOR] = out_sumstats[ColName.SNPID].map(paintor_pp)
-                elif method == "caviafbf":
+                elif method == "caviarbf":
                     caviarbf_pp = self.run_caviarbf(sumstats=fm_input_ol, ld_matrix=ld_matrix, **kwargs)
                     out_sumstats[ColName.PP_CAVIARBF] = out_sumstats[ColName.SNPID].map(caviarbf_pp)
             else:

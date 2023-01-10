@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.1] - 2023-01-10
+
+### Added
+
+- Instruction of installation
+
+### Changed
+
+
+### Fixed
+- typo in easyfinemap.py line519
+
 ## [0.2.0] - 2023-01-10
 
 ### Added
