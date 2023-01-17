@@ -6,7 +6,7 @@
 2. intersect the significant snps with the LD reference.
 3. make a plink file from the intersected snps.
 TODO: 4. calculate LD matrix from the plink file.
-TODO: 5. perform conditional analysis in conditional mode.
+5. perform conditional analysis in conditional mode.
 """
 
 import logging

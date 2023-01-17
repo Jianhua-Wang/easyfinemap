@@ -509,6 +509,7 @@ class EasyFinemap(object):
             elif method in ["finemap", "paintor", "caviarbf"]:
                 ld_matrix = f"{temp_dir}/intersc.ld"
                 if not os.path.exists(ld_matrix):
+                    # TODO: reduce the number of SNPs when using paintor and caviarbf in multiple causal variant mode
                     fm_input_ol = self.prepare_ld_matrix(sumstats=fm_input, outprefix=f"{temp_dir}/intersc", **kwargs)
                 if method == "finemap":
                     finemap_pp = self.run_finemap(sumstats=fm_input_ol, ld_matrix=ld_matrix, **kwargs)
