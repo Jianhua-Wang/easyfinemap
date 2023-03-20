@@ -177,8 +177,18 @@ class LDRef:
             if "{chrom}" in ldref_path:
                 inprefix = ldref_path.replace("{chrom}", str(chrom))
                 if not os.path.exists(f"{inprefix}.bed"):
-                    self.logger.warning(f"{inprefix}.bed not found.")
-                    continue
+                    if chrom == 23:
+                        inprefix = ldref_path.replace("{chrom}", "X")
+                        if os.path.exists(f"{inprefix}.bed"):
+                            self.logger.warning(f"chr{chrom} not found, use X instead.")
+                            params[0].append(inprefix)
+                            params[1].append(f"{outprefix}.chr{chrom}")
+                            params[2].append(mac)
+                        else:
+                            self.logger.warning(f"{inprefix}.bed not found.")
+                    else:
+                        self.logger.warning(f"{inprefix}.bed not found.")
+                        continue
                 else:
                     params[0].append(inprefix)
                     params[1].append(f"{outprefix}.chr{chrom}")

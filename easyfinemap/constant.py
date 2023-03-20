@@ -36,4 +36,4 @@ class ColName:
 
 
 # only support autosomes
-CHROMS = [i for i in range(1, 23)]
+CHROMS = [i for i in range(1, 24)]
