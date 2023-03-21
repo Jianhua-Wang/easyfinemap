@@ -144,6 +144,7 @@ class SumStat(pd.DataFrame):
     def standarize(self):
         """Standarize the data."""
         self._validate()
+        self.logger.info("standarizing data")
         self = self.drop_allna_cols()
         self = self.check_chr()
         self = self.check_bp()

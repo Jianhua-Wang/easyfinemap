@@ -53,6 +53,7 @@ class Loci:
         cojo_window_kb: int = 10000,
         cojo_collinear: float = 0.9,
         diff_freq: float = 0.2,
+        only_use_sig_snps: bool = False,
         use_ref_EAF: bool = False,
         threads: int = 1,
     ) -> Union[Tuple[pd.DataFrame, pd.DataFrame], None]:
@@ -88,6 +89,8 @@ class Loci:
             The collinear threshold for conditional analysis, by default 0.9
         diff_freq : float, optional
             The difference frequency threshold for conditional analysis, by default 0.2
+        only_use_sig_snps : bool, optional
+            Whether to use the significant snps for conditional analysis, by default False
         use_ref_EAF : bool, optional
             Whether to use the reference EAF for conditional analysis, by default False
         threads : int, optional
@@ -124,6 +127,7 @@ class Loci:
                     cojo_collinear,
                     diff_freq,
                     use_ref_EAF,
+                    only_use_sig_snps,
                     threads,
                 )
         else:
@@ -315,6 +319,7 @@ class Loci:
         cojo_collinear: float = 0.9,
         diff_freq: float = 0.2,
         use_ref_EAF: bool = False,
+        only_use_sig_snps: bool = False,
         threads: int = 1,
     ) -> pd.DataFrame:
         """
@@ -338,6 +343,8 @@ class Loci:
             The difference frequency, by default 0.2
         use_ref_EAF : bool, optional
             Whether to use the reference EAF, by default False
+        only_use_sig_snps : bool, optional
+            Whether to only use the significant snps, by default False
         threads : int, optional
             The number of threads, by default 1
             TODO: accelerate the process by running cojo in loci identified by distance
@@ -351,7 +358,10 @@ class Loci:
         args_list = []
         loci = Loci()
         for chrom in sig_df[ColName.CHR].unique():
-            in_df = sumstats[sumstats[ColName.CHR] == chrom]
+            if only_use_sig_snps:
+                in_df = sig_df[sig_df[ColName.CHR] == chrom]
+            else:
+                in_df = sumstats[sumstats[ColName.CHR] == chrom]
             args_list.append(
                 (
                     in_df,

@@ -122,10 +122,14 @@ def get_loci(
     cojo_collinear: float = typer.Option(0.9, "--cojo-collinear", help="The cojo collinear threshold."),
     diff_freq: float = typer.Option(0.2, "--diff-freq", help="The difference in allele frequency threshold."),
     use_ref_eaf: bool = typer.Option(False, "--use-ref-eaf", help="Whether to use the reference panel EAF."),
+    only_use_sig_snps: bool = typer.Option(
+        False, "--only-use-sig-snps", help="Whether to only use the significant SNPs."
+    ),
     threads: int = typer.Option(1, "--threads", "-t", help="The number of threads."),
 ) -> None:
     """Get the loci from the GWAS summary statistics file."""
     if sumstats_path.exists():
+        logging.info(f"Loading {sumstats_path}...")
         sumstats = pd.read_csv(sumstats_path, sep="\t")
         Loci().identify_indep_loci(
             sumstats=sumstats,
@@ -143,6 +147,7 @@ def get_loci(
             cojo_collinear=cojo_collinear,
             diff_freq=diff_freq,
             use_ref_EAF=use_ref_eaf,
+            only_use_sig_snps=only_use_sig_snps,
             threads=threads,
         )
     else:
