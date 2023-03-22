@@ -77,28 +77,28 @@ def validate_ldref(
     ld.valid(ldref_path, outprefix, file_type, mac, threads)
 
 
-@app.command()
-def validate_sumstats(
-    sumstats_path: Path = typer.Argument(..., help="The path to the GWAS summary statistics file."),
-    output: Path = typer.Argument(..., help="The output prefix."),
-) -> None:
-    """Validate the GWAS summary statistics file."""
-    if sumstats_path.exists():
-        sumstats = pd.read_csv(sumstats_path, sep="\t")
-        typer.echo(f"Loaded {sumstats_path} successfully.")
-        typer.echo(f"Number of SNPs: {sumstats.shape[0]}")
-        typer.echo(f"Number of columns: {sumstats.shape[1]}")
-        typer.echo(f"Columns: {list(sumstats.columns)}")
-        valid_sumstats = SumStat(sumstats)
-        valid_sumstats = valid_sumstats.standarize()
-        if output.suffix == ".gz":
-            valid_sumstats.to_csv(output, sep="\t", index=False, compression="gzip")
-        else:
-            valid_sumstats.to_csv(output, sep="\t", index=False)
-        typer.echo(f"Saved the validated summary statistics to {output}.")
-    else:
-        logging.error(f"No such file of {sumstats_path}.")
-        sys.exit(1)
+# @app.command()
+# def validate_sumstats(
+#     sumstats_path: Path = typer.Argument(..., help="The path to the GWAS summary statistics file."),
+#     output: Path = typer.Argument(..., help="The output prefix."),
+# ) -> None:
+#     """Validate the GWAS summary statistics file."""
+#     if sumstats_path.exists():
+#         sumstats = pd.read_csv(sumstats_path, sep="\t")
+#         typer.echo(f"Loaded {sumstats_path} successfully.")
+#         typer.echo(f"Number of SNPs: {sumstats.shape[0]}")
+#         typer.echo(f"Number of columns: {sumstats.shape[1]}")
+#         typer.echo(f"Columns: {list(sumstats.columns)}")
+#         valid_sumstats = SumStat(sumstats)
+#         valid_sumstats = valid_sumstats.standarize()
+#         if output.suffix == ".gz":
+#             valid_sumstats.to_csv(output, sep="\t", index=False, compression="gzip")
+#         else:
+#             valid_sumstats.to_csv(output, sep="\t", index=False)
+#         typer.echo(f"Saved the validated summary statistics to {output}.")
+#     else:
+#         logging.error(f"No such file of {sumstats_path}.")
+#         sys.exit(1)
 
 
 @app.command()

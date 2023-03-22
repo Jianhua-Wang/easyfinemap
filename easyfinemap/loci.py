@@ -22,7 +22,7 @@ from easyfinemap.constant import ColName
 from easyfinemap.ldref import LDRef
 from easyfinemap.sumstat import SumStat
 from easyfinemap.tools import Tools
-from easyfinemap.utils import get_significant_snps, io_in_tempdir
+from easyfinemap.utils import get_significant_snps, io_in_tempdir, make_SNPID_unique
 
 
 class Loci:
@@ -101,8 +101,7 @@ class Loci:
         Tuple[pd.DataFrame, pd.DataFrame]
             The independent lead snps and independent loci.
         """
-        sumstats = SumStat(sumstats)
-        sumstats = sumstats.standarize()
+        sumstats = make_SNPID_unique(sumstats)
         if method == "distance":
             sig_df = get_significant_snps(sumstats, sig_threshold)
             lead_snp = self.indep_snps_by_distance(sig_df, distance)

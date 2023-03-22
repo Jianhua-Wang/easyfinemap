@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.2] - 2023-03-22
+
+### Added
+
+
+### Changed
+- deleted format function
+
+
+### Fixed
+
+
 ## [0.2.1] - 2023-01-10
 
 ### Added

@@ -30,7 +30,7 @@ from easyfinemap.constant import ColName
 from easyfinemap.ldref import LDRef
 from easyfinemap.sumstat import SumStat
 from easyfinemap.tools import Tools
-from easyfinemap.utils import io_in_tempdir
+from easyfinemap.utils import io_in_tempdir, make_SNPID_unique
 
 
 class EasyFinemap(object):
@@ -581,8 +581,7 @@ class EasyFinemap(object):
         threads : int, optional
             Number of threads, by default 1
         """
-        sumstats = SumStat(sumstats)
-        sumstats = sumstats.standarize()
+        sumstats = make_SNPID_unique(sumstats)
         if credible_threshold and credible_method is None and methods != ["all"] and len(methods) == 1:
             credible_method = methods[0]
         kwargs_list = []
