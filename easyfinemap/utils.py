@@ -70,6 +70,8 @@ def make_SNPID_unique(sumstat: pd.DataFrame, replace_rsIDcol: bool = False, remo
     if replace_rsIDcol:
         df[ColName.RSID] = allele_df[ColName.SNPID]
     else:
+        if ColName.SNPID in df.columns:
+            df.drop(ColName.SNPID, axis=1, inplace=True)
         df.insert(loc=0, column=ColName.SNPID, value=allele_df[ColName.SNPID].values)  # type: ignore
     if remove_duplicates:
         df.sort_values(ColName.P, inplace=True)

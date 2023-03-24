@@ -12,7 +12,6 @@ nav:
   - Modules:
     - EasyFinemap: api/easyfinemap.md
     - CLI: api/cli.md
-    - SumStat: api/Sumstat.md
     - LDRef: api/LDRef.md
     - Loci: api/Loci.md
     - utils: api/utils.md

@@ -36,36 +36,6 @@ def test_validate_ldref():
     assert "EUR.valid.chr21.bim" in os.listdir(f"{PWD}/exampledata/LDREF")
 
 
-def test_validate_sumstats():
-    """Test the validate_sumstats command."""
-    result = runner.invoke(app, ["validate-sumstats", "--help"])
-    assert result.exit_code == 0
-    assert "validate-sumstats" in result.stdout
-    result = runner.invoke(
-        app,
-        ["validate-sumstats", f"{PWD}/exampledata/noEAF_noMAF.txt.gz", f"{PWD}/exampledata/sumstats.valid.txt"],
-    )
-    assert result.exit_code == 0
-    assert "sumstats.valid.txt" in os.listdir(f"{PWD}/exampledata/")
-    os.remove(f"{PWD}/exampledata/sumstats.valid.txt")
-    result = runner.invoke(
-        app,
-        ["validate-sumstats", f"{PWD}/exampledata/noEAF_noMAF.txt.gz", f"{PWD}/exampledata/sumstats.valid.txt.gz"],
-    )
-    assert result.exit_code == 0
-    assert "sumstats.valid.txt.gz" in os.listdir(f"{PWD}/exampledata/")
-    os.remove(f"{PWD}/exampledata/sumstats.valid.txt.gz")
-    result = runner.invoke(
-        app,
-        [
-            "validate-sumstats",
-            f"{PWD}/exampledata/noEAF_noMAF.1.txt.gz",
-            f"{PWD}/exampledata/sumstats.valid.txt.gz",
-        ],
-    )
-    assert result.exit_code == 1
-
-
 def test_get_loci():
     """Test the get-loci command."""
     result = runner.invoke(app, ["get-loci", "--help"])

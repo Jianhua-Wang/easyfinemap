@@ -28,7 +28,8 @@ from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn, T
 
 from easyfinemap.constant import ColName
 from easyfinemap.ldref import LDRef
-from easyfinemap.sumstat import SumStat
+
+# from easyfinemap.sumstat import SumStat
 from easyfinemap.tools import Tools
 from easyfinemap.utils import io_in_tempdir, make_SNPID_unique
 
@@ -621,8 +622,8 @@ class EasyFinemap(object):
                     progress.update(task, advance=1)
                     progress.refresh()
                     output.append(res.get())
-        output = pd.concat(output, ignore_index=True)
+        output_df = pd.concat(output, ignore_index=True)
         if outfile:
-            output.to_csv(outfile, sep="\t", index=False)
+            output_df.to_csv(outfile, sep="\t", index=False)
         else:
-            return output
+            return output_df

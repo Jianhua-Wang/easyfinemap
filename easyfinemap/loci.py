@@ -10,6 +10,7 @@ merge the overlapped independent loci (optional).
 """
 
 import logging
+import os
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 from subprocess import PIPE, run
@@ -20,7 +21,8 @@ from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn, T
 
 from easyfinemap.constant import ColName
 from easyfinemap.ldref import LDRef
-from easyfinemap.sumstat import SumStat
+
+# from easyfinemap.sumstat import SumStat
 from easyfinemap.tools import Tools
 from easyfinemap.utils import get_significant_snps, io_in_tempdir, make_SNPID_unique
 
@@ -42,6 +44,7 @@ class Loci:
         sumstats: pd.DataFrame,
         sig_threshold: float = 5e-8,
         loci_extend: int = 500,
+        ldblock: Optional[str] = None,
         if_merge: bool = False,
         outprefix: Optional[str] = None,
         ldref: Optional[str] = None,
@@ -102,13 +105,16 @@ class Loci:
             The independent lead snps and independent loci.
         """
         sumstats = make_SNPID_unique(sumstats)
+        if ldblock is not None:
+            ldblock = pd.read_csv(ldblock, sep="\t", names=[ColName.CHR, ColName.START, ColName.END])
         if method == "distance":
             sig_df = get_significant_snps(sumstats, sig_threshold)
-            lead_snp = self.indep_snps_by_distance(sig_df, distance)
+            lead_snp = self.indep_snps_by_distance(sig_df, distance, ldblock)
         elif method == "clumping":
             clump_p1 = sig_threshold
             if ldref is not None:
-                lead_snp = self.indep_snps_by_ldclumping(sumstats, ldref, clump_p1, clump_kb, clump_r2)
+                sig_df = get_significant_snps(sumstats, sig_threshold)
+                lead_snp = self.indep_snps_by_ldclumping(sig_df, ldref, clump_p1, clump_kb, clump_r2)
             else:
                 raise ValueError(f"Please provide the ldref file for method: {method}")
         elif method == "conditional":
@@ -127,11 +133,12 @@ class Loci:
                     diff_freq,
                     use_ref_EAF,
                     only_use_sig_snps,
+                    ldblock,
                     threads,
                 )
         else:
             raise ValueError(f"Unsupported method: {method}")
-        loci = self.leadsnp2loci(lead_snp, loci_extend, if_merge)
+        loci = self.leadsnp2loci(lead_snp, loci_extend, if_merge, ldblock)
         if if_merge and ColName.COJO_BETA in lead_snp.columns:
             self.logger.warning("The loci identified by cojo may not need merge.")
             lead_snp = lead_snp[lead_snp[ColName.SNPID].isin(loci[ColName.LEAD_SNP])]
@@ -142,8 +149,7 @@ class Loci:
             leadsnp_file = f"{outprefix}.leadsnp.txt"
             lead_snp.to_csv(leadsnp_file, sep="\t", index=False)
             self.logger.info(f"Save the independent lead snps to {leadsnp_file}")
-        else:
-            return lead_snp, loci
+        return lead_snp, loci
 
     @staticmethod
     def merge_overlapped_loci(loci_df: pd.DataFrame):
@@ -180,7 +186,9 @@ class Loci:
         return result
 
     @staticmethod
-    def indep_snps_by_distance(sig_df: pd.DataFrame, distance: int = 500) -> pd.DataFrame:
+    def indep_snps_by_distance(
+        sig_df: pd.DataFrame, distance: int = 500, ldblock: Optional[pd.DataFrame] = None
+    ) -> pd.DataFrame:
         """
         Identify the independent snps by distance only.
 
@@ -190,24 +198,42 @@ class Loci:
             The significant snps.
         distance : int, optional
             The distance threshold, by default 500, unit: kb
+        ldblock : Optional[pd.DataFrame], optional
+            The ld block information, use boundary to identify the independent snps, by default None
 
         Returns
         -------
         pd.DataFrame
             The independent snps.
         """
-        sig_df.sort_values(ColName.P, inplace=True)
+        sig_df = sig_df.sort_values(ColName.P).copy()
         lead_snp = []
-        distance = distance * 1000
-        while len(sig_df):
-            lead_snp.append(sig_df.iloc[[0]])
-            sig_df = sig_df[
-                ~(
-                    (sig_df[ColName.CHR] == sig_df.iloc[0][ColName.CHR])
-                    & (sig_df[ColName.BP] >= sig_df.iloc[0][ColName.BP] - distance)
-                    & (sig_df[ColName.BP] <= sig_df.iloc[0][ColName.BP] + distance)
-                )
-            ]  # type: ignore
+        if ldblock is not None:
+            while len(sig_df):
+                lead_snp.append(sig_df.iloc[[0]])
+                sig_block = ldblock[
+                    (ldblock[ColName.CHR] == sig_df.iloc[0][ColName.CHR])
+                    & (ldblock[ColName.START] <= sig_df.iloc[0][ColName.BP])
+                    & (ldblock[ColName.END] >= sig_df.iloc[0][ColName.BP])
+                ]
+                sig_df = sig_df[
+                    ~(
+                        (sig_df[ColName.CHR] == sig_df.iloc[0][ColName.CHR])
+                        & (sig_df[ColName.BP] >= sig_df.iloc[0][ColName.BP] - sig_block.iloc[0][ColName.START])
+                        & (sig_df[ColName.BP] <= sig_df.iloc[0][ColName.BP] + sig_block.iloc[0][ColName.END])
+                    )
+                ]
+        else:
+            distance = distance * 1000
+            while len(sig_df):
+                lead_snp.append(sig_df.iloc[[0]])
+                sig_df = sig_df[
+                    ~(
+                        (sig_df[ColName.CHR] == sig_df.iloc[0][ColName.CHR])
+                        & (sig_df[ColName.BP] >= sig_df.iloc[0][ColName.BP] - distance)
+                        & (sig_df[ColName.BP] <= sig_df.iloc[0][ColName.BP] + distance)
+                    )
+                ]  # type: ignore
         lead_snp = pd.concat(lead_snp, axis=0, ignore_index=True)
         return lead_snp
 
@@ -303,10 +329,14 @@ class Loci:
             self.logger.error(res.stderr)
             raise RuntimeError(res.stderr)
         else:
-            clump_snps = pd.read_csv(clump_outfile, delim_whitespace=True, usecols=["SNP"])
-            clump_snps = clump_snps["SNP"].to_list()
-            clump_snps = sig_df[sig_df[ColName.SNPID].isin(clump_snps)]
-            return clump_snps
+            if os.path.exists(clump_outfile):
+                clump_snps = pd.read_csv(clump_outfile, delim_whitespace=True, usecols=["SNP"])
+                clump_snps = clump_snps["SNP"].to_list()
+                clump_snps = sig_df[sig_df[ColName.SNPID].isin(clump_snps)]
+                return clump_snps
+            else:
+                logging.warning(f"No clumped snps found for chromosome {chrom}")
+                return pd.DataFrame()
 
     @staticmethod
     def indep_snps_by_conditional(
@@ -319,6 +349,7 @@ class Loci:
         diff_freq: float = 0.2,
         use_ref_EAF: bool = False,
         only_use_sig_snps: bool = False,
+        ldblock: Optional[pd.DataFrame] = None,
         threads: int = 1,
     ) -> pd.DataFrame:
         """
@@ -344,9 +375,10 @@ class Loci:
             Whether to use the reference EAF, by default False
         only_use_sig_snps : bool, optional
             Whether to only use the significant snps, by default False
+        ldblock : Optional[pd.DataFrame], optional
+            The LD block, run cojo in each LD block, by default None
         threads : int, optional
             The number of threads, by default 1
-            TODO: accelerate the process by running cojo in loci identified by distance
         """
         logger = logging.getLogger('COJO')
         if not use_ref_EAF and ColName.EAF not in sumstats.columns:
@@ -356,23 +388,53 @@ class Loci:
         logger.debug(f"Number of chromosomes: {len(sig_df[ColName.CHR].unique())}")
         args_list = []
         loci = Loci()
-        for chrom in sig_df[ColName.CHR].unique():
-            if only_use_sig_snps:
-                in_df = sig_df[sig_df[ColName.CHR] == chrom]
-            else:
-                in_df = sumstats[sumstats[ColName.CHR] == chrom]
-            args_list.append(
-                (
-                    in_df,
-                    ldref.format(chrom=chrom),
-                    sample_size,
-                    cojo_window_kb,
-                    cojo_collinear,
-                    diff_freq,
-                    sig_threshold,
-                    use_ref_EAF,
+        if ldblock is not None:
+            sig_blocks = loci.indep_snps_by_distance(sig_df, ldblock=ldblock)
+            sig_blocks = loci.leadsnp2loci(sig_blocks, ldblock=ldblock)
+            for i in sig_blocks.index:
+                if only_use_sig_snps:
+                    in_df = sig_df[
+                        (sig_df[ColName.CHR] == sig_blocks.loc[i][ColName.CHR])
+                        & (sig_df[ColName.BP] >= sig_blocks.loc[i][ColName.START])
+                        & (sig_df[ColName.BP] <= sig_blocks.loc[i][ColName.END])
+                    ]
+                else:
+                    in_df = sumstats[
+                        (sumstats[ColName.CHR] == sig_blocks.loc[i][ColName.CHR])
+                        & (sumstats[ColName.BP] >= sig_blocks.loc[i][ColName.START])
+                        & (sumstats[ColName.BP] <= sig_blocks.loc[i][ColName.END])
+                    ]
+                args_list.append(
+                    (
+                        in_df,
+                        ldref.format(chrom=sig_blocks.loc[i][ColName.CHR]),
+                        sample_size,
+                        cojo_window_kb,
+                        cojo_collinear,
+                        diff_freq,
+                        sig_threshold,
+                        use_ref_EAF,
+                    )
                 )
-            )
+        else:
+            for chrom in sig_df[ColName.CHR].unique():
+                if only_use_sig_snps:
+                    in_df = sig_df[sig_df[ColName.CHR] == chrom]
+                else:
+                    in_df = sumstats[sumstats[ColName.CHR] == chrom]
+                args_list.append(
+                    (
+                        in_df,
+                        ldref.format(chrom=chrom),
+                        sample_size,
+                        cojo_window_kb,
+                        cojo_collinear,
+                        diff_freq,
+                        sig_threshold,
+                        use_ref_EAF,
+                    )
+                )
+
         with ProcessPoolExecutor(max_workers=threads) as executor:
             results = []
             with Progress(
@@ -497,7 +559,9 @@ class Loci:
             return cojo_snps
 
     @staticmethod
-    def leadsnp2loci(lead_snps: pd.DataFrame, range: int = 500, if_merge: bool = False) -> pd.DataFrame:
+    def leadsnp2loci(
+        lead_snps: pd.DataFrame, range: int = 500, if_merge: bool = False, ldblock: Optional[pd.DataFrame] = None
+    ) -> pd.DataFrame:
         """
         Expand the independent lead snps to independent loci by given range.
 
@@ -509,7 +573,8 @@ class Loci:
             The range, by default 500, unit: kb
         if_merge : bool, optional
             Whether merge the overlapped loci, by default False
-            TODO: use custom blocks as loci boundaries
+        ldblock : Optional[pd.DataFrame], optional
+            The ld block, using LD block to expand the independent loci, by default None
 
         Returns
         -------
@@ -517,14 +582,30 @@ class Loci:
             The independent loci.
         """
         loci_df = lead_snps.copy()
-        # loci_df = make_SNPID_unique(loci_df)
-        range = range * 1000
         loci_df = loci_df[[ColName.CHR, ColName.BP, ColName.P, ColName.SNPID]]
         loci_df.columns = [ColName.CHR, ColName.LEAD_SNP_BP, ColName.LEAD_SNP_P, ColName.LEAD_SNP]  # type: ignore
-        loci_df[ColName.START] = loci_df[ColName.LEAD_SNP_BP] - range
-        loci_df[ColName.START] = loci_df[ColName.START].apply(lambda x: 0 if x < 0 else x)
-        loci_df[ColName.END] = loci_df[ColName.LEAD_SNP_BP] + range
+        if ldblock is not None:
+            loci_df[ColName.START] = 0
+            loci_df[ColName.END] = 0
+            for i in loci_df.index:
+                sub_ldblock = ldblock[
+                    (ldblock[ColName.CHR] == loci_df.loc[i, ColName.CHR])
+                    & (ldblock[ColName.START] <= loci_df.loc[i, ColName.LEAD_SNP_BP])
+                    & (ldblock[ColName.END] >= loci_df.loc[i, ColName.LEAD_SNP_BP])
+                ]
+                if sub_ldblock.empty:
+                    continue
+                else:
+                    loci_df.loc[i, ColName.START] = sub_ldblock.iloc[0][ColName.START]
+                    loci_df.loc[i, ColName.END] = sub_ldblock.iloc[0][ColName.END]
+        else:
+            range = range * 1000
+
+            loci_df[ColName.START] = loci_df[ColName.LEAD_SNP_BP] - range
+            loci_df[ColName.START] = loci_df[ColName.START].apply(lambda x: 0 if x < 0 else x)
+            loci_df[ColName.END] = loci_df[ColName.LEAD_SNP_BP] + range
         loci_df = loci_df[ColName.loci_cols].copy()
         if if_merge:
             loci_df = Loci.merge_overlapped_loci(loci_df)
+        loci_df = loci_df.sort_values(by=[ColName.CHR, ColName.START, ColName.END])
         return loci_df

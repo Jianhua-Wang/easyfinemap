@@ -14,7 +14,8 @@ from easyfinemap import __version__
 from easyfinemap.easyfinemap import EasyFinemap
 from easyfinemap.ldref import LDRef
 from easyfinemap.loci import Loci
-from easyfinemap.sumstat import SumStat
+
+# from easyfinemap.sumstat import SumStat
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 app = typer.Typer(context_settings=CONTEXT_SETTINGS, add_completion=False)
@@ -107,6 +108,7 @@ def get_loci(
     output: str = typer.Argument(..., help="The output prefix."),
     sig_threshold: float = typer.Option(5e-8, "--sig-threshold", "-s", help="The significance threshold."),
     loci_extension: int = typer.Option(500, "--loci-extension", "-l", help="The extension from lead SNPs, in kb"),
+    ldblock: str = typer.Option(None, "--ldblock", help="The path to the LD block file."),
     if_merge: bool = typer.Option(
         False, "--merge-loci", "-i", help="Whether to merge the loci, not recommanded for conditional mode."
     ),
@@ -135,6 +137,7 @@ def get_loci(
             sumstats=sumstats,
             sig_threshold=sig_threshold,
             loci_extend=loci_extension,
+            ldblock=ldblock,
             if_merge=if_merge,
             outprefix=output,
             ldref=ldref,
