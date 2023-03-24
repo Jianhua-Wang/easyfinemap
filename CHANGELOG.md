@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.2.2] - 2023-03-22\4
+## [0.2.3] - 2023-03-22\4
 
 ### Added
 - suppor using LD blocks as loci boudaries.
