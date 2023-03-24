@@ -417,20 +417,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../Sumstat/" class="md-nav__link">
-        SumStat
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../LDRef/" class="md-nav__link">
         LDRef
       </a>
@@ -716,14 +702,14 @@
 
           <details class="quote">
             <summary>Source code in <code>easyfinemap/loci.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">33</span>
 <span class="normal">34</span>
 <span class="normal">35</span>
 <span class="normal">36</span>
 <span class="normal">37</span>
-<span class="normal">38</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Initialize the Loci class.&quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;Loci&quot;</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">plink</span> <span class="o">=</span> <span class="n">Tools</span><span class="p">()</span><span class="o">.</span><span class="n">plink</span>
@@ -854,36 +840,7 @@
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/loci.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">242</span>
-<span class="normal">243</span>
-<span class="normal">244</span>
-<span class="normal">245</span>
-<span class="normal">246</span>
-<span class="normal">247</span>
-<span class="normal">248</span>
-<span class="normal">249</span>
-<span class="normal">250</span>
-<span class="normal">251</span>
-<span class="normal">252</span>
-<span class="normal">253</span>
-<span class="normal">254</span>
-<span class="normal">255</span>
-<span class="normal">256</span>
-<span class="normal">257</span>
-<span class="normal">258</span>
-<span class="normal">259</span>
-<span class="normal">260</span>
-<span class="normal">261</span>
-<span class="normal">262</span>
-<span class="normal">263</span>
-<span class="normal">264</span>
-<span class="normal">265</span>
-<span class="normal">266</span>
-<span class="normal">267</span>
-<span class="normal">268</span>
-<span class="normal">269</span>
-<span class="normal">270</span>
-<span class="normal">271</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">271</span>
 <span class="normal">272</span>
 <span class="normal">273</span>
 <span class="normal">274</span>
@@ -918,7 +875,40 @@
 <span class="normal">303</span>
 <span class="normal">304</span>
 <span class="normal">305</span>
-<span class="normal">306</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s2">&quot;./tmp/loci&quot;</span><span class="p">)</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s2">&quot;./tmp/loci&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">clump_per_chr</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sig_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -979,10 +969,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">clump_snps</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">clump_outfile</span><span class="p">,</span> <span class="n">delim_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;SNP&quot;</span><span class="p">])</span>
-        <span class="n">clump_snps</span> <span class="o">=</span> <span class="n">clump_snps</span><span class="p">[</span><span class="s2">&quot;SNP&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
-        <span class="n">clump_snps</span> <span class="o">=</span> <span class="n">sig_df</span><span class="p">[</span><span class="n">sig_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">clump_snps</span><span class="p">)]</span>
-        <span class="k">return</span> <span class="n">clump_snps</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">clump_outfile</span><span class="p">):</span>
+            <span class="n">clump_snps</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">clump_outfile</span><span class="p">,</span> <span class="n">delim_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;SNP&quot;</span><span class="p">])</span>
+            <span class="n">clump_snps</span> <span class="o">=</span> <span class="n">clump_snps</span><span class="p">[</span><span class="s2">&quot;SNP&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+            <span class="n">clump_snps</span> <span class="o">=</span> <span class="n">sig_df</span><span class="p">[</span><span class="n">sig_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">clump_snps</span><span class="p">)]</span>
+            <span class="k">return</span> <span class="n">clump_snps</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No clumped snps found for chromosome </span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -1127,78 +1121,7 @@
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/loci.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">384</span>
-<span class="normal">385</span>
-<span class="normal">386</span>
-<span class="normal">387</span>
-<span class="normal">388</span>
-<span class="normal">389</span>
-<span class="normal">390</span>
-<span class="normal">391</span>
-<span class="normal">392</span>
-<span class="normal">393</span>
-<span class="normal">394</span>
-<span class="normal">395</span>
-<span class="normal">396</span>
-<span class="normal">397</span>
-<span class="normal">398</span>
-<span class="normal">399</span>
-<span class="normal">400</span>
-<span class="normal">401</span>
-<span class="normal">402</span>
-<span class="normal">403</span>
-<span class="normal">404</span>
-<span class="normal">405</span>
-<span class="normal">406</span>
-<span class="normal">407</span>
-<span class="normal">408</span>
-<span class="normal">409</span>
-<span class="normal">410</span>
-<span class="normal">411</span>
-<span class="normal">412</span>
-<span class="normal">413</span>
-<span class="normal">414</span>
-<span class="normal">415</span>
-<span class="normal">416</span>
-<span class="normal">417</span>
-<span class="normal">418</span>
-<span class="normal">419</span>
-<span class="normal">420</span>
-<span class="normal">421</span>
-<span class="normal">422</span>
-<span class="normal">423</span>
-<span class="normal">424</span>
-<span class="normal">425</span>
-<span class="normal">426</span>
-<span class="normal">427</span>
-<span class="normal">428</span>
-<span class="normal">429</span>
-<span class="normal">430</span>
-<span class="normal">431</span>
-<span class="normal">432</span>
-<span class="normal">433</span>
-<span class="normal">434</span>
-<span class="normal">435</span>
-<span class="normal">436</span>
-<span class="normal">437</span>
-<span class="normal">438</span>
-<span class="normal">439</span>
-<span class="normal">440</span>
-<span class="normal">441</span>
-<span class="normal">442</span>
-<span class="normal">443</span>
-<span class="normal">444</span>
-<span class="normal">445</span>
-<span class="normal">446</span>
-<span class="normal">447</span>
-<span class="normal">448</span>
-<span class="normal">449</span>
-<span class="normal">450</span>
-<span class="normal">451</span>
-<span class="normal">452</span>
-<span class="normal">453</span>
-<span class="normal">454</span>
-<span class="normal">455</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">455</span>
 <span class="normal">456</span>
 <span class="normal">457</span>
 <span class="normal">458</span>
@@ -1231,7 +1154,78 @@
 <span class="normal">485</span>
 <span class="normal">486</span>
 <span class="normal">487</span>
-<span class="normal">488</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s2">&quot;./tmp/loci&quot;</span><span class="p">)</span>
+<span class="normal">488</span>
+<span class="normal">489</span>
+<span class="normal">490</span>
+<span class="normal">491</span>
+<span class="normal">492</span>
+<span class="normal">493</span>
+<span class="normal">494</span>
+<span class="normal">495</span>
+<span class="normal">496</span>
+<span class="normal">497</span>
+<span class="normal">498</span>
+<span class="normal">499</span>
+<span class="normal">500</span>
+<span class="normal">501</span>
+<span class="normal">502</span>
+<span class="normal">503</span>
+<span class="normal">504</span>
+<span class="normal">505</span>
+<span class="normal">506</span>
+<span class="normal">507</span>
+<span class="normal">508</span>
+<span class="normal">509</span>
+<span class="normal">510</span>
+<span class="normal">511</span>
+<span class="normal">512</span>
+<span class="normal">513</span>
+<span class="normal">514</span>
+<span class="normal">515</span>
+<span class="normal">516</span>
+<span class="normal">517</span>
+<span class="normal">518</span>
+<span class="normal">519</span>
+<span class="normal">520</span>
+<span class="normal">521</span>
+<span class="normal">522</span>
+<span class="normal">523</span>
+<span class="normal">524</span>
+<span class="normal">525</span>
+<span class="normal">526</span>
+<span class="normal">527</span>
+<span class="normal">528</span>
+<span class="normal">529</span>
+<span class="normal">530</span>
+<span class="normal">531</span>
+<span class="normal">532</span>
+<span class="normal">533</span>
+<span class="normal">534</span>
+<span class="normal">535</span>
+<span class="normal">536</span>
+<span class="normal">537</span>
+<span class="normal">538</span>
+<span class="normal">539</span>
+<span class="normal">540</span>
+<span class="normal">541</span>
+<span class="normal">542</span>
+<span class="normal">543</span>
+<span class="normal">544</span>
+<span class="normal">545</span>
+<span class="normal">546</span>
+<span class="normal">547</span>
+<span class="normal">548</span>
+<span class="normal">549</span>
+<span class="normal">550</span>
+<span class="normal">551</span>
+<span class="normal">552</span>
+<span class="normal">553</span>
+<span class="normal">554</span>
+<span class="normal">555</span>
+<span class="normal">556</span>
+<span class="normal">557</span>
+<span class="normal">558</span>
+<span class="normal">559</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s2">&quot;./tmp/loci&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">cojo_slct</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -1347,7 +1341,7 @@
 
 
 <h2 id="easyfinemap.loci.Loci.identify_indep_loci" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">identify_indep_loci</span><span class="p">(</span><span class="n">sumstats</span><span class="p">,</span> <span class="n">sig_threshold</span><span class="o">=</span><span class="mf">5e-08</span><span class="p">,</span> <span class="n">loci_extend</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">if_merge</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">outprefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ldref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;distance&#39;</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">clump_kb</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">clump_r2</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">sample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cojo_window_kb</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">cojo_collinear</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">diff_freq</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">use_ref_EAF</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">identify_indep_loci</span><span class="p">(</span><span class="n">sumstats</span><span class="p">,</span> <span class="n">sig_threshold</span><span class="o">=</span><span class="mf">5e-08</span><span class="p">,</span> <span class="n">loci_extend</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">ldblock</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">if_merge</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">outprefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ldref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;distance&#39;</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">clump_kb</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">clump_r2</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">sample_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cojo_window_kb</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">cojo_collinear</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">diff_freq</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">only_use_sig_snps</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_ref_EAF</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></code>
 
 <a href="#easyfinemap.loci.Loci.identify_indep_loci" class="headerlink" title="Permanent link">&para;</a></h2>
 
@@ -1499,6 +1493,16 @@ choose from ["distance", "clumping", "conditional"]</p></td>
           </td>
         </tr>
         <tr>
+          <td><code>only_use_sig_snps</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a>, optional</code>
+          </td>
+          <td><p>Whether to use the significant snps for conditional analysis, by default False</p></td>
+          <td>
+                <code>False</code>
+          </td>
+        </tr>
+        <tr>
           <td><code>use_ref_EAF</code></td>
           <td>
                 <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a>, optional</code>
@@ -1541,9 +1545,7 @@ choose from ["distance", "clumping", "conditional"]</p></td>
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/loci.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 40</span>
-<span class="normal"> 41</span>
-<span class="normal"> 42</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 42</span>
 <span class="normal"> 43</span>
 <span class="normal"> 44</span>
 <span class="normal"> 45</span>
@@ -1644,11 +1646,21 @@ choose from ["distance", "clumping", "conditional"]</p></td>
 <span class="normal">140</span>
 <span class="normal">141</span>
 <span class="normal">142</span>
-<span class="normal">143</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">identify_indep_loci</span><span class="p">(</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">identify_indep_loci</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">sig_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5e-8</span><span class="p">,</span>
     <span class="n">loci_extend</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span>
+    <span class="n">ldblock</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">if_merge</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">outprefix</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">ldref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1660,6 +1672,7 @@ choose from ["distance", "clumping", "conditional"]</p></td>
     <span class="n">cojo_window_kb</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">,</span>
     <span class="n">cojo_collinear</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span>
     <span class="n">diff_freq</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">only_use_sig_snps</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">use_ref_EAF</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">threads</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">],</span> <span class="kc">None</span><span class="p">]:</span>
@@ -1695,6 +1708,8 @@ choose from ["distance", "clumping", "conditional"]</p></td>
 <span class="sd">        The collinear threshold for conditional analysis, by default 0.9</span>
 <span class="sd">    diff_freq : float, optional</span>
 <span class="sd">        The difference frequency threshold for conditional analysis, by default 0.2</span>
+<span class="sd">    only_use_sig_snps : bool, optional</span>
+<span class="sd">        Whether to use the significant snps for conditional analysis, by default False</span>
 <span class="sd">    use_ref_EAF : bool, optional</span>
 <span class="sd">        Whether to use the reference EAF for conditional analysis, by default False</span>
 <span class="sd">    threads : int, optional</span>
@@ -1705,15 +1720,17 @@ choose from ["distance", "clumping", "conditional"]</p></td>
 <span class="sd">    Tuple[pd.DataFrame, pd.DataFrame]</span>
 <span class="sd">        The independent lead snps and independent loci.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">sumstats</span> <span class="o">=</span> <span class="n">SumStat</span><span class="p">(</span><span class="n">sumstats</span><span class="p">)</span>
-    <span class="n">sumstats</span> <span class="o">=</span> <span class="n">sumstats</span><span class="o">.</span><span class="n">standarize</span><span class="p">()</span>
+    <span class="n">sumstats</span> <span class="o">=</span> <span class="n">make_SNPID_unique</span><span class="p">(</span><span class="n">sumstats</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ldblock</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ldblock</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">ldblock</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">START</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">END</span><span class="p">])</span>
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;distance&quot;</span><span class="p">:</span>
         <span class="n">sig_df</span> <span class="o">=</span> <span class="n">get_significant_snps</span><span class="p">(</span><span class="n">sumstats</span><span class="p">,</span> <span class="n">sig_threshold</span><span class="p">)</span>
-        <span class="n">lead_snp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">indep_snps_by_distance</span><span class="p">(</span><span class="n">sig_df</span><span class="p">,</span> <span class="n">distance</span><span class="p">)</span>
+        <span class="n">lead_snp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">indep_snps_by_distance</span><span class="p">(</span><span class="n">sig_df</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">ldblock</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;clumping&quot;</span><span class="p">:</span>
         <span class="n">clump_p1</span> <span class="o">=</span> <span class="n">sig_threshold</span>
         <span class="k">if</span> <span class="n">ldref</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">lead_snp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">indep_snps_by_ldclumping</span><span class="p">(</span><span class="n">sumstats</span><span class="p">,</span> <span class="n">ldref</span><span class="p">,</span> <span class="n">clump_p1</span><span class="p">,</span> <span class="n">clump_kb</span><span class="p">,</span> <span class="n">clump_r2</span><span class="p">)</span>
+            <span class="n">sig_df</span> <span class="o">=</span> <span class="n">get_significant_snps</span><span class="p">(</span><span class="n">sumstats</span><span class="p">,</span> <span class="n">sig_threshold</span><span class="p">)</span>
+            <span class="n">lead_snp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">indep_snps_by_ldclumping</span><span class="p">(</span><span class="n">sig_df</span><span class="p">,</span> <span class="n">ldref</span><span class="p">,</span> <span class="n">clump_p1</span><span class="p">,</span> <span class="n">clump_kb</span><span class="p">,</span> <span class="n">clump_r2</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Please provide the ldref file for method: </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;conditional&quot;</span><span class="p">:</span>
@@ -1731,11 +1748,13 @@ choose from ["distance", "clumping", "conditional"]</p></td>
                 <span class="n">cojo_collinear</span><span class="p">,</span>
                 <span class="n">diff_freq</span><span class="p">,</span>
                 <span class="n">use_ref_EAF</span><span class="p">,</span>
+                <span class="n">only_use_sig_snps</span><span class="p">,</span>
+                <span class="n">ldblock</span><span class="p">,</span>
                 <span class="n">threads</span><span class="p">,</span>
             <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported method: </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">loci</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">leadsnp2loci</span><span class="p">(</span><span class="n">lead_snp</span><span class="p">,</span> <span class="n">loci_extend</span><span class="p">,</span> <span class="n">if_merge</span><span class="p">)</span>
+    <span class="n">loci</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">leadsnp2loci</span><span class="p">(</span><span class="n">lead_snp</span><span class="p">,</span> <span class="n">loci_extend</span><span class="p">,</span> <span class="n">if_merge</span><span class="p">,</span> <span class="n">ldblock</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">if_merge</span> <span class="ow">and</span> <span class="n">ColName</span><span class="o">.</span><span class="n">COJO_BETA</span> <span class="ow">in</span> <span class="n">lead_snp</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;The loci identified by cojo may not need merge.&quot;</span><span class="p">)</span>
         <span class="n">lead_snp</span> <span class="o">=</span> <span class="n">lead_snp</span><span class="p">[</span><span class="n">lead_snp</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">loci</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">LEAD_SNP</span><span class="p">])]</span>
@@ -1746,8 +1765,7 @@ choose from ["distance", "clumping", "conditional"]</p></td>
         <span class="n">leadsnp_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">outprefix</span><span class="si">}</span><span class="s2">.leadsnp.txt&quot;</span>
         <span class="n">lead_snp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">leadsnp_file</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Save the independent lead snps to </span><span class="si">{</span><span class="n">leadsnp_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">lead_snp</span><span class="p">,</span> <span class="n">loci</span>
+    <span class="k">return</span> <span class="n">lead_snp</span><span class="p">,</span> <span class="n">loci</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -1759,7 +1777,7 @@ choose from ["distance", "clumping", "conditional"]</p></td>
 
 
 <h2 id="easyfinemap.loci.Loci.indep_snps_by_conditional" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">indep_snps_by_conditional</span><span class="p">(</span><span class="n">sumstats</span><span class="p">,</span> <span class="n">ldref</span><span class="p">,</span> <span class="n">sample_size</span><span class="p">,</span> <span class="n">sig_threshold</span><span class="o">=</span><span class="mf">5e-08</span><span class="p">,</span> <span class="n">cojo_window_kb</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">cojo_collinear</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">diff_freq</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">use_ref_EAF</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">indep_snps_by_conditional</span><span class="p">(</span><span class="n">sumstats</span><span class="p">,</span> <span class="n">ldref</span><span class="p">,</span> <span class="n">sample_size</span><span class="p">,</span> <span class="n">sig_threshold</span><span class="o">=</span><span class="mf">5e-08</span><span class="p">,</span> <span class="n">cojo_window_kb</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">cojo_collinear</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">diff_freq</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">use_ref_EAF</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">only_use_sig_snps</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ldblock</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
@@ -1864,12 +1882,31 @@ choose from ["distance", "clumping", "conditional"]</p></td>
           </td>
         </tr>
         <tr>
+          <td><code>only_use_sig_snps</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a>, optional</code>
+          </td>
+          <td><p>Whether to only use the significant snps, by default False</p></td>
+          <td>
+                <code>False</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>ldblock</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" title="typing.Optional" href="https://docs.python.org/3/library/typing.html#typing.Optional">Optional</a>[<span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span>], optional</code>
+          </td>
+          <td><p>The LD block, run cojo in each LD block, by default None</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
           <td><code>threads</code></td>
           <td>
                 <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a>, optional</code>
           </td>
-          <td><p>The number of threads, by default 1
-TODO: accelerate the process by running cojo in loci identified by distance</p></td>
+          <td><p>The number of threads, by default 1</p></td>
           <td>
                 <code>1</code>
           </td>
@@ -1879,40 +1916,7 @@ TODO: accelerate the process by running cojo in loci identified by distance</p><
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/loci.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">308</span>
-<span class="normal">309</span>
-<span class="normal">310</span>
-<span class="normal">311</span>
-<span class="normal">312</span>
-<span class="normal">313</span>
-<span class="normal">314</span>
-<span class="normal">315</span>
-<span class="normal">316</span>
-<span class="normal">317</span>
-<span class="normal">318</span>
-<span class="normal">319</span>
-<span class="normal">320</span>
-<span class="normal">321</span>
-<span class="normal">322</span>
-<span class="normal">323</span>
-<span class="normal">324</span>
-<span class="normal">325</span>
-<span class="normal">326</span>
-<span class="normal">327</span>
-<span class="normal">328</span>
-<span class="normal">329</span>
-<span class="normal">330</span>
-<span class="normal">331</span>
-<span class="normal">332</span>
-<span class="normal">333</span>
-<span class="normal">334</span>
-<span class="normal">335</span>
-<span class="normal">336</span>
-<span class="normal">337</span>
-<span class="normal">338</span>
-<span class="normal">339</span>
-<span class="normal">340</span>
-<span class="normal">341</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">341</span>
 <span class="normal">342</span>
 <span class="normal">343</span>
 <span class="normal">344</span>
@@ -1953,7 +1957,78 @@ TODO: accelerate the process by running cojo in loci identified by distance</p><
 <span class="normal">379</span>
 <span class="normal">380</span>
 <span class="normal">381</span>
-<span class="normal">382</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span>
+<span class="normal">385</span>
+<span class="normal">386</span>
+<span class="normal">387</span>
+<span class="normal">388</span>
+<span class="normal">389</span>
+<span class="normal">390</span>
+<span class="normal">391</span>
+<span class="normal">392</span>
+<span class="normal">393</span>
+<span class="normal">394</span>
+<span class="normal">395</span>
+<span class="normal">396</span>
+<span class="normal">397</span>
+<span class="normal">398</span>
+<span class="normal">399</span>
+<span class="normal">400</span>
+<span class="normal">401</span>
+<span class="normal">402</span>
+<span class="normal">403</span>
+<span class="normal">404</span>
+<span class="normal">405</span>
+<span class="normal">406</span>
+<span class="normal">407</span>
+<span class="normal">408</span>
+<span class="normal">409</span>
+<span class="normal">410</span>
+<span class="normal">411</span>
+<span class="normal">412</span>
+<span class="normal">413</span>
+<span class="normal">414</span>
+<span class="normal">415</span>
+<span class="normal">416</span>
+<span class="normal">417</span>
+<span class="normal">418</span>
+<span class="normal">419</span>
+<span class="normal">420</span>
+<span class="normal">421</span>
+<span class="normal">422</span>
+<span class="normal">423</span>
+<span class="normal">424</span>
+<span class="normal">425</span>
+<span class="normal">426</span>
+<span class="normal">427</span>
+<span class="normal">428</span>
+<span class="normal">429</span>
+<span class="normal">430</span>
+<span class="normal">431</span>
+<span class="normal">432</span>
+<span class="normal">433</span>
+<span class="normal">434</span>
+<span class="normal">435</span>
+<span class="normal">436</span>
+<span class="normal">437</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span>
+<span class="normal">445</span>
+<span class="normal">446</span>
+<span class="normal">447</span>
+<span class="normal">448</span>
+<span class="normal">449</span>
+<span class="normal">450</span>
+<span class="normal">451</span>
+<span class="normal">452</span>
+<span class="normal">453</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">indep_snps_by_conditional</span><span class="p">(</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">ldref</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1963,6 +2038,8 @@ TODO: accelerate the process by running cojo in loci identified by distance</p><
     <span class="n">cojo_collinear</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span>
     <span class="n">diff_freq</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
     <span class="n">use_ref_EAF</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">only_use_sig_snps</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">ldblock</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">threads</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -1986,9 +2063,12 @@ TODO: accelerate the process by running cojo in loci identified by distance</p><
 <span class="sd">        The difference frequency, by default 0.2</span>
 <span class="sd">    use_ref_EAF : bool, optional</span>
 <span class="sd">        Whether to use the reference EAF, by default False</span>
+<span class="sd">    only_use_sig_snps : bool, optional</span>
+<span class="sd">        Whether to only use the significant snps, by default False</span>
+<span class="sd">    ldblock : Optional[pd.DataFrame], optional</span>
+<span class="sd">        The LD block, run cojo in each LD block, by default None</span>
 <span class="sd">    threads : int, optional</span>
 <span class="sd">        The number of threads, by default 1</span>
-<span class="sd">        TODO: accelerate the process by running cojo in loci identified by distance</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;COJO&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">use_ref_EAF</span> <span class="ow">and</span> <span class="n">ColName</span><span class="o">.</span><span class="n">EAF</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sumstats</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
@@ -1998,20 +2078,53 @@ TODO: accelerate the process by running cojo in loci identified by distance</p><
     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of chromosomes: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sig_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">args_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">loci</span> <span class="o">=</span> <span class="n">Loci</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">chrom</span> <span class="ow">in</span> <span class="n">sig_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
-        <span class="n">in_df</span> <span class="o">=</span> <span class="n">sumstats</span><span class="p">[</span><span class="n">sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">]</span> <span class="o">==</span> <span class="n">chrom</span><span class="p">]</span>
-        <span class="n">args_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="p">(</span>
-                <span class="n">in_df</span><span class="p">,</span>
-                <span class="n">ldref</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chrom</span><span class="o">=</span><span class="n">chrom</span><span class="p">),</span>
-                <span class="n">sample_size</span><span class="p">,</span>
-                <span class="n">cojo_window_kb</span><span class="p">,</span>
-                <span class="n">cojo_collinear</span><span class="p">,</span>
-                <span class="n">diff_freq</span><span class="p">,</span>
-                <span class="n">sig_threshold</span><span class="p">,</span>
-                <span class="n">use_ref_EAF</span><span class="p">,</span>
+    <span class="k">if</span> <span class="n">ldblock</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sig_blocks</span> <span class="o">=</span> <span class="n">loci</span><span class="o">.</span><span class="n">indep_snps_by_distance</span><span class="p">(</span><span class="n">sig_df</span><span class="p">,</span> <span class="n">ldblock</span><span class="o">=</span><span class="n">ldblock</span><span class="p">)</span>
+        <span class="n">sig_blocks</span> <span class="o">=</span> <span class="n">loci</span><span class="o">.</span><span class="n">leadsnp2loci</span><span class="p">(</span><span class="n">sig_blocks</span><span class="p">,</span> <span class="n">ldblock</span><span class="o">=</span><span class="n">ldblock</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sig_blocks</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">only_use_sig_snps</span><span class="p">:</span>
+                <span class="n">in_df</span> <span class="o">=</span> <span class="n">sig_df</span><span class="p">[</span>
+                    <span class="p">(</span><span class="n">sig_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">]</span> <span class="o">==</span> <span class="n">sig_blocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">])</span>
+                    <span class="o">&amp;</span> <span class="p">(</span><span class="n">sig_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">sig_blocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">START</span><span class="p">])</span>
+                    <span class="o">&amp;</span> <span class="p">(</span><span class="n">sig_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">sig_blocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">END</span><span class="p">])</span>
+                <span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">in_df</span> <span class="o">=</span> <span class="n">sumstats</span><span class="p">[</span>
+                    <span class="p">(</span><span class="n">sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">]</span> <span class="o">==</span> <span class="n">sig_blocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">])</span>
+                    <span class="o">&amp;</span> <span class="p">(</span><span class="n">sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">sig_blocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">START</span><span class="p">])</span>
+                    <span class="o">&amp;</span> <span class="p">(</span><span class="n">sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">sig_blocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">END</span><span class="p">])</span>
+                <span class="p">]</span>
+            <span class="n">args_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="n">in_df</span><span class="p">,</span>
+                    <span class="n">ldref</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chrom</span><span class="o">=</span><span class="n">sig_blocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">]),</span>
+                    <span class="n">sample_size</span><span class="p">,</span>
+                    <span class="n">cojo_window_kb</span><span class="p">,</span>
+                    <span class="n">cojo_collinear</span><span class="p">,</span>
+                    <span class="n">diff_freq</span><span class="p">,</span>
+                    <span class="n">sig_threshold</span><span class="p">,</span>
+                    <span class="n">use_ref_EAF</span><span class="p">,</span>
+                <span class="p">)</span>
             <span class="p">)</span>
-        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">chrom</span> <span class="ow">in</span> <span class="n">sig_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">only_use_sig_snps</span><span class="p">:</span>
+                <span class="n">in_df</span> <span class="o">=</span> <span class="n">sig_df</span><span class="p">[</span><span class="n">sig_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">]</span> <span class="o">==</span> <span class="n">chrom</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">in_df</span> <span class="o">=</span> <span class="n">sumstats</span><span class="p">[</span><span class="n">sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">]</span> <span class="o">==</span> <span class="n">chrom</span><span class="p">]</span>
+            <span class="n">args_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="n">in_df</span><span class="p">,</span>
+                    <span class="n">ldref</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chrom</span><span class="o">=</span><span class="n">chrom</span><span class="p">),</span>
+                    <span class="n">sample_size</span><span class="p">,</span>
+                    <span class="n">cojo_window_kb</span><span class="p">,</span>
+                    <span class="n">cojo_collinear</span><span class="p">,</span>
+                    <span class="n">diff_freq</span><span class="p">,</span>
+                    <span class="n">sig_threshold</span><span class="p">,</span>
+                    <span class="n">use_ref_EAF</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
     <span class="k">with</span> <span class="n">ProcessPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
         <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">with</span> <span class="n">Progress</span><span class="p">(</span>
@@ -2039,7 +2152,7 @@ TODO: accelerate the process by running cojo in loci identified by distance</p><
 
 
 <h2 id="easyfinemap.loci.Loci.indep_snps_by_distance" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">indep_snps_by_distance</span><span class="p">(</span><span class="n">sig_df</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">indep_snps_by_distance</span><span class="p">(</span><span class="n">sig_df</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">ldblock</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
@@ -2083,6 +2196,16 @@ TODO: accelerate the process by running cojo in loci identified by distance</p><
                 <code>500</code>
           </td>
         </tr>
+        <tr>
+          <td><code>ldblock</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" title="typing.Optional" href="https://docs.python.org/3/library/typing.html#typing.Optional">Optional</a>[<span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span>], optional</code>
+          </td>
+          <td><p>The ld block information, use boundary to identify the independent snps, by default None</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
     </tbody>
   </table>
 
@@ -2106,16 +2229,7 @@ TODO: accelerate the process by running cojo in loci identified by distance</p><
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/loci.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">179</span>
-<span class="normal">180</span>
-<span class="normal">181</span>
-<span class="normal">182</span>
-<span class="normal">183</span>
-<span class="normal">184</span>
-<span class="normal">185</span>
-<span class="normal">186</span>
-<span class="normal">187</span>
-<span class="normal">188</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">188</span>
 <span class="normal">189</span>
 <span class="normal">190</span>
 <span class="normal">191</span>
@@ -2136,8 +2250,39 @@ TODO: accelerate the process by running cojo in loci identified by distance</p><
 <span class="normal">206</span>
 <span class="normal">207</span>
 <span class="normal">208</span>
-<span class="normal">209</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
-<span class="k">def</span> <span class="nf">indep_snps_by_distance</span><span class="p">(</span><span class="n">sig_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="k">def</span> <span class="nf">indep_snps_by_distance</span><span class="p">(</span>
+    <span class="n">sig_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">ldblock</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Identify the independent snps by distance only.</span>
 
@@ -2147,24 +2292,42 @@ TODO: accelerate the process by running cojo in loci identified by distance</p><
 <span class="sd">        The significant snps.</span>
 <span class="sd">    distance : int, optional</span>
 <span class="sd">        The distance threshold, by default 500, unit: kb</span>
+<span class="sd">    ldblock : Optional[pd.DataFrame], optional</span>
+<span class="sd">        The ld block information, use boundary to identify the independent snps, by default None</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    pd.DataFrame</span>
 <span class="sd">        The independent snps.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">sig_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ColName</span><span class="o">.</span><span class="n">P</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">sig_df</span> <span class="o">=</span> <span class="n">sig_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ColName</span><span class="o">.</span><span class="n">P</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">lead_snp</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">distance</span> <span class="o">=</span> <span class="n">distance</span> <span class="o">*</span> <span class="mi">1000</span>
-    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">sig_df</span><span class="p">):</span>
-        <span class="n">lead_snp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sig_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">]])</span>
-        <span class="n">sig_df</span> <span class="o">=</span> <span class="n">sig_df</span><span class="p">[</span>
-            <span class="o">~</span><span class="p">(</span>
-                <span class="p">(</span><span class="n">sig_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">]</span> <span class="o">==</span> <span class="n">sig_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">])</span>
-                <span class="o">&amp;</span> <span class="p">(</span><span class="n">sig_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">sig_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">]</span> <span class="o">-</span> <span class="n">distance</span><span class="p">)</span>
-                <span class="o">&amp;</span> <span class="p">(</span><span class="n">sig_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">sig_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">]</span> <span class="o">+</span> <span class="n">distance</span><span class="p">)</span>
-            <span class="p">)</span>
-        <span class="p">]</span>  <span class="c1"># type: ignore</span>
+    <span class="k">if</span> <span class="n">ldblock</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">sig_df</span><span class="p">):</span>
+            <span class="n">lead_snp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sig_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">]])</span>
+            <span class="n">sig_block</span> <span class="o">=</span> <span class="n">ldblock</span><span class="p">[</span>
+                <span class="p">(</span><span class="n">ldblock</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">]</span> <span class="o">==</span> <span class="n">sig_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">])</span>
+                <span class="o">&amp;</span> <span class="p">(</span><span class="n">ldblock</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">START</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">sig_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">])</span>
+                <span class="o">&amp;</span> <span class="p">(</span><span class="n">ldblock</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">END</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">sig_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">])</span>
+            <span class="p">]</span>
+            <span class="n">sig_df</span> <span class="o">=</span> <span class="n">sig_df</span><span class="p">[</span>
+                <span class="o">~</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">sig_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">]</span> <span class="o">==</span> <span class="n">sig_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">])</span>
+                    <span class="o">&amp;</span> <span class="p">(</span><span class="n">sig_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">sig_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">]</span> <span class="o">-</span> <span class="n">sig_block</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">START</span><span class="p">])</span>
+                    <span class="o">&amp;</span> <span class="p">(</span><span class="n">sig_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">sig_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">]</span> <span class="o">+</span> <span class="n">sig_block</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">END</span><span class="p">])</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">distance</span> <span class="o">=</span> <span class="n">distance</span> <span class="o">*</span> <span class="mi">1000</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">sig_df</span><span class="p">):</span>
+            <span class="n">lead_snp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sig_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">]])</span>
+            <span class="n">sig_df</span> <span class="o">=</span> <span class="n">sig_df</span><span class="p">[</span>
+                <span class="o">~</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">sig_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">]</span> <span class="o">==</span> <span class="n">sig_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">])</span>
+                    <span class="o">&amp;</span> <span class="p">(</span><span class="n">sig_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">sig_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">]</span> <span class="o">-</span> <span class="n">distance</span><span class="p">)</span>
+                    <span class="o">&amp;</span> <span class="p">(</span><span class="n">sig_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">sig_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">]</span> <span class="o">+</span> <span class="n">distance</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">]</span>  <span class="c1"># type: ignore</span>
     <span class="n">lead_snp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">lead_snp</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">lead_snp</span>
 </code></pre></div></td></tr></table></div>
@@ -2275,36 +2438,36 @@ TODO: accelerate the process by running cojo in loci identified by distance</p><
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/loci.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">211</span>
-<span class="normal">212</span>
-<span class="normal">213</span>
-<span class="normal">214</span>
-<span class="normal">215</span>
-<span class="normal">216</span>
-<span class="normal">217</span>
-<span class="normal">218</span>
-<span class="normal">219</span>
-<span class="normal">220</span>
-<span class="normal">221</span>
-<span class="normal">222</span>
-<span class="normal">223</span>
-<span class="normal">224</span>
-<span class="normal">225</span>
-<span class="normal">226</span>
-<span class="normal">227</span>
-<span class="normal">228</span>
-<span class="normal">229</span>
-<span class="normal">230</span>
-<span class="normal">231</span>
-<span class="normal">232</span>
-<span class="normal">233</span>
-<span class="normal">234</span>
-<span class="normal">235</span>
-<span class="normal">236</span>
-<span class="normal">237</span>
-<span class="normal">238</span>
-<span class="normal">239</span>
-<span class="normal">240</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">indep_snps_by_ldclumping</span><span class="p">(</span>
     <span class="n">sig_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">ldref</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">clump_p1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5e-8</span><span class="p">,</span> <span class="n">clump_kb</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">clump_r2</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
@@ -2345,7 +2508,7 @@ TODO: accelerate the process by running cojo in loci identified by distance</p><
 
 
 <h2 id="easyfinemap.loci.Loci.leadsnp2loci" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">leadsnp2loci</span><span class="p">(</span><span class="n">lead_snps</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">if_merge</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">leadsnp2loci</span><span class="p">(</span><span class="n">lead_snps</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">if_merge</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ldblock</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
@@ -2394,10 +2557,19 @@ TODO: accelerate the process by running cojo in loci identified by distance</p><
           <td>
                 <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a>, optional</code>
           </td>
-          <td><p>Whether merge the overlapped loci, by default False
-TODO: use custom blocks as loci boundaries</p></td>
+          <td><p>Whether merge the overlapped loci, by default False</p></td>
           <td>
                 <code>False</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>ldblock</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" title="typing.Optional" href="https://docs.python.org/3/library/typing.html#typing.Optional">Optional</a>[<span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span>], optional</code>
+          </td>
+          <td><p>The ld block, using LD block to expand the independent loci, by default None</p></td>
+          <td>
+                <code>None</code>
           </td>
         </tr>
     </tbody>
@@ -2423,39 +2595,60 @@ TODO: use custom blocks as loci boundaries</p></td>
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/loci.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">490</span>
-<span class="normal">491</span>
-<span class="normal">492</span>
-<span class="normal">493</span>
-<span class="normal">494</span>
-<span class="normal">495</span>
-<span class="normal">496</span>
-<span class="normal">497</span>
-<span class="normal">498</span>
-<span class="normal">499</span>
-<span class="normal">500</span>
-<span class="normal">501</span>
-<span class="normal">502</span>
-<span class="normal">503</span>
-<span class="normal">504</span>
-<span class="normal">505</span>
-<span class="normal">506</span>
-<span class="normal">507</span>
-<span class="normal">508</span>
-<span class="normal">509</span>
-<span class="normal">510</span>
-<span class="normal">511</span>
-<span class="normal">512</span>
-<span class="normal">513</span>
-<span class="normal">514</span>
-<span class="normal">515</span>
-<span class="normal">516</span>
-<span class="normal">517</span>
-<span class="normal">518</span>
-<span class="normal">519</span>
-<span class="normal">520</span>
-<span class="normal">521</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
-<span class="k">def</span> <span class="nf">leadsnp2loci</span><span class="p">(</span><span class="n">lead_snps</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">if_merge</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">561</span>
+<span class="normal">562</span>
+<span class="normal">563</span>
+<span class="normal">564</span>
+<span class="normal">565</span>
+<span class="normal">566</span>
+<span class="normal">567</span>
+<span class="normal">568</span>
+<span class="normal">569</span>
+<span class="normal">570</span>
+<span class="normal">571</span>
+<span class="normal">572</span>
+<span class="normal">573</span>
+<span class="normal">574</span>
+<span class="normal">575</span>
+<span class="normal">576</span>
+<span class="normal">577</span>
+<span class="normal">578</span>
+<span class="normal">579</span>
+<span class="normal">580</span>
+<span class="normal">581</span>
+<span class="normal">582</span>
+<span class="normal">583</span>
+<span class="normal">584</span>
+<span class="normal">585</span>
+<span class="normal">586</span>
+<span class="normal">587</span>
+<span class="normal">588</span>
+<span class="normal">589</span>
+<span class="normal">590</span>
+<span class="normal">591</span>
+<span class="normal">592</span>
+<span class="normal">593</span>
+<span class="normal">594</span>
+<span class="normal">595</span>
+<span class="normal">596</span>
+<span class="normal">597</span>
+<span class="normal">598</span>
+<span class="normal">599</span>
+<span class="normal">600</span>
+<span class="normal">601</span>
+<span class="normal">602</span>
+<span class="normal">603</span>
+<span class="normal">604</span>
+<span class="normal">605</span>
+<span class="normal">606</span>
+<span class="normal">607</span>
+<span class="normal">608</span>
+<span class="normal">609</span>
+<span class="normal">610</span>
+<span class="normal">611</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="k">def</span> <span class="nf">leadsnp2loci</span><span class="p">(</span>
+    <span class="n">lead_snps</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">if_merge</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">ldblock</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Expand the independent lead snps to independent loci by given range.</span>
 
@@ -2467,7 +2660,8 @@ TODO: use custom blocks as loci boundaries</p></td>
 <span class="sd">        The range, by default 500, unit: kb</span>
 <span class="sd">    if_merge : bool, optional</span>
 <span class="sd">        Whether merge the overlapped loci, by default False</span>
-<span class="sd">        TODO: use custom blocks as loci boundaries</span>
+<span class="sd">    ldblock : Optional[pd.DataFrame], optional</span>
+<span class="sd">        The ld block, using LD block to expand the independent loci, by default None</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -2475,16 +2669,32 @@ TODO: use custom blocks as loci boundaries</p></td>
 <span class="sd">        The independent loci.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">loci_df</span> <span class="o">=</span> <span class="n">lead_snps</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="c1"># loci_df = make_SNPID_unique(loci_df)</span>
-    <span class="nb">range</span> <span class="o">=</span> <span class="nb">range</span> <span class="o">*</span> <span class="mi">1000</span>
     <span class="n">loci_df</span> <span class="o">=</span> <span class="n">loci_df</span><span class="p">[[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">P</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">]]</span>
     <span class="n">loci_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">LEAD_SNP_BP</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">LEAD_SNP_P</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">LEAD_SNP</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
-    <span class="n">loci_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">START</span><span class="p">]</span> <span class="o">=</span> <span class="n">loci_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">LEAD_SNP_BP</span><span class="p">]</span> <span class="o">-</span> <span class="nb">range</span>
-    <span class="n">loci_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">START</span><span class="p">]</span> <span class="o">=</span> <span class="n">loci_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">START</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">x</span><span class="p">)</span>
-    <span class="n">loci_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">END</span><span class="p">]</span> <span class="o">=</span> <span class="n">loci_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">LEAD_SNP_BP</span><span class="p">]</span> <span class="o">+</span> <span class="nb">range</span>
+    <span class="k">if</span> <span class="n">ldblock</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">loci_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">START</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">loci_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">END</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">loci_df</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+            <span class="n">sub_ldblock</span> <span class="o">=</span> <span class="n">ldblock</span><span class="p">[</span>
+                <span class="p">(</span><span class="n">ldblock</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">]</span> <span class="o">==</span> <span class="n">loci_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">])</span>
+                <span class="o">&amp;</span> <span class="p">(</span><span class="n">ldblock</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">START</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">loci_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">LEAD_SNP_BP</span><span class="p">])</span>
+                <span class="o">&amp;</span> <span class="p">(</span><span class="n">ldblock</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">END</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">loci_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">LEAD_SNP_BP</span><span class="p">])</span>
+            <span class="p">]</span>
+            <span class="k">if</span> <span class="n">sub_ldblock</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">loci_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">START</span><span class="p">]</span> <span class="o">=</span> <span class="n">sub_ldblock</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">START</span><span class="p">]</span>
+                <span class="n">loci_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">END</span><span class="p">]</span> <span class="o">=</span> <span class="n">sub_ldblock</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">ColName</span><span class="o">.</span><span class="n">END</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">range</span> <span class="o">=</span> <span class="nb">range</span> <span class="o">*</span> <span class="mi">1000</span>
+
+        <span class="n">loci_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">START</span><span class="p">]</span> <span class="o">=</span> <span class="n">loci_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">LEAD_SNP_BP</span><span class="p">]</span> <span class="o">-</span> <span class="nb">range</span>
+        <span class="n">loci_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">START</span><span class="p">]</span> <span class="o">=</span> <span class="n">loci_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">START</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">x</span><span class="p">)</span>
+        <span class="n">loci_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">END</span><span class="p">]</span> <span class="o">=</span> <span class="n">loci_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">LEAD_SNP_BP</span><span class="p">]</span> <span class="o">+</span> <span class="nb">range</span>
     <span class="n">loci_df</span> <span class="o">=</span> <span class="n">loci_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">loci_cols</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">if_merge</span><span class="p">:</span>
         <span class="n">loci_df</span> <span class="o">=</span> <span class="n">Loci</span><span class="o">.</span><span class="n">merge_overlapped_loci</span><span class="p">(</span><span class="n">loci_df</span><span class="p">)</span>
+    <span class="n">loci_df</span> <span class="o">=</span> <span class="n">loci_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">START</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">END</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">loci_df</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -2554,16 +2764,7 @@ TODO: use custom blocks as loci boundaries</p></td>
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/loci.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">145</span>
-<span class="normal">146</span>
-<span class="normal">147</span>
-<span class="normal">148</span>
-<span class="normal">149</span>
-<span class="normal">150</span>
-<span class="normal">151</span>
-<span class="normal">152</span>
-<span class="normal">153</span>
-<span class="normal">154</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">154</span>
 <span class="normal">155</span>
 <span class="normal">156</span>
 <span class="normal">157</span>
@@ -2586,7 +2787,16 @@ TODO: use custom blocks as loci boundaries</p></td>
 <span class="normal">174</span>
 <span class="normal">175</span>
 <span class="normal">176</span>
-<span class="normal">177</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">merge_overlapped_loci</span><span class="p">(</span><span class="n">loci_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Merge the overlapped loci.</span>

@@ -517,20 +517,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../Sumstat/" class="md-nav__link">
-        SumStat
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../LDRef/" class="md-nav__link">
         LDRef
       </a>
@@ -732,8 +718,7 @@
 
           <details class="quote">
             <summary>Source code in <code>easyfinemap/easyfinemap.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">39</span>
-<span class="normal">40</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">40</span>
 <span class="normal">41</span>
 <span class="normal">42</span>
 <span class="normal">43</span>
@@ -745,7 +730,8 @@
 <span class="normal">49</span>
 <span class="normal">50</span>
 <span class="normal">51</span>
-<span class="normal">52</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">52</span>
+<span class="normal">53</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Initialize.&quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;EasyFinemap&#39;</span><span class="p">)</span>
     <span class="n">tool</span> <span class="o">=</span> <span class="n">Tools</span><span class="p">()</span>
@@ -882,8 +868,7 @@
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/easyfinemap.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">314</span>
-<span class="normal">315</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">315</span>
 <span class="normal">316</span>
 <span class="normal">317</span>
 <span class="normal">318</span>
@@ -937,7 +922,8 @@
 <span class="normal">366</span>
 <span class="normal">367</span>
 <span class="normal">368</span>
-<span class="normal">369</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">cond_sumstat</span><span class="p">(</span>
+<span class="normal">369</span>
+<span class="normal">370</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">cond_sumstat</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">lead_snp</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1179,9 +1165,7 @@
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/easyfinemap.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">529</span>
-<span class="normal">530</span>
-<span class="normal">531</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">531</span>
 <span class="normal">532</span>
 <span class="normal">533</span>
 <span class="normal">534</span>
@@ -1278,7 +1262,8 @@
 <span class="normal">625</span>
 <span class="normal">626</span>
 <span class="normal">627</span>
-<span class="normal">628</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">finemap_all_loci</span><span class="p">(</span>
+<span class="normal">628</span>
+<span class="normal">629</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">finemap_all_loci</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">loci</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -1332,8 +1317,7 @@
 <span class="sd">    threads : int, optional</span>
 <span class="sd">        Number of threads, by default 1</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">sumstats</span> <span class="o">=</span> <span class="n">SumStat</span><span class="p">(</span><span class="n">sumstats</span><span class="p">)</span>
-    <span class="n">sumstats</span> <span class="o">=</span> <span class="n">sumstats</span><span class="o">.</span><span class="n">standarize</span><span class="p">()</span>
+    <span class="n">sumstats</span> <span class="o">=</span> <span class="n">make_SNPID_unique</span><span class="p">(</span><span class="n">sumstats</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">credible_threshold</span> <span class="ow">and</span> <span class="n">credible_method</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">methods</span> <span class="o">!=</span> <span class="p">[</span><span class="s2">&quot;all&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">methods</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">credible_method</span> <span class="o">=</span> <span class="n">methods</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">kwargs_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1373,11 +1357,11 @@
                 <span class="n">progress</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">advance</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">progress</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
                 <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
-    <span class="n">output</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">output_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">outfile</span><span class="p">:</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">output_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">output</span>
+        <span class="k">return</span> <span class="n">output_df</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -1490,8 +1474,7 @@
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/easyfinemap.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">445</span>
-<span class="normal">446</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">446</span>
 <span class="normal">447</span>
 <span class="normal">448</span>
 <span class="normal">449</span>
@@ -1572,7 +1555,9 @@
 <span class="normal">524</span>
 <span class="normal">525</span>
 <span class="normal">526</span>
-<span class="normal">527</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/easyfinemap&#39;</span><span class="p">)</span>
+<span class="normal">527</span>
+<span class="normal">528</span>
+<span class="normal">529</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/easyfinemap&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">finemap_locus</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -1639,6 +1624,7 @@
         <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;finemap&quot;</span><span class="p">,</span> <span class="s2">&quot;paintor&quot;</span><span class="p">,</span> <span class="s2">&quot;caviarbf&quot;</span><span class="p">]:</span>
             <span class="n">ld_matrix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/intersc.ld&quot;</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">ld_matrix</span><span class="p">):</span>
+                <span class="c1"># TODO: reduce the number of SNPs when using paintor and caviarbf in multiple causal variant mode</span>
                 <span class="n">fm_input_ol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_ld_matrix</span><span class="p">(</span><span class="n">sumstats</span><span class="o">=</span><span class="n">fm_input</span><span class="p">,</span> <span class="n">outprefix</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/intersc&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;finemap&quot;</span><span class="p">:</span>
                 <span class="n">finemap_pp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_finemap</span><span class="p">(</span><span class="n">sumstats</span><span class="o">=</span><span class="n">fm_input_ol</span><span class="p">,</span> <span class="n">ld_matrix</span><span class="o">=</span><span class="n">ld_matrix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -1749,8 +1735,7 @@
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/easyfinemap.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">405</span>
-<span class="normal">406</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">406</span>
 <span class="normal">407</span>
 <span class="normal">408</span>
 <span class="normal">409</span>
@@ -1787,7 +1772,8 @@
 <span class="normal">440</span>
 <span class="normal">441</span>
 <span class="normal">442</span>
-<span class="normal">443</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_credset</span><span class="p">(</span>
+<span class="normal">443</span>
+<span class="normal">444</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_credset</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">finemap_res</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">max_causal</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -1920,8 +1906,7 @@
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/easyfinemap.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">371</span>
-<span class="normal">372</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">372</span>
 <span class="normal">373</span>
 <span class="normal">374</span>
 <span class="normal">375</span>
@@ -1952,7 +1937,8 @@
 <span class="normal">400</span>
 <span class="normal">401</span>
 <span class="normal">402</span>
-<span class="normal">403</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">prepare_ld_matrix</span><span class="p">(</span>
+<span class="normal">403</span>
+<span class="normal">404</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">prepare_ld_matrix</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">ldref</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -2079,8 +2065,7 @@ and 0.2 for binary traits.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/easyfinemap.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">54</span>
-<span class="normal">55</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">55</span>
 <span class="normal">56</span>
 <span class="normal">57</span>
 <span class="normal">58</span>
@@ -2117,7 +2102,8 @@ and 0.2 for binary traits.</p></td>
 <span class="normal">89</span>
 <span class="normal">90</span>
 <span class="normal">91</span>
-<span class="normal">92</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">run_abf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">var_prior</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">max_causal</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
+<span class="normal">92</span>
+<span class="normal">93</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">run_abf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">var_prior</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">max_causal</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Run ABF.</span>
 
@@ -2250,8 +2236,7 @@ and 0.2 for binary traits.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/easyfinemap.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">246</span>
-<span class="normal">247</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">247</span>
 <span class="normal">248</span>
 <span class="normal">249</span>
 <span class="normal">250</span>
@@ -2316,7 +2301,8 @@ and 0.2 for binary traits.</p></td>
 <span class="normal">309</span>
 <span class="normal">310</span>
 <span class="normal">311</span>
-<span class="normal">312</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/easyfinemap&#39;</span><span class="p">)</span>
+<span class="normal">312</span>
+<span class="normal">313</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/easyfinemap&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">run_caviarbf</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">ld_matrix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_causal</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">temp_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
@@ -2487,8 +2473,7 @@ and 0.2 for binary traits.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/easyfinemap.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 94</span>
-<span class="normal"> 95</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 95</span>
 <span class="normal"> 96</span>
 <span class="normal"> 97</span>
 <span class="normal"> 98</span>
@@ -2570,7 +2555,8 @@ and 0.2 for binary traits.</p></td>
 <span class="normal">174</span>
 <span class="normal">175</span>
 <span class="normal">176</span>
-<span class="normal">177</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/easyfinemap&#39;</span><span class="p">)</span>
+<span class="normal">177</span>
+<span class="normal">178</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/easyfinemap&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">run_finemap</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -2748,8 +2734,7 @@ and 0.2 for binary traits.</p></td>
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/easyfinemap.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">179</span>
-<span class="normal">180</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">180</span>
 <span class="normal">181</span>
 <span class="normal">182</span>
 <span class="normal">183</span>
@@ -2813,7 +2798,8 @@ and 0.2 for binary traits.</p></td>
 <span class="normal">241</span>
 <span class="normal">242</span>
 <span class="normal">243</span>
-<span class="normal">244</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/easyfinemap&#39;</span><span class="p">)</span>
+<span class="normal">244</span>
+<span class="normal">245</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/easyfinemap&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">run_paintor</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">ld_matrix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_causal</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">temp_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>

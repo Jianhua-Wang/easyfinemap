@@ -417,20 +417,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../Sumstat/" class="md-nav__link">
-        SumStat
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../LDRef/" class="md-nav__link">
         LDRef
       </a>
@@ -825,9 +811,7 @@
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/utils.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 85</span>
-<span class="normal"> 86</span>
-<span class="normal"> 87</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 87</span>
 <span class="normal"> 88</span>
 <span class="normal"> 89</span>
 <span class="normal"> 90</span>
@@ -858,7 +842,9 @@
 <span class="normal">115</span>
 <span class="normal">116</span>
 <span class="normal">117</span>
-<span class="normal">118</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s1">&#39;./tmp&#39;</span><span class="p">):</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s1">&#39;./tmp&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Make tempdir for process.</span>
 
@@ -1023,7 +1009,9 @@
 <span class="normal">79</span>
 <span class="normal">80</span>
 <span class="normal">81</span>
-<span class="normal">82</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">make_SNPID_unique</span><span class="p">(</span><span class="n">sumstat</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">replace_rsIDcol</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">remove_duplicates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">make_SNPID_unique</span><span class="p">(</span><span class="n">sumstat</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">replace_rsIDcol</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">remove_duplicates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Make the SNPID unique.</span>
 
@@ -1060,6 +1048,8 @@
     <span class="k">if</span> <span class="n">replace_rsIDcol</span><span class="p">:</span>
         <span class="n">df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">RSID</span><span class="p">]</span> <span class="o">=</span> <span class="n">allele_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">df</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">allele_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
     <span class="k">if</span> <span class="n">remove_duplicates</span><span class="p">:</span>
         <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ColName</span><span class="o">.</span><span class="n">P</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
