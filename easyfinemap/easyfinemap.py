@@ -8,9 +8,9 @@ Perform fine-mapping for a locus using the following methods:
         2.1.1. FINEMAP
         2.1.2. PAINTOR
         2.1.3. CAVIARBF
-        TODO: 2.1.4. SuSiE
+        2.1.4. SuSiE
     2.2. with annotation
-        TODO: 2.2.1. PolyFun+SuSiE
+        TODO: 2.2.1. PolyFun
 3. Support multiple causal variant
 4. Support conditional mode
 """
@@ -312,6 +312,54 @@ class EasyFinemap(object):
             caviar_res = pd.Series(caviar_res[1].values, index=caviar_input[ColName.SNPID].tolist())
             return caviar_res
 
+    @io_in_tempdir('./tmp/easyfinemap')
+    def run_susie(
+            self,
+            sumstats: pd.DataFrame,
+            ld_matrix: str,
+            sample_size: int,
+            max_causal: int = 1,
+            temp_dir: Optional[str] = None,
+            **kwargs,
+    ) -> pd.Series:
+        """
+        Run SuSiE.
+
+        Parameters
+        ----------
+        sumstats : pd.DataFrame
+            Summary statistics.
+        ld_matrix : str
+            Path to LD matrix.
+        sample_size : int
+            Sample size.
+        max_causal : int, optional
+            Maximum number of causal variants, by default 1
+
+        Returns
+        -------
+        pd.Series
+            The result of SuSiE.
+        """
+        susie_input = sumstats.copy()
+        susie_input[ColName.Z] = susie_input[ColName.BETA] / susie_input[ColName.SE]
+        susie_input[[ColName.SNPID, ColName.Z]].to_csv(f"{temp_dir}/susie.input", sep=" ", index=False, header=True)
+
+        import rpy2.robjects as ro
+        ro.r(f'''ld = read.csv('{ld_matrix}', sep=' ', header=FALSE)
+                list_len = length(ld)
+                ld = ld[-length(ld)]
+                ld = as.matrix(ld)
+                df = read.csv('{temp_dir}/susie.input', sep=' ', header=TRUE)
+                z = df$Z
+                prior = df$SNPVAR
+                library('susieR')
+                res = susie_rss(z, ld, n={sample_size}, L = {max_causal})
+                pip = res$pip''')
+        susie_input['pip'] = ro.r('pip')
+        susie_res = pd.Series(susie_input['pip'].values, index=susie_input[ColName.SNPID].tolist())
+        return susie_res
+
     def cond_sumstat(
         self,
         sumstats: pd.DataFrame,
@@ -499,7 +547,7 @@ class EasyFinemap(object):
             fm_input = sumstats.copy()
             out_sumstats = sumstats.copy()
 
-        allowed_methods = ["abf", "finemap", "paintor", "caviarbf"]
+        allowed_methods = ["abf", "finemap", "paintor", "caviarbf", "susie"]
         if "all" in methods:
             methods = allowed_methods
         fm_input_ol = fm_input.copy()
@@ -507,7 +555,7 @@ class EasyFinemap(object):
             if method == "abf":
                 abf_pp = self.run_abf(sumstats=fm_input, **kwargs)
                 out_sumstats[ColName.PP_ABF] = out_sumstats[ColName.SNPID].map(abf_pp)
-            elif method in ["finemap", "paintor", "caviarbf"]:
+            elif method in ["finemap", "paintor", "caviarbf", "susie"]:
                 ld_matrix = f"{temp_dir}/intersc.ld"
                 if not os.path.exists(ld_matrix):
                     # TODO: reduce the number of SNPs when using paintor and caviarbf in multiple causal variant mode
@@ -521,6 +569,9 @@ class EasyFinemap(object):
                 elif method == "caviarbf":
                     caviarbf_pp = self.run_caviarbf(sumstats=fm_input_ol, ld_matrix=ld_matrix, **kwargs)
                     out_sumstats[ColName.PP_CAVIARBF] = out_sumstats[ColName.SNPID].map(caviarbf_pp)
+                elif method == "susie":
+                    susie_pp = self.run_susie(sumstats=fm_input_ol, ld_matrix=ld_matrix, **kwargs)
+                    out_sumstats[ColName.PP_SUSIE] = out_sumstats[ColName.SNPID].map(susie_pp)
             else:
                 raise ValueError(f"Method {method} is not supported")
 

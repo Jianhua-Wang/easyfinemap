@@ -1,6 +1,17 @@
 # Changelog
 
-## [0.2.3] - 2023-03-22\4
+## [0.2.4] - 2023-03-30
+
+### Added
+- support susie
+
+### Changed
+
+
+
+### Fixed
+
+## [0.2.3] - 2023-03-24
 
 ### Added
 - suppor using LD blocks as loci boudaries.

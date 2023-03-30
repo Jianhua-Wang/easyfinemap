@@ -41,6 +41,7 @@ class FinemapMethod(str, Enum):
     finemap = "finemap"
     paintor = "paintor"
     caviarbf = "caviarbf"
+    susie = "susie"
     all = "all"
 
 
