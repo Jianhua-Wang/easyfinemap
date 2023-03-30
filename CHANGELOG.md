@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.5] - 2023-03-30
+
+### Added
+- set the most significant SNP as SNP, if there are no SNPs with P-value ≤ threshold.
+
+### Changed
+
+
+
+### Fixed
+
 ## [0.2.4] - 2023-03-30
 
 ### Added

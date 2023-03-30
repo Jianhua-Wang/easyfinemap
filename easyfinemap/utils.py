@@ -11,7 +11,7 @@ import pandas as pd
 from easyfinemap.constant import ColName
 
 
-def get_significant_snps(df: pd.DataFrame, pvalue_threshold: float = 5e-8):
+def get_significant_snps(df: pd.DataFrame, pvalue_threshold: float = 5e-8, use_most_sig_if_no_sig: bool = True):
     """
     Get the significant snps from the input file, filter by pvalue.
 
@@ -21,6 +21,8 @@ def get_significant_snps(df: pd.DataFrame, pvalue_threshold: float = 5e-8):
         The input summary statistics.
     pvalue_threshold : float, optional
         The pvalue threshold, by default 5e-8
+    use_most_sig_if_no_sig : bool, optional
+        Whether to use the most significant SNP if no significant SNP found, by default True
 
     Returns
     -------
@@ -28,8 +30,16 @@ def get_significant_snps(df: pd.DataFrame, pvalue_threshold: float = 5e-8):
         The significant snps, sorted by pvalue.
     """
     sig_df = df.loc[df[ColName.P] < pvalue_threshold].copy()
-    sig_df.sort_values(ColName.P, inplace=True)
-    sig_df.reset_index(drop=True, inplace=True)
+    if sig_df.empty:
+        if use_most_sig_if_no_sig:
+            sig_df = df.loc[df[ColName.P] == df[ColName.P].min()].copy()
+            logging.debug(f"Use the most significant SNP: {sig_df[ColName.SNPID].values[0]}")
+            logging.debug(f"pvalue: {sig_df[ColName.P].values[0]}")
+        else:
+            raise ValueError("No significant SNPs found.")
+    else:
+        sig_df.sort_values(ColName.P, inplace=True)
+        sig_df.reset_index(drop=True, inplace=True)
     return sig_df
 
 
