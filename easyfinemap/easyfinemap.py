@@ -10,7 +10,8 @@ Perform fine-mapping for a locus using the following methods:
         2.1.3. CAVIARBF
         2.1.4. SuSiE
     2.2. with annotation
-        TODO: 2.2.1. PolyFun
+        TODO: 2.2.1. PolyFun + FINEMAP
+        TODO: 2.2.2. PolyFun + SuSiE
 3. Support multiple causal variant
 4. Support conditional mode
 """
@@ -25,13 +26,15 @@ import numpy as np
 import pandas as pd
 from pathos.pools import _ProcessPool as Pool
 from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn, TimeElapsedColumn
+import tabix
+import smunger as sg
 
 from easyfinemap.constant import ColName
 from easyfinemap.ldref import LDRef
 
 # from easyfinemap.sumstat import SumStat
 from easyfinemap.tools import Tools
-from easyfinemap.utils import io_in_tempdir, make_SNPID_unique
+from easyfinemap.utils import io_in_tempdir#, make_SNPID_unique
 
 
 class EasyFinemap(object):
@@ -99,6 +102,7 @@ class EasyFinemap(object):
         ld_matrix: str,
         sample_size: int,
         max_causal: int = 1,
+        prior_file: Optional[str] = None,
         temp_dir: Optional[str] = None,
         **kwargs,
     ) -> pd.Series:
@@ -115,6 +119,8 @@ class EasyFinemap(object):
             Sample size.
         max_causal : int, optional
             Maximum number of causal variants, by default 1
+        prior_file : Optional[str], optional
+            Path to prior file, by default None
         temp_dir : Optional[str], optional
             Path to tempdir, by default None
 
@@ -127,23 +133,53 @@ class EasyFinemap(object):
             raise ValueError(f"{ColName.MAF} is required for FINEMAP.")
         finemap_input = sumstats.copy()
         finemap_input[ColName.MAF] = finemap_input[ColName.MAF].replace(0, 0.00001)
-        finemap_input = finemap_input[
-            [ColName.SNPID, ColName.CHR, ColName.BP, ColName.EA, ColName.NEA, ColName.MAF, ColName.BETA, ColName.SE]
-        ]
-        finemap_input.rename(
-            columns={
-                ColName.SNPID: "rsid",
-                ColName.CHR: "chromosome",
-                ColName.BP: "position",
-                ColName.MAF: "maf",
-                ColName.BETA: "beta",
-                ColName.SE: "se",
-                ColName.EA: "allele1",
-                ColName.NEA: "allele2",
-            },
-            inplace=True,
-        )
-        finemap_input.to_csv(f"{temp_dir}/finemap.z", sep=" ", index=False)
+        if prior_file:
+            finemap_input = finemap_input[
+                [
+                    ColName.SNPID,
+                    ColName.CHR,
+                    ColName.BP,
+                    ColName.EA,
+                    ColName.NEA,
+                    ColName.MAF,
+                    ColName.BETA,
+                    ColName.SE,
+                    'SNPVAR',
+                ]
+            ]
+            finemap_input.rename(
+                columns={
+                    ColName.SNPID: "rsid",
+                    ColName.CHR: "chromosome",
+                    ColName.BP: "position",
+                    ColName.MAF: "maf",
+                    ColName.BETA: "beta",
+                    ColName.SE: "se",
+                    ColName.EA: "allele1",
+                    ColName.NEA: "allele2",
+                    'SNPVAR': 'prob',
+                },
+                inplace=True,
+            )
+            finemap_input['prob'] = finemap_input['prob'] / finemap_input['prob'].sum()
+        else:
+            finemap_input = finemap_input[
+                [ColName.SNPID, ColName.CHR, ColName.BP, ColName.EA, ColName.NEA, ColName.MAF, ColName.BETA, ColName.SE]
+            ]
+            finemap_input.rename(
+                columns={
+                    ColName.SNPID: "rsid",
+                    ColName.CHR: "chromosome",
+                    ColName.BP: "position",
+                    ColName.MAF: "maf",
+                    ColName.BETA: "beta",
+                    ColName.SE: "se",
+                    ColName.EA: "allele1",
+                    ColName.NEA: "allele2",
+                },
+                inplace=True,
+            )
+        finemap_input.to_csv(f"{temp_dir}/finemap.z", sep=" ", index=False, float_format="%0.5f")
         with open(f"{temp_dir}/finemap.master", "w") as f:
             master_content = [
                 f"{temp_dir}/finemap.z",
@@ -163,6 +199,7 @@ class EasyFinemap(object):
             f"{temp_dir}/finemap.master",
             "--n-causal-snps",
             str(max_causal),
+            "--prior-snps" if prior_file else "",
         ]
         res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
         self.logger.debug(f"run FINEMAP: {' '.join(cmd)}")
@@ -314,13 +351,14 @@ class EasyFinemap(object):
 
     @io_in_tempdir('./tmp/easyfinemap')
     def run_susie(
-            self,
-            sumstats: pd.DataFrame,
-            ld_matrix: str,
-            sample_size: int,
-            max_causal: int = 1,
-            temp_dir: Optional[str] = None,
-            **kwargs,
+        self,
+        sumstats: pd.DataFrame,
+        ld_matrix: str,
+        sample_size: int,
+        max_causal: int = 1,
+        prior_file: Optional[str] = None,
+        temp_dir: Optional[str] = None,
+        **kwargs,
     ) -> pd.Series:
         """
         Run SuSiE.
@@ -335,6 +373,8 @@ class EasyFinemap(object):
             Sample size.
         max_causal : int, optional
             Maximum number of causal variants, by default 1
+        prior_file : Optional[str], optional
+            Path to prior file, by default None
 
         Returns
         -------
@@ -343,10 +383,16 @@ class EasyFinemap(object):
         """
         susie_input = sumstats.copy()
         susie_input[ColName.Z] = susie_input[ColName.BETA] / susie_input[ColName.SE]
+        if prior_file:
+            susie_input['SNPVAR'] = susie_input['SNPVAR'] / susie_input['SNPVAR'].sum()
+        else:
+            susie_input['SNPVAR'] = 1 / len(susie_input)
         susie_input[[ColName.SNPID, ColName.Z]].to_csv(f"{temp_dir}/susie.input", sep=" ", index=False, header=True)
 
         import rpy2.robjects as ro
-        ro.r(f'''ld = read.csv('{ld_matrix}', sep=' ', header=FALSE)
+
+        ro.r(
+            f'''ld = read.csv('{ld_matrix}', sep=' ', header=FALSE)
                 list_len = length(ld)
                 ld = ld[-length(ld)]
                 ld = as.matrix(ld)
@@ -355,7 +401,8 @@ class EasyFinemap(object):
                 prior = df$SNPVAR
                 library('susieR')
                 res = susie_rss(z, ld, n={sample_size}, L = {max_causal})
-                pip = res$pip''')
+                pip = res$pip'''
+        )
         susie_input['pip'] = ro.r('pip')
         susie_res = pd.Series(susie_input['pip'].values, index=susie_input[ColName.SNPID].tolist())
         return susie_res
@@ -491,6 +538,49 @@ class EasyFinemap(object):
                 raise ValueError("Must specify credible set method when credible threshold is specified")
         return credible_set.reset_index(drop=True)
 
+    def annotate_prior(
+        self,
+        sumstats: pd.DataFrame,
+        prior_file: str,
+    ) -> pd.DataFrame:
+        """
+        Annotate prior from polyfun results.
+
+        Parameters
+        ----------
+        sumstats : pd.DataFrame
+            Summary statistics.
+        prior_file : str
+            Path to prior file, present only support polyfun's results:
+            https://github.com/omerwe/polyfun/blob/master/snpvar_meta.chr1_7.parquet
+            https://github.com/omerwe/polyfun/blob/master/snpvar_meta.chr1_7.parquet
+
+        Returns
+        -------
+        pd.DataFrame
+            Annotated summary statistics.
+        """
+        # check tabix index
+        if not os.path.exists(f"{prior_file}.tbi"):
+            raise ValueError(f"No tabix index for {prior_file}")
+        # check header
+        header = pd.read_csv(prior_file, sep="\t", nrows=0).columns.tolist()
+        if 'snpvar_bin' not in header:
+            raise ValueError(f"No snpvar_bin in {prior_file}")
+        # annotate
+        tb = tabix.open(prior_file)
+        chrom = sumstats[ColName.CHR].unique()[0]
+        start = sumstats[ColName.BP].min()
+        end = sumstats[ColName.BP].max()
+        prior_df = pd.DataFrame(data=tb.query(str(chrom), start, end), columns=header)
+        prior_df = prior_df.rename(columns={"snpvar_bin": "SNPVAR"})
+        prior_df['SNPVAR'] = prior_df['SNPVAR'].astype(float)
+        prior_df = sg.make_SNPID_unique(prior_df, ColName.CHR, ColName.BP, 'A1', 'A2')
+        prior_df = prior_df.drop_duplicates(subset=ColName.SNPID)
+        prior_map = prior_df[['SNPID', 'SNPVAR']].set_index('SNPID').to_dict()['SNPVAR']
+        sumstats['SNPVAR'] = sumstats[ColName.SNPID].map(prior_map).fillna(0)
+        return sumstats
+
     @io_in_tempdir('./tmp/easyfinemap')
     def finemap_locus(
         self,
@@ -498,13 +588,14 @@ class EasyFinemap(object):
         methods: List[str],
         lead_snp: str,
         conditional: bool = False,
+        prior_file: Optional[str] = None,
         temp_dir: Optional[str] = None,
         **kwargs,
     ) -> pd.DataFrame:
         """
         Finemap a locus.
 
-        1. Check if LD is needed, abf, susie, polyfun+susie do not need LD.
+        1. Check if LD is needed, abf does not need LD.
         2. If LD is needed, intersect the locus with the LD reference and make the LD matrix.
         3. Run the finemapping method.
         4. Get the finemapping results.
@@ -547,19 +638,23 @@ class EasyFinemap(object):
             fm_input = sumstats.copy()
             out_sumstats = sumstats.copy()
 
-        allowed_methods = ["abf", "finemap", "paintor", "caviarbf", "susie"]
+        allowed_methods = ["abf", "finemap", "paintor", "caviarbf", "susie", "polyfun_finemap", "polyfun_susie"]
         if "all" in methods:
             methods = allowed_methods
         fm_input_ol = fm_input.copy()
+        if prior_file:
+            fm_input_ol = self.annotate_prior(fm_input_ol, prior_file)
         for method in methods:
             if method == "abf":
-                abf_pp = self.run_abf(sumstats=fm_input, **kwargs)
+                abf_pp = self.run_abf(sumstats=fm_input_ol, **kwargs)
                 out_sumstats[ColName.PP_ABF] = out_sumstats[ColName.SNPID].map(abf_pp)
-            elif method in ["finemap", "paintor", "caviarbf", "susie"]:
+            elif method in ["finemap", "paintor", "caviarbf", "susie", "polyfun_finemap", "polyfun_susie"]:
                 ld_matrix = f"{temp_dir}/intersc.ld"
                 if not os.path.exists(ld_matrix):
                     # TODO: reduce the number of SNPs when using paintor and caviarbf in multiple causal variant mode
-                    fm_input_ol = self.prepare_ld_matrix(sumstats=fm_input, outprefix=f"{temp_dir}/intersc", **kwargs)
+                    fm_input_ol = self.prepare_ld_matrix(
+                        sumstats=fm_input_ol, outprefix=f"{temp_dir}/intersc", **kwargs
+                    )
                 if method == "finemap":
                     finemap_pp = self.run_finemap(sumstats=fm_input_ol, ld_matrix=ld_matrix, **kwargs)
                     out_sumstats[ColName.PP_FINEMAP] = out_sumstats[ColName.SNPID].map(finemap_pp)
@@ -572,6 +667,12 @@ class EasyFinemap(object):
                 elif method == "susie":
                     susie_pp = self.run_susie(sumstats=fm_input_ol, ld_matrix=ld_matrix, **kwargs)
                     out_sumstats[ColName.PP_SUSIE] = out_sumstats[ColName.SNPID].map(susie_pp)
+                elif method == "polyfun_finemap":
+                    polyfun_finemap_pp = self.run_finemap(sumstats=fm_input_ol, ld_matrix=ld_matrix, **kwargs)
+                    out_sumstats[ColName.PP_POLYFUN_FINEMAP] = out_sumstats[ColName.SNPID].map(polyfun_finemap_pp)
+                elif method == "polyfun_susie":
+                    polyfun_susie_pp = self.run_susie(sumstats=fm_input_ol, ld_matrix=ld_matrix, **kwargs)
+                    out_sumstats[ColName.PP_POLYFUN_SUSIE] = out_sumstats[ColName.SNPID].map(polyfun_susie_pp)
             else:
                 raise ValueError(f"Method {method} is not supported")
 
@@ -587,6 +688,7 @@ class EasyFinemap(object):
         methods: List[str],
         var_prior: float = 0.2,
         conditional: bool = False,
+        prior_file: Optional[str] = None,
         sample_size: Optional[int] = None,
         ldref: Optional[str] = None,
         cond_snps_wind_kb: int = 1000,
@@ -614,6 +716,8 @@ class EasyFinemap(object):
             Variance prior, by default 0.2
         conditional : bool, optional
             Conditional finemapping, by default False
+        prior_file : Optional[str], optional
+            Path to prior file, by default None
         sample_size : Optional[int], optional
             Sample size, by default None
         ldref : Optional[str], optional
@@ -633,7 +737,7 @@ class EasyFinemap(object):
         threads : int, optional
             Number of threads, by default 1
         """
-        sumstats = make_SNPID_unique(sumstats)
+        sumstats = sg.make_SNPID_unique(sumstats, ColName.CHR, ColName.BP, ColName.EA, ColName.NEA)
         if credible_threshold and credible_method is None and methods != ["all"] and len(methods) == 1:
             credible_method = methods[0]
         kwargs_list = []
@@ -648,6 +752,7 @@ class EasyFinemap(object):
                 "methods": methods,
                 "var_prior": var_prior,
                 "conditional": conditional,
+                "prior_file": prior_file,
                 "sample_size": sample_size,
                 "ldref": ldref.format(chrom=chrom) if ldref else None,
                 "cond_snps_wind_kb": cond_snps_wind_kb,

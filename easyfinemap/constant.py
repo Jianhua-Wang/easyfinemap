@@ -32,6 +32,8 @@ class ColName:
     PP_PAINTOR = "PP_PAINTOR"
     PP_CAVIARBF = "PP_CAVIARBF"
     PP_SUSIE = "PP_SUSIE"
+    PP_POLYFUN_FINEMAP = "PP_POLYFUN_FINEMAP"
+    PP_POLYFUN_SUSIE = "PP_POLYFUN_SUSIE"
     sumstat_cols = ['CHR', 'BP', 'rsID', 'EA', 'NEA', 'P', 'BETA', 'SE', 'EAF', 'MAF']
     loci_cols = ['CHR', 'START', 'END', 'LEAD_SNP', 'LEAD_SNP_P', 'LEAD_SNP_BP']
 

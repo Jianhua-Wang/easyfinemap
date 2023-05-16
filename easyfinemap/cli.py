@@ -21,7 +21,6 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 app = typer.Typer(context_settings=CONTEXT_SETTINGS, add_completion=False)
 
 # 1. validate LD reference panel
-# 2. validate GWAS summary statistics
 # 3. identify lead SNPs
 # 4. fine-mapping
 
@@ -42,6 +41,8 @@ class FinemapMethod(str, Enum):
     paintor = "paintor"
     caviarbf = "caviarbf"
     susie = "susie"
+    polyfun_susie = "polyfun_susie"
+    polyfun_finemap = "polyfun_finemap"
     all = "all"
 
 
@@ -77,30 +78,6 @@ def validate_ldref(
     """Validate the LD reference file."""
     ld = LDRef()
     ld.valid(ldref_path, outprefix, file_type, mac, threads)
-
-
-# @app.command()
-# def validate_sumstats(
-#     sumstats_path: Path = typer.Argument(..., help="The path to the GWAS summary statistics file."),
-#     output: Path = typer.Argument(..., help="The output prefix."),
-# ) -> None:
-#     """Validate the GWAS summary statistics file."""
-#     if sumstats_path.exists():
-#         sumstats = pd.read_csv(sumstats_path, sep="\t")
-#         typer.echo(f"Loaded {sumstats_path} successfully.")
-#         typer.echo(f"Number of SNPs: {sumstats.shape[0]}")
-#         typer.echo(f"Number of columns: {sumstats.shape[1]}")
-#         typer.echo(f"Columns: {list(sumstats.columns)}")
-#         valid_sumstats = SumStat(sumstats)
-#         valid_sumstats = valid_sumstats.standarize()
-#         if output.suffix == ".gz":
-#             valid_sumstats.to_csv(output, sep="\t", index=False, compression="gzip")
-#         else:
-#             valid_sumstats.to_csv(output, sep="\t", index=False)
-#         typer.echo(f"Saved the validated summary statistics to {output}.")
-#     else:
-#         logging.error(f"No such file of {sumstats_path}.")
-#         sys.exit(1)
 
 
 @app.command()
@@ -168,6 +145,7 @@ def fine_mapping(
     outfile: str = typer.Argument(..., help="The output file."),
     var_prior: float = typer.Option(0.5, "--var-prior", help="The prior variance for the aBF method."),
     conditional: bool = typer.Option(False, "--conditional", "-c", help="Whether to use conditional mode."),
+    prior_file: Optional[str] = typer.Option(None, "--prior-file", help="The path to the prior file."),
     sample_size: Optional[int] = typer.Option(
         None, "--sample-size", "-n", help="The sample size for conditional mode."
     ),
@@ -196,6 +174,7 @@ def fine_mapping(
             outfile=outfile,
             var_prior=var_prior,
             conditional=conditional,
+            prior_file=prior_file,
             sample_size=sample_size,
             ldref=ldref,
             cond_snps_wind_kb=cond_snps_wind_kb,

@@ -5,7 +5,7 @@
     1.2. make SNP names unique, chr-bp-sorted(EA,NEA).
 2. intersect the significant snps with the LD reference.
 3. make a plink file from the intersected snps.
-TODO: 4. calculate LD matrix from the plink file.
+4. calculate LD matrix from the plink file.
 5. perform conditional analysis in conditional mode.
 """
 
