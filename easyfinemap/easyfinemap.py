@@ -10,8 +10,8 @@ Perform fine-mapping for a locus using the following methods:
         2.1.3. CAVIARBF
         2.1.4. SuSiE
     2.2. with annotation
-        TODO: 2.2.1. PolyFun + FINEMAP
-        TODO: 2.2.2. PolyFun + SuSiE
+        2.2.1. PolyFun + FINEMAP
+        2.2.2. PolyFun + SuSiE
 3. Support multiple causal variant
 4. Support conditional mode
 """
@@ -32,9 +32,8 @@ import smunger as sg
 from easyfinemap.constant import ColName
 from easyfinemap.ldref import LDRef
 
-# from easyfinemap.sumstat import SumStat
 from easyfinemap.tools import Tools
-from easyfinemap.utils import io_in_tempdir#, make_SNPID_unique
+from easyfinemap.utils import io_in_tempdir
 
 
 class EasyFinemap(object):

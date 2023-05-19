@@ -328,38 +328,40 @@ class LDRef:
         self.logger.debug(' '.join(cmd))
         self.logger.debug(f"intersect {sumstats.shape[0]} SNPs with {ldref}")
         if res.returncode != 0:
-            self.logger.error(res.stderr)
-            self.logger.error(f'see log file: {out_plink}.log for details')
-            raise RuntimeError(res.stderr)
-        bim = pd.read_csv(
-            f"{out_plink}.bim",
-            delim_whitespace=True,
-            names=[ColName.CHR, ColName.RSID, "cM", ColName.BP, ColName.EA, ColName.NEA],
-        )
-        overlap_sumstat = sumstats[sumstats[ColName.SNPID].isin(bim[ColName.RSID])].copy()
-        overlap_sumstat.reset_index(drop=True, inplace=True)
+            self.logger.warning(res.stderr)
+            self.logger.warning(f'see log file: {out_plink}.log for details')
+            # raise RuntimeError(res.stderr)
+            return pd.DataFrame()
+        else:
+            bim = pd.read_csv(
+                f"{out_plink}.bim",
+                delim_whitespace=True,
+                names=[ColName.CHR, ColName.RSID, "cM", ColName.BP, ColName.EA, ColName.NEA],
+            )
+            overlap_sumstat = sumstats[sumstats[ColName.SNPID].isin(bim[ColName.RSID])].copy()
+            overlap_sumstat.reset_index(drop=True, inplace=True)
 
-        if use_ref_EAF:
-            cmd = [
-                self.plink,
-                "--bfile",
-                out_plink,
-                "--freq",
-                "--out",
-                f"{temp_dir}/freq",
-            ]
-            res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
-            self.logger.debug(f"calculate EAF of {out_plink}")
-            self.logger.debug(f"calculate EAF: {' '.join(cmd)}")
-            # if res.returncode != 0:
-            #     self.logger.error(res.stderr)
-            #     self.logger.error(f'see log file: {temp_dir}/freq.log for details')
-            #     raise RuntimeError(res.stderr)
-            freq = pd.read_csv(f"{temp_dir}/freq.frq", delim_whitespace=True)
-            freq['A2_frq'] = 1 - freq['MAF']
-            overlap_sumstat['EAF'] = freq['A2_frq'].where(freq['A2'] == overlap_sumstat['EA'], freq['MAF'])
-            overlap_sumstat['MAF'] = freq['MAF']
-        return overlap_sumstat
+            if use_ref_EAF:
+                cmd = [
+                    self.plink,
+                    "--bfile",
+                    out_plink,
+                    "--freq",
+                    "--out",
+                    f"{temp_dir}/freq",
+                ]
+                res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+                self.logger.debug(f"calculate EAF of {out_plink}")
+                self.logger.debug(f"calculate EAF: {' '.join(cmd)}")
+                # if res.returncode != 0:
+                #     self.logger.error(res.stderr)
+                #     self.logger.error(f'see log file: {temp_dir}/freq.log for details')
+                #     raise RuntimeError(res.stderr)
+                freq = pd.read_csv(f"{temp_dir}/freq.frq", delim_whitespace=True)
+                freq['A2_frq'] = 1 - freq['MAF']
+                overlap_sumstat['EAF'] = freq['A2_frq'].where(freq['A2'] == overlap_sumstat['EA'], freq['MAF'])
+                overlap_sumstat['MAF'] = freq['MAF']
+            return overlap_sumstat
 
     @io_in_tempdir('./tmp/ldref')
     def make_ld(

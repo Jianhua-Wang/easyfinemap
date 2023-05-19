@@ -144,11 +144,11 @@ class Loci:
             lead_snp = lead_snp[lead_snp[ColName.SNPID].isin(loci[ColName.LEAD_SNP])]
         if outprefix:
             loci_file = f"{outprefix}.loci.txt"
-            loci.to_csv(loci_file, sep="\t", index=False)
-            self.logger.info(f"Save the independent loci to {loci_file}")
+            loci.to_csv(loci_file, sep="\t", index=False, float_format="%.6g")
+            self.logger.info(f"Save {len(loci)} independent loci to {loci_file}")
             leadsnp_file = f"{outprefix}.leadsnp.txt"
-            lead_snp.to_csv(leadsnp_file, sep="\t", index=False)
-            self.logger.info(f"Save the independent lead snps to {leadsnp_file}")
+            lead_snp.to_csv(leadsnp_file, sep="\t", index=False, float_format="%.6g")
+            self.logger.info(f"Save {len(lead_snp)} independent lead snps to {leadsnp_file}")
         return lead_snp, loci
 
     @staticmethod
@@ -498,65 +498,77 @@ class Loci:
         cojo_input = sumstats.copy()
         ld = LDRef()
         cojo_input = ld.intersect(sumstats, ldref, f"{temp_dir}/cojo_input_{chrom}", use_ref_EAF)
-        cojo_input[ColName.N] = sample_size
-        cojo_input = cojo_input[
-            [ColName.SNPID, ColName.EA, ColName.NEA, ColName.EAF, ColName.BETA, ColName.SE, ColName.P, ColName.N]
-        ]
-        cojo_input.rename(
-            columns={
-                ColName.SNPID: "SNP",
-                ColName.EA: "A1",
-                ColName.NEA: "A2",
-                ColName.EAF: "freq",
-                ColName.BETA: "b",
-                ColName.SE: "se",
-                ColName.P: "p",
-                ColName.N: "N",
-            },
-            inplace=True,
-        )
-        cojo_p_file = f"{temp_dir}/cojo_input_{chrom}.ma"
-        cojo_input.to_csv(cojo_p_file, sep=" ", index=False)
-        cojo_outfile = f"{temp_dir}/cojo_{chrom}.slct"
-        cmd = [
-            self.gcta,
-            "--bfile",
-            ldref,
-            "--cojo-file",
-            cojo_p_file,
-            "--cojo-slct",
-            "--cojo-p",
-            str(sig_threshold),
-            "--cojo-wind",
-            str(cojo_window_kb),
-            "--cojo-collinear",
-            str(cojo_collinear),
-            "--diff-freq",
-            str(diff_freq),
-            "--out",
-            cojo_outfile,
-        ]
-        self.logger.debug(f"Run cojo-slct: {' '.join(cmd)}")
-        res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
-        if res.returncode != 0:
-            self.logger.error(res.stderr)
-            raise RuntimeError(res.stderr)
+        if cojo_input.empty:
+            self.logger.warning(f"No SNPs in LD reference for chromosome {temp_dir}/cojo_input_{chrom}")
+            self.logger.warning("Use the most significant SNP as the independent lead SNP.")
+            cojo_snps = sumstats.loc[sumstats[ColName.P] == sumstats[ColName.P].min()].copy()
         else:
-            cojo_snps = pd.read_csv(
-                f"{cojo_outfile}.jma.cojo", delim_whitespace=True, usecols=["SNP", "bJ", "bJ_se", "pJ"]
-            )
-            cojo_snps.rename(
+            cojo_input[ColName.N] = sample_size
+            cojo_input = cojo_input[
+                [ColName.SNPID, ColName.EA, ColName.NEA, ColName.EAF, ColName.BETA, ColName.SE, ColName.P, ColName.N]
+            ]
+            cojo_input.rename(
                 columns={
-                    "SNP": ColName.SNPID,
-                    "bJ": ColName.COJO_BETA,
-                    "bJ_se": ColName.COJO_SE,
-                    "pJ": ColName.COJO_P,
+                    ColName.SNPID: "SNP",
+                    ColName.EA: "A1",
+                    ColName.NEA: "A2",
+                    ColName.EAF: "freq",
+                    ColName.BETA: "b",
+                    ColName.SE: "se",
+                    ColName.P: "p",
+                    ColName.N: "N",
                 },
                 inplace=True,
             )
-            cojo_snps = cojo_snps[cojo_snps[ColName.COJO_P] <= sig_threshold]
-            cojo_snps = sumstats.merge(cojo_snps, on=ColName.SNPID, how="inner")
-            return cojo_snps
+            cojo_p_file = f"{temp_dir}/cojo_input_{chrom}.ma"
+            cojo_input.to_csv(cojo_p_file, sep=" ", index=False)
+            cojo_outfile = f"{temp_dir}/cojo_{chrom}.slct"
+            cmd = [
+                self.gcta,
+                "--bfile",
+                f"{temp_dir}/cojo_input_{chrom}",
+                "--cojo-file",
+                cojo_p_file,
+                "--cojo-slct",
+                "--cojo-p",
+                str(sig_threshold),
+                "--cojo-wind",
+                str(cojo_window_kb),
+                "--cojo-collinear",
+                str(cojo_collinear),
+                "--diff-freq",
+                str(diff_freq),
+                "--out",
+                cojo_outfile,
+            ]
+            self.logger.debug(f"Run cojo-slct: {' '.join(cmd)}")
+            res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+            if res.returncode != 0:
+                self.logger.warning(res.stderr)
+                self.logger.warning(f"Run cojo-slct failed for chromosome {chrom}")
+                self.logger.warning("Use the most significant SNP as the independent lead SNP.")
+                cojo_snps = sumstats.loc[sumstats[ColName.P] == sumstats[ColName.P].min()].copy()
+            else:
+                if os.path.exists(f"{cojo_outfile}.jma.cojo"):
+                    cojo_snps = pd.read_csv(
+                        f"{cojo_outfile}.jma.cojo", delim_whitespace=True, usecols=["SNP", "bJ", "bJ_se", "pJ"]
+                    )
+                    cojo_snps.rename(
+                        columns={
+                            "SNP": ColName.SNPID,
+                            "bJ": ColName.COJO_BETA,
+                            "bJ_se": ColName.COJO_SE,
+                            "pJ": ColName.COJO_P,
+                        },
+                        inplace=True,
+                    )
+                    cojo_snps = cojo_snps[cojo_snps[ColName.COJO_P] <= sig_threshold]
+                    cojo_snps = sumstats.merge(cojo_snps, on=ColName.SNPID, how="inner")
+                else:
+                    self.logger.warning(f"No conditional snps found for chromosome {chrom}")
+                    self.logger.warning("Use the most significant SNP as the independent lead SNP.")
+                    cojo_snps = sumstats.loc[sumstats[ColName.P] == sumstats[ColName.P].min()].copy()
+        return cojo_snps
 
     @staticmethod
     def leadsnp2loci(

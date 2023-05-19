@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.6] - 2023-05-19
+
+### Added
+
+- Support polyfun for finemap and susie
+
+### Changed
+- Use the most significant SNP as lead SNP when COJO fails
+
+### Fixed
+
 ## [0.2.5] - 2023-03-30
 
 ### Added
