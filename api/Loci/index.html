@@ -1225,7 +1225,19 @@
 <span class="normal">556</span>
 <span class="normal">557</span>
 <span class="normal">558</span>
-<span class="normal">559</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s2">&quot;./tmp/loci&quot;</span><span class="p">)</span>
+<span class="normal">559</span>
+<span class="normal">560</span>
+<span class="normal">561</span>
+<span class="normal">562</span>
+<span class="normal">563</span>
+<span class="normal">564</span>
+<span class="normal">565</span>
+<span class="normal">566</span>
+<span class="normal">567</span>
+<span class="normal">568</span>
+<span class="normal">569</span>
+<span class="normal">570</span>
+<span class="normal">571</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s2">&quot;./tmp/loci&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">cojo_slct</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -1271,65 +1283,77 @@
     <span class="n">cojo_input</span> <span class="o">=</span> <span class="n">sumstats</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">ld</span> <span class="o">=</span> <span class="n">LDRef</span><span class="p">()</span>
     <span class="n">cojo_input</span> <span class="o">=</span> <span class="n">ld</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span><span class="n">sumstats</span><span class="p">,</span> <span class="n">ldref</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/cojo_input_</span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">use_ref_EAF</span><span class="p">)</span>
-    <span class="n">cojo_input</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">N</span><span class="p">]</span> <span class="o">=</span> <span class="n">sample_size</span>
-    <span class="n">cojo_input</span> <span class="o">=</span> <span class="n">cojo_input</span><span class="p">[</span>
-        <span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">EA</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">NEA</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">EAF</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">BETA</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">SE</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">P</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">N</span><span class="p">]</span>
-    <span class="p">]</span>
-    <span class="n">cojo_input</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
-        <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
-            <span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">:</span> <span class="s2">&quot;SNP&quot;</span><span class="p">,</span>
-            <span class="n">ColName</span><span class="o">.</span><span class="n">EA</span><span class="p">:</span> <span class="s2">&quot;A1&quot;</span><span class="p">,</span>
-            <span class="n">ColName</span><span class="o">.</span><span class="n">NEA</span><span class="p">:</span> <span class="s2">&quot;A2&quot;</span><span class="p">,</span>
-            <span class="n">ColName</span><span class="o">.</span><span class="n">EAF</span><span class="p">:</span> <span class="s2">&quot;freq&quot;</span><span class="p">,</span>
-            <span class="n">ColName</span><span class="o">.</span><span class="n">BETA</span><span class="p">:</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span>
-            <span class="n">ColName</span><span class="o">.</span><span class="n">SE</span><span class="p">:</span> <span class="s2">&quot;se&quot;</span><span class="p">,</span>
-            <span class="n">ColName</span><span class="o">.</span><span class="n">P</span><span class="p">:</span> <span class="s2">&quot;p&quot;</span><span class="p">,</span>
-            <span class="n">ColName</span><span class="o">.</span><span class="n">N</span><span class="p">:</span> <span class="s2">&quot;N&quot;</span><span class="p">,</span>
-        <span class="p">},</span>
-        <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">cojo_p_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/cojo_input_</span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">.ma&quot;</span>
-    <span class="n">cojo_input</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">cojo_p_file</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">cojo_outfile</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/cojo_</span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">.slct&quot;</span>
-    <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gcta</span><span class="p">,</span>
-        <span class="s2">&quot;--bfile&quot;</span><span class="p">,</span>
-        <span class="n">ldref</span><span class="p">,</span>
-        <span class="s2">&quot;--cojo-file&quot;</span><span class="p">,</span>
-        <span class="n">cojo_p_file</span><span class="p">,</span>
-        <span class="s2">&quot;--cojo-slct&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;--cojo-p&quot;</span><span class="p">,</span>
-        <span class="nb">str</span><span class="p">(</span><span class="n">sig_threshold</span><span class="p">),</span>
-        <span class="s2">&quot;--cojo-wind&quot;</span><span class="p">,</span>
-        <span class="nb">str</span><span class="p">(</span><span class="n">cojo_window_kb</span><span class="p">),</span>
-        <span class="s2">&quot;--cojo-collinear&quot;</span><span class="p">,</span>
-        <span class="nb">str</span><span class="p">(</span><span class="n">cojo_collinear</span><span class="p">),</span>
-        <span class="s2">&quot;--diff-freq&quot;</span><span class="p">,</span>
-        <span class="nb">str</span><span class="p">(</span><span class="n">diff_freq</span><span class="p">),</span>
-        <span class="s2">&quot;--out&quot;</span><span class="p">,</span>
-        <span class="n">cojo_outfile</span><span class="p">,</span>
-    <span class="p">]</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Run cojo-slct: </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">res</span> <span class="o">=</span> <span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">universal_newlines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cojo_input</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No SNPs in LD reference for chromosome </span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/cojo_input_</span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Use the most significant SNP as the independent lead SNP.&quot;</span><span class="p">)</span>
+        <span class="n">cojo_snps</span> <span class="o">=</span> <span class="n">sumstats</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">P</span><span class="p">]</span> <span class="o">==</span> <span class="n">sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">P</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">cojo_snps</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cojo_outfile</span><span class="si">}</span><span class="s2">.jma.cojo&quot;</span><span class="p">,</span> <span class="n">delim_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;SNP&quot;</span><span class="p">,</span> <span class="s2">&quot;bJ&quot;</span><span class="p">,</span> <span class="s2">&quot;bJ_se&quot;</span><span class="p">,</span> <span class="s2">&quot;pJ&quot;</span><span class="p">]</span>
-        <span class="p">)</span>
-        <span class="n">cojo_snps</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+        <span class="n">cojo_input</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">N</span><span class="p">]</span> <span class="o">=</span> <span class="n">sample_size</span>
+        <span class="n">cojo_input</span> <span class="o">=</span> <span class="n">cojo_input</span><span class="p">[</span>
+            <span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">EA</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">NEA</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">EAF</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">BETA</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">SE</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">P</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">N</span><span class="p">]</span>
+        <span class="p">]</span>
+        <span class="n">cojo_input</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
             <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;SNP&quot;</span><span class="p">:</span> <span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">,</span>
-                <span class="s2">&quot;bJ&quot;</span><span class="p">:</span> <span class="n">ColName</span><span class="o">.</span><span class="n">COJO_BETA</span><span class="p">,</span>
-                <span class="s2">&quot;bJ_se&quot;</span><span class="p">:</span> <span class="n">ColName</span><span class="o">.</span><span class="n">COJO_SE</span><span class="p">,</span>
-                <span class="s2">&quot;pJ&quot;</span><span class="p">:</span> <span class="n">ColName</span><span class="o">.</span><span class="n">COJO_P</span><span class="p">,</span>
+                <span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">:</span> <span class="s2">&quot;SNP&quot;</span><span class="p">,</span>
+                <span class="n">ColName</span><span class="o">.</span><span class="n">EA</span><span class="p">:</span> <span class="s2">&quot;A1&quot;</span><span class="p">,</span>
+                <span class="n">ColName</span><span class="o">.</span><span class="n">NEA</span><span class="p">:</span> <span class="s2">&quot;A2&quot;</span><span class="p">,</span>
+                <span class="n">ColName</span><span class="o">.</span><span class="n">EAF</span><span class="p">:</span> <span class="s2">&quot;freq&quot;</span><span class="p">,</span>
+                <span class="n">ColName</span><span class="o">.</span><span class="n">BETA</span><span class="p">:</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span>
+                <span class="n">ColName</span><span class="o">.</span><span class="n">SE</span><span class="p">:</span> <span class="s2">&quot;se&quot;</span><span class="p">,</span>
+                <span class="n">ColName</span><span class="o">.</span><span class="n">P</span><span class="p">:</span> <span class="s2">&quot;p&quot;</span><span class="p">,</span>
+                <span class="n">ColName</span><span class="o">.</span><span class="n">N</span><span class="p">:</span> <span class="s2">&quot;N&quot;</span><span class="p">,</span>
             <span class="p">},</span>
             <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">cojo_snps</span> <span class="o">=</span> <span class="n">cojo_snps</span><span class="p">[</span><span class="n">cojo_snps</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">COJO_P</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">sig_threshold</span><span class="p">]</span>
-        <span class="n">cojo_snps</span> <span class="o">=</span> <span class="n">sumstats</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">cojo_snps</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;inner&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">cojo_snps</span>
+        <span class="n">cojo_p_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/cojo_input_</span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">.ma&quot;</span>
+        <span class="n">cojo_input</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">cojo_p_file</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">cojo_outfile</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/cojo_</span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">.slct&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gcta</span><span class="p">,</span>
+            <span class="s2">&quot;--bfile&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/cojo_input_</span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--cojo-file&quot;</span><span class="p">,</span>
+            <span class="n">cojo_p_file</span><span class="p">,</span>
+            <span class="s2">&quot;--cojo-slct&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--cojo-p&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">sig_threshold</span><span class="p">),</span>
+            <span class="s2">&quot;--cojo-wind&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">cojo_window_kb</span><span class="p">),</span>
+            <span class="s2">&quot;--cojo-collinear&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">cojo_collinear</span><span class="p">),</span>
+            <span class="s2">&quot;--diff-freq&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">diff_freq</span><span class="p">),</span>
+            <span class="s2">&quot;--out&quot;</span><span class="p">,</span>
+            <span class="n">cojo_outfile</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Run cojo-slct: </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">universal_newlines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Run cojo-slct failed for chromosome </span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Use the most significant SNP as the independent lead SNP.&quot;</span><span class="p">)</span>
+            <span class="n">cojo_snps</span> <span class="o">=</span> <span class="n">sumstats</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">P</span><span class="p">]</span> <span class="o">==</span> <span class="n">sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">P</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cojo_outfile</span><span class="si">}</span><span class="s2">.jma.cojo&quot;</span><span class="p">):</span>
+                <span class="n">cojo_snps</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cojo_outfile</span><span class="si">}</span><span class="s2">.jma.cojo&quot;</span><span class="p">,</span> <span class="n">delim_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;SNP&quot;</span><span class="p">,</span> <span class="s2">&quot;bJ&quot;</span><span class="p">,</span> <span class="s2">&quot;bJ_se&quot;</span><span class="p">,</span> <span class="s2">&quot;pJ&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="n">cojo_snps</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+                    <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;SNP&quot;</span><span class="p">:</span> <span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">,</span>
+                        <span class="s2">&quot;bJ&quot;</span><span class="p">:</span> <span class="n">ColName</span><span class="o">.</span><span class="n">COJO_BETA</span><span class="p">,</span>
+                        <span class="s2">&quot;bJ_se&quot;</span><span class="p">:</span> <span class="n">ColName</span><span class="o">.</span><span class="n">COJO_SE</span><span class="p">,</span>
+                        <span class="s2">&quot;pJ&quot;</span><span class="p">:</span> <span class="n">ColName</span><span class="o">.</span><span class="n">COJO_P</span><span class="p">,</span>
+                    <span class="p">},</span>
+                    <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">cojo_snps</span> <span class="o">=</span> <span class="n">cojo_snps</span><span class="p">[</span><span class="n">cojo_snps</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">COJO_P</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">sig_threshold</span><span class="p">]</span>
+                <span class="n">cojo_snps</span> <span class="o">=</span> <span class="n">sumstats</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">cojo_snps</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;inner&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No conditional snps found for chromosome </span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Use the most significant SNP as the independent lead SNP.&quot;</span><span class="p">)</span>
+                <span class="n">cojo_snps</span> <span class="o">=</span> <span class="n">sumstats</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">P</span><span class="p">]</span> <span class="o">==</span> <span class="n">sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">P</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">cojo_snps</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -1760,11 +1784,11 @@ choose from ["distance", "clumping", "conditional"]</p></td>
         <span class="n">lead_snp</span> <span class="o">=</span> <span class="n">lead_snp</span><span class="p">[</span><span class="n">lead_snp</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">loci</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">LEAD_SNP</span><span class="p">])]</span>
     <span class="k">if</span> <span class="n">outprefix</span><span class="p">:</span>
         <span class="n">loci_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">outprefix</span><span class="si">}</span><span class="s2">.loci.txt&quot;</span>
-        <span class="n">loci</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">loci_file</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Save the independent loci to </span><span class="si">{</span><span class="n">loci_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">loci</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">loci_file</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">float_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.6g</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Save </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">loci</span><span class="p">)</span><span class="si">}</span><span class="s2"> independent loci to </span><span class="si">{</span><span class="n">loci_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">leadsnp_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">outprefix</span><span class="si">}</span><span class="s2">.leadsnp.txt&quot;</span>
-        <span class="n">lead_snp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">leadsnp_file</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Save the independent lead snps to </span><span class="si">{</span><span class="n">leadsnp_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">lead_snp</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">leadsnp_file</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">float_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.6g</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Save </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">lead_snp</span><span class="p">)</span><span class="si">}</span><span class="s2"> independent lead snps to </span><span class="si">{</span><span class="n">leadsnp_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">lead_snp</span><span class="p">,</span> <span class="n">loci</span>
 </code></pre></div></td></tr></table></div>
       </details>
@@ -2595,19 +2619,7 @@ choose from ["distance", "clumping", "conditional"]</p></td>
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/loci.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">561</span>
-<span class="normal">562</span>
-<span class="normal">563</span>
-<span class="normal">564</span>
-<span class="normal">565</span>
-<span class="normal">566</span>
-<span class="normal">567</span>
-<span class="normal">568</span>
-<span class="normal">569</span>
-<span class="normal">570</span>
-<span class="normal">571</span>
-<span class="normal">572</span>
-<span class="normal">573</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">573</span>
 <span class="normal">574</span>
 <span class="normal">575</span>
 <span class="normal">576</span>
@@ -2645,7 +2657,19 @@ choose from ["distance", "clumping", "conditional"]</p></td>
 <span class="normal">608</span>
 <span class="normal">609</span>
 <span class="normal">610</span>
-<span class="normal">611</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">611</span>
+<span class="normal">612</span>
+<span class="normal">613</span>
+<span class="normal">614</span>
+<span class="normal">615</span>
+<span class="normal">616</span>
+<span class="normal">617</span>
+<span class="normal">618</span>
+<span class="normal">619</span>
+<span class="normal">620</span>
+<span class="normal">621</span>
+<span class="normal">622</span>
+<span class="normal">623</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">leadsnp2loci</span><span class="p">(</span>
     <span class="n">lead_snps</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">if_merge</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">ldblock</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>

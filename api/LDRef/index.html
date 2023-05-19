@@ -816,9 +816,7 @@
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/ldref.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">417</span>
-<span class="normal">418</span>
-<span class="normal">419</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">419</span>
 <span class="normal">420</span>
 <span class="normal">421</span>
 <span class="normal">422</span>
@@ -908,7 +906,9 @@
 <span class="normal">506</span>
 <span class="normal">507</span>
 <span class="normal">508</span>
-<span class="normal">509</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/ldref&#39;</span><span class="p">)</span>
+<span class="normal">509</span>
+<span class="normal">510</span>
+<span class="normal">511</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/ldref&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">cojo_cond</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -1439,7 +1439,9 @@
 <span class="normal">359</span>
 <span class="normal">360</span>
 <span class="normal">361</span>
-<span class="normal">362</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s2">&quot;./tmp/ldref&quot;</span><span class="p">)</span>
+<span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s2">&quot;./tmp/ldref&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">intersect</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -1487,38 +1489,40 @@
     <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">))</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;intersect </span><span class="si">{</span><span class="n">sumstats</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> SNPs with </span><span class="si">{</span><span class="n">ldref</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;see log file: </span><span class="si">{</span><span class="n">out_plink</span><span class="si">}</span><span class="s1">.log for details&#39;</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
-    <span class="n">bim</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">out_plink</span><span class="si">}</span><span class="s2">.bim&quot;</span><span class="p">,</span>
-        <span class="n">delim_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">RSID</span><span class="p">,</span> <span class="s2">&quot;cM&quot;</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">EA</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">NEA</span><span class="p">],</span>
-    <span class="p">)</span>
-    <span class="n">overlap_sumstat</span> <span class="o">=</span> <span class="n">sumstats</span><span class="p">[</span><span class="n">sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">bim</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">RSID</span><span class="p">])]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">overlap_sumstat</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;see log file: </span><span class="si">{</span><span class="n">out_plink</span><span class="si">}</span><span class="s1">.log for details&#39;</span><span class="p">)</span>
+        <span class="c1"># raise RuntimeError(res.stderr)</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bim</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">out_plink</span><span class="si">}</span><span class="s2">.bim&quot;</span><span class="p">,</span>
+            <span class="n">delim_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">RSID</span><span class="p">,</span> <span class="s2">&quot;cM&quot;</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">EA</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">NEA</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">overlap_sumstat</span> <span class="o">=</span> <span class="n">sumstats</span><span class="p">[</span><span class="n">sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">bim</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">RSID</span><span class="p">])]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">overlap_sumstat</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">use_ref_EAF</span><span class="p">:</span>
-        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">plink</span><span class="p">,</span>
-            <span class="s2">&quot;--bfile&quot;</span><span class="p">,</span>
-            <span class="n">out_plink</span><span class="p">,</span>
-            <span class="s2">&quot;--freq&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;--out&quot;</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/freq&quot;</span><span class="p">,</span>
-        <span class="p">]</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">universal_newlines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;calculate EAF of </span><span class="si">{</span><span class="n">out_plink</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;calculate EAF: </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="c1"># if res.returncode != 0:</span>
-        <span class="c1">#     self.logger.error(res.stderr)</span>
-        <span class="c1">#     self.logger.error(f&#39;see log file: {temp_dir}/freq.log for details&#39;)</span>
-        <span class="c1">#     raise RuntimeError(res.stderr)</span>
-        <span class="n">freq</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/freq.frq&quot;</span><span class="p">,</span> <span class="n">delim_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">freq</span><span class="p">[</span><span class="s1">&#39;A2_frq&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">freq</span><span class="p">[</span><span class="s1">&#39;MAF&#39;</span><span class="p">]</span>
-        <span class="n">overlap_sumstat</span><span class="p">[</span><span class="s1">&#39;EAF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">freq</span><span class="p">[</span><span class="s1">&#39;A2_frq&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">freq</span><span class="p">[</span><span class="s1">&#39;A2&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">overlap_sumstat</span><span class="p">[</span><span class="s1">&#39;EA&#39;</span><span class="p">],</span> <span class="n">freq</span><span class="p">[</span><span class="s1">&#39;MAF&#39;</span><span class="p">])</span>
-        <span class="n">overlap_sumstat</span><span class="p">[</span><span class="s1">&#39;MAF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">freq</span><span class="p">[</span><span class="s1">&#39;MAF&#39;</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">overlap_sumstat</span>
+        <span class="k">if</span> <span class="n">use_ref_EAF</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">plink</span><span class="p">,</span>
+                <span class="s2">&quot;--bfile&quot;</span><span class="p">,</span>
+                <span class="n">out_plink</span><span class="p">,</span>
+                <span class="s2">&quot;--freq&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;--out&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/freq&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">universal_newlines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;calculate EAF of </span><span class="si">{</span><span class="n">out_plink</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;calculate EAF: </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># if res.returncode != 0:</span>
+            <span class="c1">#     self.logger.error(res.stderr)</span>
+            <span class="c1">#     self.logger.error(f&#39;see log file: {temp_dir}/freq.log for details&#39;)</span>
+            <span class="c1">#     raise RuntimeError(res.stderr)</span>
+            <span class="n">freq</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/freq.frq&quot;</span><span class="p">,</span> <span class="n">delim_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">freq</span><span class="p">[</span><span class="s1">&#39;A2_frq&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">freq</span><span class="p">[</span><span class="s1">&#39;MAF&#39;</span><span class="p">]</span>
+            <span class="n">overlap_sumstat</span><span class="p">[</span><span class="s1">&#39;EAF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">freq</span><span class="p">[</span><span class="s1">&#39;A2_frq&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">freq</span><span class="p">[</span><span class="s1">&#39;A2&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">overlap_sumstat</span><span class="p">[</span><span class="s1">&#39;EA&#39;</span><span class="p">],</span> <span class="n">freq</span><span class="p">[</span><span class="s1">&#39;MAF&#39;</span><span class="p">])</span>
+            <span class="n">overlap_sumstat</span><span class="p">[</span><span class="s1">&#39;MAF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">freq</span><span class="p">[</span><span class="s1">&#39;MAF&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">overlap_sumstat</span>
 </code></pre></div></td></tr></table></div>
       </details>
   </div>
@@ -1612,9 +1616,7 @@
 
       <details class="quote">
         <summary>Source code in <code>easyfinemap/ldref.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">364</span>
-<span class="normal">365</span>
-<span class="normal">366</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">366</span>
 <span class="normal">367</span>
 <span class="normal">368</span>
 <span class="normal">369</span>
@@ -1660,7 +1662,9 @@
 <span class="normal">409</span>
 <span class="normal">410</span>
 <span class="normal">411</span>
-<span class="normal">412</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/ldref&#39;</span><span class="p">)</span>
+<span class="normal">412</span>
+<span class="normal">413</span>
+<span class="normal">414</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/ldref&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">make_ld</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">ldref</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
