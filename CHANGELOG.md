@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.7] - 2023-05-20
+
+### Added
+
+
+### Changed
+- Use tabix to load sumstats when finemap
+
+### Fixed
+
+
 ## [0.2.6] - 2023-05-19
 
 ### Added

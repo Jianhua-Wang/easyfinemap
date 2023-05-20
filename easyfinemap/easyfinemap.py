@@ -736,14 +736,13 @@ class EasyFinemap(object):
         threads : int, optional
             Number of threads, by default 1
         """
-        sumstats = sg.make_SNPID_unique(sumstats, ColName.CHR, ColName.BP, ColName.EA, ColName.NEA)
+        # sumstats = sg.make_SNPID_unique(sumstats, ColName.CHR, ColName.BP, ColName.EA, ColName.NEA)
         if credible_threshold and credible_method is None and methods != ["all"] and len(methods) == 1:
             credible_method = methods[0]
         kwargs_list = []
         for chrom, start, end, lead_snp in loci[[ColName.CHR, ColName.START, ColName.END, ColName.LEAD_SNP]].values:
-            locus_sumstats = sumstats.loc[
-                (sumstats[ColName.CHR] == chrom) & (sumstats[ColName.BP] >= start) & (sumstats[ColName.BP] <= end)
-            ]
+            locus_sumstats = sg.export_sumstats(sumstats, chrom, start, end)
+            locus_sumstats = sg.make_SNPID_unique(locus_sumstats, ColName.CHR, ColName.BP, ColName.EA, ColName.NEA)
             kwargs = {
                 "sumstats": locus_sumstats,
                 "lead_snp": lead_snp,
@@ -779,6 +778,6 @@ class EasyFinemap(object):
                     output.append(res.get())
         output_df = pd.concat(output, ignore_index=True)
         if outfile:
-            output_df.to_csv(outfile, sep="\t", index=False)
+            output_df.to_csv(outfile, sep="\t", index=False, float_format="%0.5f")
         else:
             return output_df
