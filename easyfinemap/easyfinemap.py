@@ -389,6 +389,9 @@ class EasyFinemap(object):
         susie_input[[ColName.SNPID, ColName.Z]].to_csv(f"{temp_dir}/susie.input", sep=" ", index=False, header=True)
 
         import rpy2.robjects as ro
+        from rpy2.rinterface_lib.callbacks import logger as rpy2_logger
+
+        rpy2_logger.setLevel(logging.ERROR)
 
         ro.r(
             f'''ld = read.csv('{ld_matrix}', sep=' ', header=FALSE)
@@ -406,6 +409,7 @@ class EasyFinemap(object):
         susie_res = pd.Series(susie_input['pip'].values, index=susie_input[ColName.SNPID].tolist())
         return susie_res
 
+    @io_in_tempdir('./tmp/easyfinemap')
     def cond_sumstat(
         self,
         sumstats: pd.DataFrame,
@@ -415,6 +419,7 @@ class EasyFinemap(object):
         sample_size: int,
         use_ref_EAF: bool = False,
         cond_snps_wind_kb: int = 1000,
+        temp_dir: Optional[str] = None,
         **kwargs,
     ) -> pd.DataFrame:
         """
@@ -434,6 +439,8 @@ class EasyFinemap(object):
             Use reference EAF, by default False
         cond_snps_wind_kb : int, optional
             Conditional SNPs window in kb, by default 1000
+        temp_dir : Optional[str], optional
+            Path to tempdir, by default None
 
         Returns
         -------
@@ -460,7 +467,11 @@ class EasyFinemap(object):
             cond_res[ColName.COJO_P] = cond_res[ColName.P]
         else:
             ld = LDRef()
-            cond_res = ld.cojo_cond(sumstats, cond_snps, ldref, sample_size, use_ref_EAF)  # type: ignore
+            chrom = lead_snp_chr
+            cojo_input = ld.intersect(sumstats, ldref, f"{temp_dir}/cojo_input_{chrom}", use_ref_EAF)
+            cond_res = ld.cojo_cond(
+                cojo_input, cond_snps, f"{temp_dir}/cojo_input_{chrom}", sample_size, use_ref_EAF
+            )  # type: ignore
         return cond_res
 
     def prepare_ld_matrix(
@@ -778,6 +789,6 @@ class EasyFinemap(object):
                     output.append(res.get())
         output_df = pd.concat(output, ignore_index=True)
         if outfile:
-            output_df.to_csv(outfile, sep="\t", index=False, float_format="%0.5f")
+            output_df.to_csv(outfile, sep="\t", index=False, float_format="%0.6g")
         else:
             return output_df

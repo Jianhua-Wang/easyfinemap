@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.8] - 2023-05-23
+
+### Added
+
+
+### Changed
+- Speed up conditional analysis by intersect ldref with input sumstat first
+
+### Fixed
+
+
+
 ## [0.2.7] - 2023-05-20
 
 ### Added
