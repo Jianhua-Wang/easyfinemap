@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.9] - 2023-05-24
+
+### Added
+
+
+### Changed
+- Speed up susie by using fread
+
+### Fixed
+
+
 ## [0.2.8] - 2023-05-23
 
 ### Added
@@ -9,7 +20,6 @@
 - Speed up conditional analysis by intersect ldref with input sumstat first
 
 ### Fixed
-
 
 
 ## [0.2.7] - 2023-05-20
