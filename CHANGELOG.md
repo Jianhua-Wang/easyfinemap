@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.3.0] - 2023-05-24
+
+### Added
+- annotate R2 for locus plot
+
+### Changed
+
+### Fixed
+
+
 ## [0.2.9] - 2023-05-24
 
 ### Added

@@ -399,8 +399,8 @@ class LDRef:
             "--r2",
             "square",
             "spaces",
-            # "--threads",
-            # "1",
+            "--threads",
+            "10",
             "--out",
             outprefix,
         ]
@@ -509,3 +509,70 @@ class LDRef:
             output = sumstats.merge(cond_res, on=ColName.SNPID, how="left")
             output = output.dropna(subset=[ColName.COJO_P, ColName.COJO_BETA, ColName.COJO_SE])
             return output
+
+    @io_in_tempdir('./tmp/ldref')
+    def annotate_r2(
+        self,
+        sumstat: pd.DataFrame,
+        ldref: str,
+        ld_snp: str,
+        temp_dir: Optional[str] = None,
+    ) -> pd.DataFrame:
+        """
+        Annotate SNPs with r2 to the lead SNP.
+
+        Parameters
+        ----------
+        sumstat : pd.DataFrame
+            The summary statistics.
+        ldref : str
+            The path to the LD reference file.
+        ld_snp : str
+            The lead SNP.
+        temp_dir : Optional[str], optional
+            The path to the temporary directory, by default None
+
+        Returns
+        -------
+        pd.DataFrame
+            The annotated summary statistics.
+        """
+        if len(sumstat[ColName.CHR].unique()) > 1:
+            raise ValueError("Only one chromosome is allowed.")
+        chrom = sumstat[ColName.CHR].iloc[0]
+        if len(sumstat) > 100000:
+            self.logger.warning("The sumstats is large, it may take a long time to annotate the r2.")
+        ld = LDRef()
+        r2_df = sumstat.copy()
+        r2_input = ld.intersect(sumstat, ldref.format(chrom=chrom), f"{temp_dir}/r2_input_{chrom}")
+        if ld_snp not in r2_input[ColName.SNPID].tolist():
+            raise ValueError(f"{ld_snp} not in the LD reference.")
+        cmd = [
+            self.plink,
+            "--bfile",
+            f"{temp_dir}/r2_input_{chrom}",
+            "--r2",
+            "--ld-snp",
+            ld_snp,
+            "--ld-window-kb",
+            "100000",
+            "--ld-window",
+            "99999999",
+            "--ld-window-r2",
+            "0",
+            "--keep-allele-order",
+            "--out",
+            f"{temp_dir}/r2_{chrom}",
+        ]
+        self.logger.debug(f"annotate r2: {' '.join(cmd)}")
+        res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+        if res.returncode != 0:
+            self.logger.error(res.stderr)
+            raise RuntimeError(res.stderr)
+        else:
+            res_r2 = pd.read_csv(f"{temp_dir}/r2_{chrom}.ld", delim_whitespace=True)
+            res_r2 = pd.Series(res_r2["R2"].values, index=res_r2["SNP_B"].values)
+            r2_df["R2"] = r2_df[ColName.SNPID].map(res_r2)
+            r2_df.loc[r2_df[ColName.SNPID] == ld_snp, "R2"] = 1
+            r2_df['R2'] = r2_df['R2'].fillna(-1)
+            return r2_df

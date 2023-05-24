@@ -22,7 +22,6 @@ from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn, T
 from easyfinemap.constant import ColName
 from easyfinemap.ldref import LDRef
 
-# from easyfinemap.sumstat import SumStat
 from easyfinemap.tools import Tools
 from easyfinemap.utils import get_significant_snps, io_in_tempdir, make_SNPID_unique
 
