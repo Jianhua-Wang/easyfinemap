@@ -394,11 +394,10 @@ class EasyFinemap(object):
         rpy2_logger.setLevel(logging.ERROR)
 
         ro.r(
-            f'''ld = read.csv('{ld_matrix}', sep=' ', header=FALSE)
-                list_len = length(ld)
-                ld = ld[-length(ld)]
+            f'''library('data.table')
+                ld = fread('{ld_matrix}', sep=' ', header=FALSE)
                 ld = as.matrix(ld)
-                df = read.csv('{temp_dir}/susie.input', sep=' ', header=TRUE)
+                df = fread('{temp_dir}/susie.input', sep=' ', header=TRUE)
                 z = df$Z
                 prior = df$SNPVAR
                 library('susieR')

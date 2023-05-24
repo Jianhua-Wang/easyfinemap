@@ -399,8 +399,8 @@ class LDRef:
             "--r2",
             "square",
             "spaces",
-            "--threads",
-            "1",
+            # "--threads",
+            # "1",
             "--out",
             outprefix,
         ]
