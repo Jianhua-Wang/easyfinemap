@@ -13,7 +13,7 @@ from .plots import locus_plot
 
 __author__ = """Jianhua Wang"""
 __email__ = 'jianhua.mert@gmail.com'
-__version__ = '0.3.0'
+__version__ = '0.3.1'
 
 
 logging.basicConfig(
