@@ -7,6 +7,7 @@ from rich.logging import RichHandler
 from .easyfinemap import EasyFinemap
 from .ldref import LDRef
 from .loci import Loci
+from .plots import locus_plot
 
 # from .sumstat import SumStat
 

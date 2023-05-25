@@ -400,7 +400,7 @@ class LDRef:
             "square",
             "spaces",
             "--threads",
-            "10",
+            "1",
             "--out",
             outprefix,
         ]

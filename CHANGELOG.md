@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.3.1] - 2023-05-25
+
+### Added
+- locus plot
+
+### Changed
+
+### Fixed
+
+
 ## [0.3.0] - 2023-05-24
 
 ### Added
