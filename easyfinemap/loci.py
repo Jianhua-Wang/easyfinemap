@@ -441,7 +441,7 @@ class Loci:
                 BarColumn(),
                 MofNCompleteColumn(),
                 TimeElapsedColumn(),
-                auto_refresh=False,
+                auto_refresh=True,
             ) as progress:
                 task = progress.add_task("Run cojo-slct", total=len(args_list))
                 for _ in executor.map(loci.cojo_slct, *zip(*args_list)):

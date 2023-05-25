@@ -687,21 +687,6 @@ files = [
 ]
 
 [[package]]
-name = "dill"
-version = "0.3.6"
-description = "serialize all of python"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "dill-0.3.6-py3-none-any.whl", hash = "sha256:a07ffd2351b8c678dfc4a856a3005f8067aea51d6ba6c700796a4d9e280f39f0"},
-    {file = "dill-0.3.6.tar.gz", hash = "sha256:e5db55f3687856d8fbdab002ed78544e1c4559a130302693d839dfe8f93f2373"},
-]
-
-[package.extras]
-graph = ["objgraph (>=1.7.2)"]
-
-[[package]]
 name = "distlib"
 version = "0.3.6"
 description = "Distribution utilities"
@@ -1764,33 +1749,6 @@ files = [
 ]
 
 [[package]]
-name = "multiprocess"
-version = "0.70.14"
-description = "better multiprocessing and multithreading in python"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "multiprocess-0.70.14-pp37-pypy37_pp73-macosx_10_9_x86_64.whl", hash = "sha256:560a27540daef4ce8b24ed3cc2496a3c670df66c96d02461a4da67473685adf3"},
-    {file = "multiprocess-0.70.14-pp37-pypy37_pp73-manylinux_2_24_i686.whl", hash = "sha256:bfbbfa36f400b81d1978c940616bc77776424e5e34cb0c94974b178d727cfcd5"},
-    {file = "multiprocess-0.70.14-pp37-pypy37_pp73-manylinux_2_24_x86_64.whl", hash = "sha256:89fed99553a04ec4f9067031f83a886d7fdec5952005551a896a4b6a59575bb9"},
-    {file = "multiprocess-0.70.14-pp38-pypy38_pp73-macosx_10_9_x86_64.whl", hash = "sha256:40a5e3685462079e5fdee7c6789e3ef270595e1755199f0d50685e72523e1d2a"},
-    {file = "multiprocess-0.70.14-pp38-pypy38_pp73-manylinux_2_24_i686.whl", hash = "sha256:44936b2978d3f2648727b3eaeab6d7fa0bedf072dc5207bf35a96d5ee7c004cf"},
-    {file = "multiprocess-0.70.14-pp38-pypy38_pp73-manylinux_2_24_x86_64.whl", hash = "sha256:e628503187b5d494bf29ffc52d3e1e57bb770ce7ce05d67c4bbdb3a0c7d3b05f"},
-    {file = "multiprocess-0.70.14-pp39-pypy39_pp73-macosx_10_9_x86_64.whl", hash = "sha256:0d5da0fc84aacb0e4bd69c41b31edbf71b39fe2fb32a54eaedcaea241050855c"},
-    {file = "multiprocess-0.70.14-pp39-pypy39_pp73-manylinux_2_24_i686.whl", hash = "sha256:6a7b03a5b98e911a7785b9116805bd782815c5e2bd6c91c6a320f26fd3e7b7ad"},
-    {file = "multiprocess-0.70.14-pp39-pypy39_pp73-manylinux_2_24_x86_64.whl", hash = "sha256:cea5bdedd10aace3c660fedeac8b087136b4366d4ee49a30f1ebf7409bce00ae"},
-    {file = "multiprocess-0.70.14-py310-none-any.whl", hash = "sha256:7dc1f2f6a1d34894c8a9a013fbc807971e336e7cc3f3ff233e61b9dc679b3b5c"},
-    {file = "multiprocess-0.70.14-py37-none-any.whl", hash = "sha256:93a8208ca0926d05cdbb5b9250a604c401bed677579e96c14da3090beb798193"},
-    {file = "multiprocess-0.70.14-py38-none-any.whl", hash = "sha256:6725bc79666bbd29a73ca148a0fb5f4ea22eed4a8f22fce58296492a02d18a7b"},
-    {file = "multiprocess-0.70.14-py39-none-any.whl", hash = "sha256:63cee628b74a2c0631ef15da5534c8aedbc10c38910b9c8b18dcd327528d1ec7"},
-    {file = "multiprocess-0.70.14.tar.gz", hash = "sha256:3eddafc12f2260d27ae03fe6069b12570ab4764ab59a75e81624fac453fbf46a"},
-]
-
-[package.dependencies]
-dill = ">=0.3.6"
-
-[[package]]
 name = "mypy"
 version = "0.990"
 description = "Optional static typing for Python"
@@ -2181,24 +2139,6 @@ qa = ["flake8 (==3.8.3)", "mypy (==0.782)"]
 testing = ["docopt", "pytest (<6.0.0)"]
 
 [[package]]
-name = "pathos"
-version = "0.3.0"
-description = "parallel graph management and execution in heterogeneous computing"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "pathos-0.3.0-py3-none-any.whl", hash = "sha256:b1f5a79b1c79a594330d451832642ee5bb61dd77dc75ba9e5c72087c77e8994c"},
-    {file = "pathos-0.3.0.tar.gz", hash = "sha256:24fa8db51fbd9284da8e191794097c4bb2aa3fce411090e57af6385e61b97e09"},
-]
-
-[package.dependencies]
-dill = ">=0.3.6"
-multiprocess = ">=0.70.14"
-pox = ">=0.3.2"
-ppft = ">=1.7.6.6"
-
-[[package]]
 name = "pathspec"
 version = "0.11.1"
 description = "Utility library for gitignore style pattern matching of file paths."
@@ -2307,33 +2247,6 @@ files = [
 [package.extras]
 dev = ["pre-commit", "tox"]
 testing = ["pytest", "pytest-benchmark"]
-
-[[package]]
-name = "pox"
-version = "0.3.2"
-description = "utilities for filesystem exploration and automated builds"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "pox-0.3.2-py3-none-any.whl", hash = "sha256:56fe2f099ecd8a557b8948082504492de90e8598c34733c9b1fdeca8f7b6de61"},
-    {file = "pox-0.3.2.tar.gz", hash = "sha256:e825225297638d6e3d49415f8cfb65407a5d15e56f2fb7fe9d9b9e3050c65ee1"},
-]
-
-[[package]]
-name = "ppft"
-version = "1.7.6.6"
-description = "distributed and parallel python"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "ppft-1.7.6.6-py3-none-any.whl", hash = "sha256:f355d2caeed8bd7c9e4a860c471f31f7e66d1ada2791ab5458ea7dca15a51e41"},
-    {file = "ppft-1.7.6.6.tar.gz", hash = "sha256:f933f0404f3e808bc860745acb3b79cd4fe31ea19a20889a645f900415be60f1"},
-]
-
-[package.extras]
-dill = ["dill (>=0.3.6)"]
 
 [[package]]
 name = "pre-commit"
@@ -3169,14 +3082,14 @@ files = [
 
 [[package]]
 name = "smunger"
-version = "0.0.21"
+version = "0.0.23"
 description = "munger for GWAS summary statistics."
 category = "main"
 optional = false
 python-versions = ">=3.8,<3.12"
 files = [
-    {file = "smunger-0.0.21-py3-none-any.whl", hash = "sha256:a35c0e2f6ab33e7ae8ce6d16f64c6d7d52841627c399895ab9a5d6eba86e6fbc"},
-    {file = "smunger-0.0.21.tar.gz", hash = "sha256:ed5897459921801fe8fe056e949036b19fb2777fb85e26f62e55d594490e8b22"},
+    {file = "smunger-0.0.23-py3-none-any.whl", hash = "sha256:ac4160bb0e106bb323d38adc2e63be164699eae67e3ac15eae2363cfd813d6f3"},
+    {file = "smunger-0.0.23.tar.gz", hash = "sha256:884b38df4523118f16d8460764877320ceb80778037bdb90a442547f18fbddec"},
 ]
 
 [package.dependencies]
@@ -3674,4 +3587,4 @@ test = ["pytest", "black", "isort", "mypy", "flake8", "flake8-docstrings", "pyte
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.12"
-content-hash = "6e629e343a1a05d87cb3b31c163dfcdc3c48aee8cfe1f6e327cde65d191f82c8"
+content-hash = "acbbe525607616b5dd130bc082554c264f9059974341866bb84ebb019a0eb815"

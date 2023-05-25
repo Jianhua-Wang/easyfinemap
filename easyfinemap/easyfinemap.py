@@ -24,7 +24,7 @@ from typing import List, Optional
 
 import numpy as np
 import pandas as pd
-from pathos.pools import _ProcessPool as Pool
+from concurrent.futures import ProcessPoolExecutor
 from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn, TimeElapsedColumn
 import tabix
 import smunger as sg
@@ -689,6 +689,22 @@ class EasyFinemap(object):
         credible_set[ColName.LEAD_SNP] = lead_snp
         return credible_set
 
+    def finemap_locus_parallel(self, kwargs):
+        """
+        Perform finemapping for a locus in parallel.
+
+        Parameters
+        ----------
+        kwargs : dict
+            Keyword arguments.
+
+        Returns
+        -------
+        pd.DataFrame
+            Finemapping results.
+        """
+        return self.finemap_locus(**kwargs)
+
     def finemap_all_loci(
         self,
         sumstats: pd.DataFrame,
@@ -771,21 +787,35 @@ class EasyFinemap(object):
             }
             kwargs_list.append(kwargs)
         ef = EasyFinemap()
-        output = []
-        with Progress(
-            TextColumn("{task.description}"),
-            BarColumn(),
-            MofNCompleteColumn(),
-            TimeElapsedColumn(),
-            auto_refresh=True,
-        ) as progress:
-            with Pool(threads) as p:
-                task = progress.add_task("Perform Fine-mapping...", total=len(loci))
-                results = [p.apply_async(ef.finemap_locus, kwds=kwargs) for kwargs in kwargs_list]
-                for res in results:
+        # output = []
+        # with Progress(
+        #     TextColumn("{task.description}"),
+        #     BarColumn(),
+        #     MofNCompleteColumn(),
+        #     TimeElapsedColumn(),
+        #     auto_refresh=True,
+        # ) as progress:
+        #     with Pool(threads) as p:
+        #         task = progress.add_task("Perform Fine-mapping...", total=len(loci))
+        #         results = [p.apply_async(ef.finemap_locus, kwds=kwargs) for kwargs in kwargs_list]
+        #         for res in results:
+        #             progress.update(task, advance=1)
+        #             progress.refresh()
+        #             output.append(res.get())
+        with ProcessPoolExecutor(max_workers=threads) as executor:
+            output = []
+            with Progress(
+                TextColumn("{task.description}"),
+                BarColumn(),
+                MofNCompleteColumn(),
+                TimeElapsedColumn(),
+                auto_refresh=True,
+            ) as progress:
+                task = progress.add_task("Perform Fine-mapping...", total=len(kwargs_list))
+                for _ in executor.map(ef.finemap_locus_parallel, kwargs_list):
                     progress.update(task, advance=1)
                     progress.refresh()
-                    output.append(res.get())
+                    output.append(_)
         output_df = pd.concat(output, ignore_index=True)
         if outfile:
             output_df.to_csv(outfile, sep="\t", index=False, float_format="%0.6g")

@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.3.2] - 2023-05-25
+
+### Added
+
+### Changed
+- remove pathos
+### Fixed
+
+
 ## [0.3.1] - 2023-05-25
 
 ### Added
