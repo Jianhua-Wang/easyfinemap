@@ -218,8 +218,8 @@ class Loci:
                 sig_df = sig_df[
                     ~(
                         (sig_df[ColName.CHR] == sig_df.iloc[0][ColName.CHR])
-                        & (sig_df[ColName.BP] >= sig_df.iloc[0][ColName.BP] - sig_block.iloc[0][ColName.START])
-                        & (sig_df[ColName.BP] <= sig_df.iloc[0][ColName.BP] + sig_block.iloc[0][ColName.END])
+                        & (sig_df[ColName.BP] >= sig_block.iloc[0][ColName.START])
+                        & (sig_df[ColName.BP] <= sig_block.iloc[0][ColName.END])
                     )
                 ]
         else:
