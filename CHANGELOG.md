@@ -1,5 +1,15 @@
 # Changelog
 
+
+## [0.3.4] - 2023-06-12
+
+### Added
+
+### Changed
+- fix bugs in loci by ldblock
+### Fixed
+
+
 ## [0.3.3] - 2023-06-12
 
 ### Added
