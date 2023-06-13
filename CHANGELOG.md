@@ -1,4 +1,12 @@
 # Changelog
+## [0.3.5] - 2023-06-13
+
+### Added
+
+### Changed
+- fix smunger independency
+### Fixed
+
 
 
 ## [0.3.4] - 2023-06-12
