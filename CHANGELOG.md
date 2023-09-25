@@ -1,4 +1,13 @@
 # Changelog
+## [0.3.6] - 2023-09-25
+
+### Added
+
+### Changed
+
+### Fixed
+- fix dependency
+
 ## [0.3.5] - 2023-06-13
 
 ### Added

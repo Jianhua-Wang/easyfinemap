@@ -496,6 +496,7 @@ class LDRef:
             "--out",
             cojo_outfile,
         ]
+        self.logger.debug(f"conditional analysis: {' '.join(cmd)}")
         res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
         if res.returncode != 0:
             self.logger.error(res.stderr)
