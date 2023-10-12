@@ -1,52 +1,17 @@
 # Installation
 
-## Stable release
+easyfinemap is a Python package that can be installed directly using pip. However, since easyfinemap requires additional fine-mapping software to compute posterior probabilities, such as FINEMAP and PAINTOR, you will need to install these software as well. Users have the option to install them manually or clone the easyfinemap conda environment. Here are the specific steps:
 
-To install easy_finemap, run this command in your
-terminal:
-
-``` console
-$ pip install easyfinemap
-```
-
-This is the preferred method to install easyfinemap, as it will always install the most recent stable release.
-
-If you don't have [pip][] installed, this [Python installation guide][]
-can guide you through the process.
-
-## From source
-
-The source for easy_finemap can be downloaded from
-the [Github repo][].
-
-You can either clone the public repository:
-
-``` console
-$ git clone git://github.com/Jianhua-Wang/easy_finemap
-```
-
-Or download the [tarball][]:
-
-``` console
-$ curl -OJL https://github.com/Jianhua-Wang/easy_finemap/tarball/master
-```
-
-Once you have a copy of the source, you can install it with:
-
-``` console
-$ pip install .
-```
-
-  [pip]: https://pip.pypa.io
-  [Python installation guide]: http://docs.python-guide.org/en/latest/starting/installation/
-  [Github repo]: https://github.com/%7B%7B%20cookiecutter.github_username%20%7D%7D/%7B%7B%20cookiecutter.project_slug%20%7D%7D
-  [tarball]: https://github.com/%7B%7B%20cookiecutter.github_username%20%7D%7D/%7B%7B%20cookiecutter.project_slug%20%7D%7D/tarball/master
-
-## Install finemappingn tools used in EasyFinemap
-
-EasyFinemap uses several famous finemapping tools, such as FINEMAP, CAVIARBF, and PAINTOR.
-
-You can make them from the source code by yourself or install them using `conda`.
-
-Or you just create the environment of EasyFinemap using `conda`.
-
+1. Download the environment configuration file:
+   ```bash
+   wget https://github.com/Jianhua-Wang/easyfinemap/blob/main/environment.yml
+   ```
+2. Create a conda environment:
+   ```bash
+   conda env create -f environment.yml
+   ```
+3. Activate the conda environment:
+   ```bash
+   conda activate easyfinemap
+   ```
+Once the conda environment is activated, you will have easyfinemap and the required fine-mapping software installed and ready to use.

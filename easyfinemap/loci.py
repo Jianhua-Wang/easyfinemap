@@ -494,6 +494,8 @@ class Loci:
             The conditional snps.
         """
         chrom = sumstats[ColName.CHR].unique()[0]
+        if not use_ref_EAF and sumstats[ColName.EAF].isnull().any():
+            raise ValueError(f"{ColName.EAF} is not in the sumstats, please set use_ref_EAF to True")
         cojo_input = sumstats.copy()
         ld = LDRef()
         cojo_input = ld.intersect(sumstats, ldref, f"{temp_dir}/cojo_input_{chrom}", use_ref_EAF)

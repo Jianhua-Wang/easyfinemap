@@ -10,25 +10,29 @@
 [![Build Status](https://github.com/Jianhua-Wang/easyfinemap/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/Jianhua-Wang/easyfinemap/actions/workflows/python-package-conda.yml)
 
 
-user-friendly pipeline for GWAS fine-mapping
+A flexible framework for GWAS fine-mapping
 
 
 * Documentation: <https://Jianhua-Wang.github.io/easyfinemap>
 * GitHub: <https://github.com/Jianhua-Wang/easyfinemap>
 * PyPI: <https://pypi.org/project/easyfinemap/>
-* Free software: MIT
+* License: MIT
 
 
 ## Features
-* Prepare LD reference for fine-mapping
-* Standardize input summary statistics
-* Identify independent loci by distance, LD clumping, or conditional analysis
-* Fine-mapping with or without LD reference
+* Formatting of summary statistics using smunger.
+* Fast extraction of summary statistics for fine-mapping using tabix/bgzip.
+* Checking and formatting of LD reference.
+* Representation of variants using Unique SNP ID.
+* Support for identifying independent loci using three methods: distance, LD clumping, and conditional analysis.
+* Fine-mapping without the need for LD reference.
+* Support for four LD-based fine-mapping tools and function-based fine-mapping.
+* Fine-mapping combined with conditional analysis.
 
-## Finemapping approaches
+<!-- ## Finemapping approaches
 * LD-free
     * aBF
 * LD-based
     * FINEMAP
     * CAVIARBF
-    * PAINTOR
+    * PAINTOR -->

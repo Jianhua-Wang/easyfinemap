@@ -6,9 +6,14 @@ watch: [README.md, CONTRIBUTING.md, CHANGELOG.md, easyfinemap]
 #strict: true
 nav:
   - Home:
-    - index.md
-    - Installation: installation.md
-  - Usage: usage.md
+    - Introduction: index.md
+    - Install: installation.md
+    - Quick start: quickstart.md
+  - Usage:
+    - File formats: fileformats.md
+    - Validate LD reference: validate.md
+    - Identify independent loci: identify.md
+    - Fine-mapping: fine.md
   - Modules:
     - EasyFinemap: api/easyfinemap.md
     - CLI: api/cli.md
@@ -88,19 +93,19 @@ plugins:
       #   - easyfinemap
 extra:
   social:
-    - icon: fontawesome/brands/twitter
-      # replace with your own tweet link below
-      link: https://github.com/waynerv/cookiecutter-pypackage
-      name: Tweet
-    - icon: fontawesome/brands/facebook
-      # replace with your own facebook link below
-      link: https://github.com/waynerv/cookiecutter-pypackage
-      name: Facebook
-    - icon: fontawesome/brands/github
-      link: https://github.com/Jianhua-Wang/easyfinemap
-      name: Github
-    - icon: material/email
-      link: "mailto:jianhua.mert@gmail.com"
+  #   - icon: fontawesome/brands/twitter
+  #     # replace with your own tweet link below
+  #     link: https://github.com/waynerv/cookiecutter-pypackage
+  #     name: Tweet
+  #   - icon: fontawesome/brands/facebook
+  #     # replace with your own facebook link below
+  #     link: https://github.com/waynerv/cookiecutter-pypackage
+  #     name: Facebook
+  #   - icon: fontawesome/brands/github
+  #     link: https://github.com/Jianhua-Wang/easyfinemap
+  #     name: Github
+  #   - icon: material/email
+  #     link: "mailto:jianhua.mert@gmail.com"
   # to enable disqus, uncomment the following and put your disqus id below
   # disqus: disqus_id
 # uncomment the following and put your google tracking id below to enable GA

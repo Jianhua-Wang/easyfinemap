@@ -1,4 +1,14 @@
 # Changelog
+
+## [0.4.0] - 2023-10-12
+
+### Added
+- docs
+
+### Changed
+
+### Fixed
+
 ## [0.3.9] - 2023-09-26
 
 ### Added
