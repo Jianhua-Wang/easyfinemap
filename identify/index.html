@@ -228,28 +228,11 @@
         <a href="../api/easyfinemap/" class="md-tabs__link">
           
   
-  Modules
+  API
 
         </a>
       </li>
     
-  
-
-      
-        
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../changelog/" class="md-tabs__link">
-        
-  
-    
-  
-  Changelog
-
-      </a>
-    </li>
   
 
       
@@ -641,7 +624,7 @@
             
   
   <span class="md-ellipsis">
-    Modules
+    API
   </span>
   
 
@@ -651,7 +634,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
-            Modules
+            API
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -666,26 +649,6 @@
   
   <span class="md-ellipsis">
     EasyFinemap
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../api/cli/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    CLI
   </span>
   
 
@@ -782,25 +745,6 @@
   
 
     
-      
-      
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../changelog/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Changelog
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
   </ul>
 </nav>
                   </div>
@@ -888,7 +832,14 @@
   <h1>Identify independent loci</h1>
 
 <p>Because fine-mapping is typically conducted locally, determining the regions for fine-mapping a summary statistic requires identifying the regions based on significant loci in a GWAS.</p>
-<p>EasyFinemap provides three methods to determine the regions for fine-mapping: distance, clumping, and conditional. The distance method merges nearby variants within a given distance threshold into a locus and selects a lead SNP from each locus. The clumping method merges variants within the same clumping window based on a specified window size and r2 threshold, and selects a lead SNP from each merged locus. The conditional method merges variants within the same cojo window based on a specified window size and cojo collinear threshold, and selects a lead SNP from each merged locus. The key difference among these methods lies in the criteria used for merging variants: distance and clumping methods are based on physical distances between variants, while the conditional method is based on their correlation. Both distance and clumping methods utilize GWAS summary statistics, whereas the conditional method incorporates both GWAS summary statistics and LD reference.</p>
+<p>EasyFinemap provides three methods to determine the regions for fine-mapping: distance, clumping, and conditional. </p>
+<ul>
+<li>The distance method merges nearby variants within a given distance threshold into a locus and selects a lead SNP from each locus.</li>
+<li>The clumping method merges variants within the same clumping window based on a specified window size and r2 threshold, and selects a lead SNP from each merged locus.</li>
+<li>The conditional method merges variants within the same cojo window based on a specified window size and cojo collinear threshold, and selects a lead SNP from each merged locus.</li>
+</ul>
+<p>The key difference among these methods lies in the criteria used for merging variants: distance and clumping methods are based on physical distances between variants, while the conditional method is based on their correlation. </p>
+<p>Both distance and clumping methods utilize GWAS summary statistics, whereas the conditional method incorporates both GWAS summary statistics and LD reference.</p>
 <p>Here is an example of using EasyFinemap for locus identification:</p>
 <p>Download the example data (ignore if already downloaded):
 <div class="highlight"><pre><span></span><code>git clone https://github.com/Jianhua-Wang/easyfinemap.git
@@ -1083,6 +1034,12 @@ CHR     START   END     LEAD_SNP        LEAD_SNP_P      LEAD_SNP_BP
     
     
       <script src="../assets/javascripts/bundle.726fbb30.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       
     
   </body>

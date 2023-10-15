@@ -11,10 +11,6 @@
         <link rel="canonical" href="https://Jianhua-Wang.github.io/easyfinemap/api/cli/">
       
       
-        <link rel="prev" href="../easyfinemap/">
-      
-      
-        <link rel="next" href="../LDRef/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -22,7 +18,7 @@
     
     
       
-        <title>CLI - EasyFinemap</title>
+        <title>Cli - EasyFinemap</title>
       
     
     
@@ -111,7 +107,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              CLI
+              Cli
             
           </span>
         </div>
@@ -219,37 +215,18 @@
         
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
+      <li class="md-tabs__item">
         <a href="../easyfinemap/" class="md-tabs__link">
           
   
-  Modules
+  API
 
         </a>
       </li>
     
-  
-
-      
-        
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../changelog/" class="md-tabs__link">
-        
-  
-    
-  
-  Changelog
-
-      </a>
-    </li>
   
 
       
@@ -540,8 +517,6 @@
       
   
   
-    
-  
   
     
     
@@ -551,29 +526,29 @@
       
       
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   <span class="md-ellipsis">
-    Modules
+    API
   </span>
   
 
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
-            Modules
+            API
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -592,111 +567,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    CLI
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  <span class="md-ellipsis">
-    CLI
-  </span>
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#easyfinemap.cli" class="md-nav__link">
-    cli
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#easyfinemap.cli.FinemapMethod" class="md-nav__link">
-    FinemapMethod
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#easyfinemap.cli.LociMethod" class="md-nav__link">
-    LociMethod
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#easyfinemap.cli.fine_mapping" class="md-nav__link">
-    fine_mapping()
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#easyfinemap.cli.get_loci" class="md-nav__link">
-    get_loci()
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#easyfinemap.cli.main" class="md-nav__link">
-    main()
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#easyfinemap.cli.validate_ldref" class="md-nav__link">
-    validate_ldref()
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -785,25 +655,6 @@
           </ul>
         </nav>
       
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../changelog/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Changelog
-  </span>
-  
-
-      </a>
     </li>
   
 
@@ -899,7 +750,7 @@
   
 
 
-  <h1>CLI</h1>
+  <h1>Cli</h1>
 
 <div class="doc doc-object doc-module">
 
@@ -1009,7 +860,7 @@
 
 
 <h2 id="easyfinemap.cli.fine_mapping" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">fine_mapping</span><span class="p">(</span><span class="n">sumstats_path</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The path to the GWAS summary statistics file.&#39;</span><span class="p">),</span> <span class="n">loci_path</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The path to the loci file, generated by get-loci command.&#39;</span><span class="p">),</span> <span class="n">lead_snps_path</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The path to the lead SNPs file, generated by get-loci command.&#39;</span><span class="p">),</span> <span class="n">methods</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="s1">&#39;--methods&#39;</span><span class="p">,</span> <span class="s1">&#39;-m&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The methods to use.&#39;</span><span class="p">),</span> <span class="n">outfile</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The output file.&#39;</span><span class="p">),</span> <span class="n">var_prior</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;--var-prior&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The prior variance for the aBF method.&#39;</span><span class="p">),</span> <span class="n">conditional</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;--conditional&#39;</span><span class="p">,</span> <span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Whether to use conditional mode.&#39;</span><span class="p">),</span> <span class="n">prior_file</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;--prior-file&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The path to the prior file.&#39;</span><span class="p">),</span> <span class="n">sample_size</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;--sample-size&#39;</span><span class="p">,</span> <span class="s1">&#39;-n&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The sample size for conditional mode.&#39;</span><span class="p">),</span> <span class="n">ldref</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;--ldref&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The path to the LD reference file.&#39;</span><span class="p">),</span> <span class="n">cond_snps_wind_kb</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="s1">&#39;--cond-snps-wind-kb&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The conditional SNPs window size, in kb.&#39;</span><span class="p">),</span> <span class="n">max_causal</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;--max-causal&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The maximum number of causal SNPs.&#39;</span><span class="p">),</span> <span class="n">credible_threshold</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;--credible-threshold&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The credible threshold.&#39;</span><span class="p">),</span> <span class="n">credible_method</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;--credible-method&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The fine-mapping method for credible set.&#39;</span><span class="p">),</span> <span class="n">use_ref_EAF</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;--use-ref-eaf&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Whether to use the reference panel EAF.&#39;</span><span class="p">),</span> <span class="n">threads</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;--threads&#39;</span><span class="p">,</span> <span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The number of threads.&#39;</span><span class="p">))</span></code>
+          <code class="highlight language-python"><span class="n">fine_mapping</span><span class="p">(</span><span class="n">sumstats_path</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The path to the GWAS summary statistics file.&#39;</span><span class="p">),</span> <span class="n">loci_path</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The path to the loci file, generated by get-loci command.&#39;</span><span class="p">),</span> <span class="n">lead_snps_path</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The path to the lead SNPs file, generated by get-loci command.&#39;</span><span class="p">),</span> <span class="n">methods</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="s1">&#39;--methods&#39;</span><span class="p">,</span> <span class="s1">&#39;-m&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The methods to use.&#39;</span><span class="p">),</span> <span class="n">outfile</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The output file.&#39;</span><span class="p">),</span> <span class="n">var_prior</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="s1">&#39;--var-prior&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The prior variance for the aBF method.&#39;</span><span class="p">),</span> <span class="n">conditional</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;--conditional&#39;</span><span class="p">,</span> <span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Whether to use conditional mode.&#39;</span><span class="p">),</span> <span class="n">prior_file</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;--prior-file&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The path to the prior file.&#39;</span><span class="p">),</span> <span class="n">sample_size</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;--sample-size&#39;</span><span class="p">,</span> <span class="s1">&#39;-n&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The sample size for conditional mode.&#39;</span><span class="p">),</span> <span class="n">ldref</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;--ldref&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The path to the LD reference file.&#39;</span><span class="p">),</span> <span class="n">cond_snps_wind_kb</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="mi">10000</span><span class="p">,</span> <span class="s1">&#39;--cond-snps-wind-kb&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The conditional SNPs window size, in kb.&#39;</span><span class="p">),</span> <span class="n">max_causal</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;--max-causal&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The maximum number of causal SNPs.&#39;</span><span class="p">),</span> <span class="n">credible_threshold</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;--credible-threshold&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The credible threshold.&#39;</span><span class="p">),</span> <span class="n">credible_method</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;--credible-method&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The fine-mapping method for credible set.&#39;</span><span class="p">),</span> <span class="n">use_ref_EAF</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;--use-ref-eaf&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Whether to use the reference panel EAF.&#39;</span><span class="p">),</span> <span class="n">threads</span><span class="o">=</span><span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;--threads&#39;</span><span class="p">,</span> <span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;The number of threads.&#39;</span><span class="p">))</span></code>
 
 <a href="#easyfinemap.cli.fine_mapping" class="headerlink" title="Permanent link">&para;</a></h2>
 
@@ -1077,7 +928,7 @@
     <span class="n">lead_snps_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The path to the lead SNPs file, generated by get-loci command.&quot;</span><span class="p">),</span>
     <span class="n">methods</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">FinemapMethod</span><span class="p">]</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="s2">&quot;--methods&quot;</span><span class="p">,</span> <span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The methods to use.&quot;</span><span class="p">),</span>
     <span class="n">outfile</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The output file.&quot;</span><span class="p">),</span>
-    <span class="n">var_prior</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="s2">&quot;--var-prior&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The prior variance for the aBF method.&quot;</span><span class="p">),</span>
+    <span class="n">var_prior</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="s2">&quot;--var-prior&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The prior variance for the aBF method.&quot;</span><span class="p">),</span>
     <span class="n">conditional</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;--conditional&quot;</span><span class="p">,</span> <span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Whether to use conditional mode.&quot;</span><span class="p">),</span>
     <span class="n">prior_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;--prior-file&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The path to the prior file.&quot;</span><span class="p">),</span>
     <span class="n">sample_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span>
@@ -1418,6 +1269,12 @@
     
     
       <script src="../../assets/javascripts/bundle.726fbb30.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       
     
   </body>

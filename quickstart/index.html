@@ -223,28 +223,11 @@
         <a href="../api/easyfinemap/" class="md-tabs__link">
           
   
-  Modules
+  API
 
         </a>
       </li>
     
-  
-
-      
-        
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../changelog/" class="md-tabs__link">
-        
-  
-    
-  
-  Changelog
-
-      </a>
-    </li>
   
 
       
@@ -566,7 +549,7 @@
             
   
   <span class="md-ellipsis">
-    Modules
+    API
   </span>
   
 
@@ -576,7 +559,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
-            Modules
+            API
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -591,26 +574,6 @@
   
   <span class="md-ellipsis">
     EasyFinemap
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../api/cli/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    CLI
   </span>
   
 
@@ -707,25 +670,6 @@
   
 
     
-      
-      
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../changelog/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Changelog
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
   </ul>
 </nav>
                   </div>
@@ -762,7 +706,32 @@
 
   <h1>Quick start</h1>
 
-
+<p>To perform the simplest fine-mapping using easyfinemap, including determining independent loci using the distance-based method and calculating the posterior probability for each SNP using the abf method, you can follow these steps:</p>
+<ol>
+<li>
+<p>Download the example data (ignore if already downloaded):
+<div class="highlight"><pre><span></span><code>git clone https://github.com/Jianhua-Wang/easyfinemap.git
+cd easyfinemap/exampledata
+</code></pre></div></p>
+</li>
+<li>
+<p>Determine independent loci using the distance-based method:
+<div class="highlight"><pre><span></span><code>$ easyfinemap get-loci -m  distance PH251.sig.txt.gz PH251.distance
+</code></pre></div></p>
+</li>
+<li>
+<p>Calculate the posterior probability for each SNP using the abf method:
+<div class="highlight"><pre><span></span><code>$ easyfinemap fine-mapping \
+    -m abf \
+    --credible-threshold 0.95 \
+    PH251.txt.gz \
+    PH251.distance.loci.txt \
+    PH251.distance.leadsnp.txt \
+    PH251.abf.txt
+</code></pre></div></p>
+</li>
+</ol>
+<p>For more advanced features and parameter explanations, please refer to the <a href="https://jianhua-wang.github.io/easyfinemap/fileformats/">documentation</a>。</p>
 
 
 
@@ -810,6 +779,12 @@
     
     
       <script src="../assets/javascripts/bundle.726fbb30.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       
     
   </body>
