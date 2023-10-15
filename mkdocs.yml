@@ -14,15 +14,15 @@ nav:
     - Validate LD reference: validate.md
     - Identify independent loci: identify.md
     - Fine-mapping: fine.md
-  - Modules:
+  - API:
     - EasyFinemap: api/easyfinemap.md
-    - CLI: api/cli.md
+    # - CLI: api/cli.md
     - LDRef: api/LDRef.md
     - Loci: api/Loci.md
     - utils: api/utils.md
     - Tools: api/tools.md
   # - Contributing: contributing.md
-  - Changelog: changelog.md
+  # - Changelog: changelog.md
 theme:
   name: material
   language: en
@@ -59,8 +59,8 @@ markdown_extensions:
   # - pymdownx.tilde
   # - pymdownx.tabbed
   # - attr_list
-  # - pymdownx.arithmatex:
-  #     generic: true
+  - pymdownx.arithmatex:
+      generic: true
   # - pymdownx.highlight:
   #     linenums: false
   # - pymdownx.superfences
@@ -72,6 +72,10 @@ markdown_extensions:
       permalink: true
       # slugify: !!python/name:pymdownx.slugs.uslugify
   - meta
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 plugins:
   - include-markdown
   - search:
@@ -108,6 +112,7 @@ extra:
   #     link: "mailto:jianhua.mert@gmail.com"
   # to enable disqus, uncomment the following and put your disqus id below
   # disqus: disqus_id
+
 # uncomment the following and put your google tracking id below to enable GA
 #google_analytics:
   #- UA-xxx

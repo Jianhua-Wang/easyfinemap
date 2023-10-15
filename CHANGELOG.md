@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.4.1] - 2023-10-15
+
+### Added
+- docs
+
+### Changed
+
+### Fixed
+
+
 ## [0.4.0] - 2023-10-12
 
 ### Added

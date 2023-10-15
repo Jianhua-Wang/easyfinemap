@@ -1,6 +1,14 @@
 Because fine-mapping is typically conducted locally, determining the regions for fine-mapping a summary statistic requires identifying the regions based on significant loci in a GWAS.
 
-EasyFinemap provides three methods to determine the regions for fine-mapping: distance, clumping, and conditional. The distance method merges nearby variants within a given distance threshold into a locus and selects a lead SNP from each locus. The clumping method merges variants within the same clumping window based on a specified window size and r2 threshold, and selects a lead SNP from each merged locus. The conditional method merges variants within the same cojo window based on a specified window size and cojo collinear threshold, and selects a lead SNP from each merged locus. The key difference among these methods lies in the criteria used for merging variants: distance and clumping methods are based on physical distances between variants, while the conditional method is based on their correlation. Both distance and clumping methods utilize GWAS summary statistics, whereas the conditional method incorporates both GWAS summary statistics and LD reference.
+EasyFinemap provides three methods to determine the regions for fine-mapping: distance, clumping, and conditional. 
+
+- The distance method merges nearby variants within a given distance threshold into a locus and selects a lead SNP from each locus.
+- The clumping method merges variants within the same clumping window based on a specified window size and r2 threshold, and selects a lead SNP from each merged locus.
+- The conditional method merges variants within the same cojo window based on a specified window size and cojo collinear threshold, and selects a lead SNP from each merged locus.
+
+The key difference among these methods lies in the criteria used for merging variants: distance and clumping methods are based on physical distances between variants, while the conditional method is based on their correlation. 
+
+Both distance and clumping methods utilize GWAS summary statistics, whereas the conditional method incorporates both GWAS summary statistics and LD reference.
 
 Here is an example of using EasyFinemap for locus identification:
 
