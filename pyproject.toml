@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "easyfinemap"
-version = "0.4.1"
+version = "0.4.2"
 homepage = "https://github.com/Jianhua-Wang/easy_finemap"
 description = "user-friendly pipeline for GWAS fine-mapping."
 authors = ["Jianhua Wang <jianhua.mert@gmail.com>"]
