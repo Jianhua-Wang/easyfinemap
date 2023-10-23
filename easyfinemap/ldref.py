@@ -391,7 +391,7 @@ class LDRef:
         -------
         None
         """
-        self.logger.info("Making the LD matrix")
+        self.logger.info(f"Making LD matrix: {outprefix}")
         cmd = [
             self.plink,
             "--bfile",
@@ -407,8 +407,8 @@ class LDRef:
         res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
         self.logger.debug(f"get LD matrix: {' '.join(cmd)}")
         if res.returncode != 0:
-            self.logger.error(res.stderr)
-            raise RuntimeError(res.stderr)
+            self.logger.warning(res.stderr)
+            self.logger.warning(f'see log file: {outprefix}.log for details')
         else:
             self.logger.debug("LD matrix is made")
             run(["sed", "-i", "s/nan/1e-6/g", f"{outprefix}.ld"])
@@ -458,11 +458,12 @@ class LDRef:
             raise ValueError(f"{ColName.EAF} is not in the sumstats, please set use_ref_EAF to True")
         chrom = sumstats[ColName.CHR].iloc[0]
         ld = LDRef()
-        all_sumstats = pd.concat([sumstats, cond_snps], ignore_index=True)
-        all_sumstats.drop_duplicates(subset=[ColName.SNPID], inplace=True)
-        all_sumstats.sort_values(by=[ColName.CHR, ColName.BP], inplace=True)
-        all_sumstats.reset_index(drop=True, inplace=True)
-        cojo_input = ld.intersect(all_sumstats, ldref, f"{temp_dir}/cojo_input_{chrom}", use_ref_EAF)
+        # all_sumstats = pd.concat([sumstats, cond_snps], ignore_index=True)
+        # all_sumstats.drop_duplicates(subset=[ColName.SNPID], inplace=True)
+        # all_sumstats.sort_values(by=[ColName.CHR, ColName.BP], inplace=True)
+        # all_sumstats.reset_index(drop=True, inplace=True)
+        # cojo_input = ld.intersect(all_sumstats, ldref, f"{temp_dir}/cojo_input_{chrom}", use_ref_EAF)
+        cojo_input = sumstats.copy()
         cojo_input[ColName.N] = sample_size
         cojo_input = cojo_input[
             [ColName.SNPID, ColName.EA, ColName.NEA, ColName.EAF, ColName.BETA, ColName.SE, ColName.P, ColName.N]

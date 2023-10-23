@@ -615,7 +615,7 @@ class Loci:
             range = range * 1000
 
             loci_df[ColName.START] = loci_df[ColName.LEAD_SNP_BP] - range
-            loci_df[ColName.START] = loci_df[ColName.START].apply(lambda x: 0 if x < 0 else x)
+            loci_df[ColName.START] = loci_df[ColName.START].apply(lambda x: 1 if x <= 0 else x)
             loci_df[ColName.END] = loci_df[ColName.LEAD_SNP_BP] + range
         loci_df = loci_df[ColName.loci_cols].copy()
         if if_merge:

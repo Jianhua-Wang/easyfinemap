@@ -54,7 +54,9 @@ class EasyFinemap(object):
         if not self.tmp_root.exists():
             self.tmp_root.mkdir(parents=True)
 
-    def run_abf(self, sumstats: pd.DataFrame, var_prior: float = 0.2, max_causal: int = 1, **kwargs) -> pd.Series:
+    def run_abf(
+        self, sumstats: pd.DataFrame, var_prior: float = 0.2, max_causal: int = 1, **kwargs
+    ) -> pd.Series:
         """
         Run ABF.
 
@@ -89,7 +91,10 @@ class EasyFinemap(object):
         df = sumstats.copy()
         df["W2"] = var_prior**2
         df["SNP_BF"] = np.sqrt((df[ColName.SE] ** 2 / (df[ColName.SE] ** 2 + df["W2"]))) * np.exp(
-            df["W2"] / (df[ColName.BETA] ** 2 + df["W2"]) * (df[ColName.BETA] ** 2 / df[ColName.SE] ** 2) / 2
+            df["W2"]
+            / (df[ColName.BETA] ** 2 + df["W2"])
+            * (df[ColName.BETA] ** 2 / df[ColName.SE] ** 2)
+            / 2
         )
         df[ColName.PP_ABF] = df["SNP_BF"] / df["SNP_BF"].sum()
         return pd.Series(data=df[ColName.PP_ABF].values, index=df[ColName.SNPID].tolist())
@@ -163,7 +168,16 @@ class EasyFinemap(object):
             finemap_input['prob'] = finemap_input['prob'] / finemap_input['prob'].sum()
         else:
             finemap_input = finemap_input[
-                [ColName.SNPID, ColName.CHR, ColName.BP, ColName.EA, ColName.NEA, ColName.MAF, ColName.BETA, ColName.SE]
+                [
+                    ColName.SNPID,
+                    ColName.CHR,
+                    ColName.BP,
+                    ColName.EA,
+                    ColName.NEA,
+                    ColName.MAF,
+                    ColName.BETA,
+                    ColName.SE,
+                ]
             ]
             finemap_input.rename(
                 columns={
@@ -215,7 +229,12 @@ class EasyFinemap(object):
 
     @io_in_tempdir('./tmp/easyfinemap')
     def run_paintor(
-        self, sumstats: pd.DataFrame, ld_matrix: str, max_causal: int = 1, temp_dir: Optional[str] = None, **kwargs
+        self,
+        sumstats: pd.DataFrame,
+        ld_matrix: str,
+        max_causal: int = 1,
+        temp_dir: Optional[str] = None,
+        **kwargs,
     ):
         """
         Run PAINTOR.
@@ -243,7 +262,9 @@ class EasyFinemap(object):
         paintor_input[[ColName.SNPID, ColName.CHR, ColName.BP, "Zscore"]].to_csv(
             f"{temp_dir}/{input_prefix}", sep=" ", index=False
         )
-        paintor_input["coding"].to_csv(f"{temp_dir}/{input_prefix}.annotations", sep=" ", index=False, header=True)
+        paintor_input["coding"].to_csv(
+            f"{temp_dir}/{input_prefix}.annotations", sep=" ", index=False, header=True
+        )
         with open(f"{temp_dir}/{input_prefix}.input", "w") as f:
             f.write(input_prefix)
         ld_matrix_abs_path = os.path.abspath(ld_matrix)
@@ -275,14 +296,23 @@ class EasyFinemap(object):
             raise RuntimeError(res.stderr)
         else:
             paintor_res = pd.read_csv(
-                f"{temp_dir}/paintor.processed.results", sep=" ", usecols=["SNPID", "Posterior_Prob"]
+                f"{temp_dir}/paintor.processed.results",
+                sep=" ",
+                usecols=["SNPID", "Posterior_Prob"],
             )
-            paintor_res = pd.Series(paintor_res["Posterior_Prob"].values, index=paintor_res["SNPID"].tolist())
+            paintor_res = pd.Series(
+                paintor_res["Posterior_Prob"].values, index=paintor_res["SNPID"].tolist()
+            )
             return paintor_res
 
     @io_in_tempdir('./tmp/easyfinemap')
     def run_caviarbf(
-        self, sumstats: pd.DataFrame, ld_matrix: str, max_causal: int = 1, temp_dir: Optional[str] = None, **kwargs
+        self,
+        sumstats: pd.DataFrame,
+        ld_matrix: str,
+        max_causal: int = 1,
+        temp_dir: Optional[str] = None,
+        **kwargs,
     ):
         """
         Run CAVIAR-BF.
@@ -305,7 +335,9 @@ class EasyFinemap(object):
         """
         caviar_input = sumstats.copy()
         caviar_input[ColName.Z] = caviar_input[ColName.BETA] / caviar_input[ColName.SE]
-        caviar_input[[ColName.SNPID, ColName.Z]].to_csv(f"{temp_dir}/caviar.input", sep=" ", index=False, header=False)
+        caviar_input[[ColName.SNPID, ColName.Z]].to_csv(
+            f"{temp_dir}/caviar.input", sep=" ", index=False, header=False
+        )
         n_variants = caviar_input.shape[0]
         cmd = [
             self.caviarbf,
@@ -386,7 +418,9 @@ class EasyFinemap(object):
             susie_input['SNPVAR'] = susie_input['SNPVAR'] / susie_input['SNPVAR'].sum()
         else:
             susie_input['SNPVAR'] = 1 / len(susie_input)
-        susie_input[[ColName.SNPID, ColName.Z]].to_csv(f"{temp_dir}/susie.input", sep=" ", index=False, header=True)
+        susie_input[[ColName.SNPID, ColName.Z]].to_csv(
+            f"{temp_dir}/susie.input", sep=" ", index=False, header=True
+        )
 
         import rpy2.robjects as ro
         from rpy2.rinterface_lib.callbacks import logger as rpy2_logger
@@ -457,7 +491,7 @@ class EasyFinemap(object):
             & (lead_snps[ColName.BP] >= lead_snp_bp - cond_snps_wind_kb * 1000)
             & (lead_snps[ColName.BP] <= lead_snp_bp + cond_snps_wind_kb * 1000)
             & (lead_snps[ColName.SNPID] != lead_snp)
-        ]
+        ].copy()
         if cond_snps.empty:
             self.logger.debug(f"No conditional SNPs found for {lead_snp}")
             cond_res = sumstats.copy()
@@ -466,8 +500,17 @@ class EasyFinemap(object):
             cond_res[ColName.COJO_P] = cond_res[ColName.P]
         else:
             ld = LDRef()
+            for col in [ColName.COJO_P, ColName.COJO_BETA, ColName.COJO_SE]:
+                if col in cond_snps.columns:
+                    cond_snps.drop(columns=[col], inplace=True)
             chrom = lead_snp_chr
-            cojo_input = ld.intersect(sumstats, ldref, f"{temp_dir}/cojo_input_{chrom}", use_ref_EAF)
+            all_sumstats = pd.concat([sumstats, cond_snps], ignore_index=True)
+            all_sumstats.drop_duplicates(subset=[ColName.SNPID], inplace=True)
+            all_sumstats.sort_values(by=[ColName.CHR, ColName.BP], inplace=True)
+            all_sumstats.reset_index(drop=True, inplace=True)
+            cojo_input = ld.intersect(
+                all_sumstats, ldref, f"{temp_dir}/cojo_input_{chrom}", use_ref_EAF
+            )
             cond_res = ld.cojo_cond(
                 cojo_input, cond_snps, f"{temp_dir}/cojo_input_{chrom}", sample_size, use_ref_EAF
             )  # type: ignore
@@ -542,9 +585,13 @@ class EasyFinemap(object):
                 pp_col = f"PP_{credible_method.upper()}"
                 credible_set = finemap_res.sort_values(pp_col, ascending=False)
                 credible_set = finemap_res.sort_values(by=pp_col, ascending=False)
-                credible_set = credible_set[credible_set[pp_col].shift().fillna(0).cumsum() <= credible_threshold]
+                credible_set = credible_set[
+                    credible_set[pp_col].shift().fillna(0).cumsum() <= credible_threshold
+                ]
             else:
-                raise ValueError("Must specify credible set method when credible threshold is specified")
+                raise ValueError(
+                    "Must specify credible set method when credible threshold is specified"
+                )
         return credible_set.reset_index(drop=True)
 
     def annotate_prior(
@@ -594,6 +641,9 @@ class EasyFinemap(object):
     def finemap_locus(
         self,
         sumstats: pd.DataFrame,
+        chrom: str,
+        start: int,
+        end: int,
         methods: List[str],
         lead_snp: str,
         conditional: bool = False,
@@ -629,59 +679,121 @@ class EasyFinemap(object):
         pd.DataFrame
             Finemapping results.
         """
+        locus_sumstats = sg.export_sumstats(sumstats, chrom, start, end)
+        locus_sumstats = sg.make_SNPID_unique(
+            locus_sumstats, ColName.CHR, ColName.BP, ColName.EA, ColName.NEA
+        )
+        self.logger.info(f"Finemap {chrom}:{start}-{end}")
+        self.logger.info(f"Number of SNPs: {locus_sumstats.shape[0]}")
         if conditional:
-            cond_res = self.cond_sumstat(sumstats=sumstats, lead_snp=lead_snp, **kwargs)
+            cond_res = self.cond_sumstat(sumstats=locus_sumstats, lead_snp=lead_snp, **kwargs)
             fm_input = cond_res.copy()
             fm_input[ColName.BETA] = cond_res[ColName.COJO_BETA]
             fm_input[ColName.SE] = cond_res[ColName.COJO_SE]
             fm_input[ColName.P] = cond_res[ColName.COJO_P]
-            out_sumstats = sumstats.merge(
+            out_sumstats = locus_sumstats.merge(
                 cond_res[[ColName.SNPID, ColName.COJO_BETA, ColName.COJO_SE, ColName.COJO_P]],
                 on=ColName.SNPID,
                 how="left",
             )
             max_causal = kwargs.get("max_causal", 1)
             if max_causal > 1:
-                self.logger.warning("Conditional finemapping does not support multiple causal variants")
+                self.logger.warning(
+                    "Conditional finemapping does not support multiple causal variants"
+                )
         else:
-            fm_input = sumstats.copy()
-            out_sumstats = sumstats.copy()
+            fm_input = locus_sumstats.copy()
+            out_sumstats = locus_sumstats.copy()
 
-        allowed_methods = ["abf", "finemap", "paintor", "caviarbf", "susie", "polyfun_finemap", "polyfun_susie"]
+        allowed_methods = [
+            "abf",
+            "finemap",
+            "paintor",
+            "caviarbf",
+            "susie",
+            "polyfun_finemap",
+            "polyfun_susie",
+        ]
+        methods_required_ld = [
+            "finemap",
+            "paintor",
+            "caviarbf",
+            "susie",
+            "polyfun_finemap",
+            "polyfun_susie",
+        ]
         if "all" in methods:
             methods = allowed_methods
         fm_input_ol = fm_input.copy()
         if prior_file:
             fm_input_ol = self.annotate_prior(fm_input_ol, prior_file)
+        if len(set(methods).intersection(set(methods_required_ld))) > 0:
+            # TODO: reduce the number of SNPs when using paintor and caviarbf in multiple causal variant mode
+            ld_ol = self.prepare_ld_matrix(sumstats=fm_input_ol, outprefix=f"{temp_dir}/intersc", **kwargs)
+        # if os.path.exists(f"{temp_dir}/intersc.ld"):
+        #     fm_input_ol = ld_ol.copy()
         for method in methods:
             if method == "abf":
                 abf_pp = self.run_abf(sumstats=fm_input_ol, **kwargs)
                 out_sumstats[ColName.PP_ABF] = out_sumstats[ColName.SNPID].map(abf_pp)
-            elif method in ["finemap", "paintor", "caviarbf", "susie", "polyfun_finemap", "polyfun_susie"]:
+            elif method in methods_required_ld:
                 ld_matrix = f"{temp_dir}/intersc.ld"
-                if not os.path.exists(ld_matrix):
-                    # TODO: reduce the number of SNPs when using paintor and caviarbf in multiple causal variant mode
-                    fm_input_ol = self.prepare_ld_matrix(
-                        sumstats=fm_input_ol, outprefix=f"{temp_dir}/intersc", **kwargs
-                    )
                 if method == "finemap":
-                    finemap_pp = self.run_finemap(sumstats=fm_input_ol, ld_matrix=ld_matrix, **kwargs)
-                    out_sumstats[ColName.PP_FINEMAP] = out_sumstats[ColName.SNPID].map(finemap_pp)
+                    if os.path.exists(ld_matrix):
+                        finemap_pp = self.run_finemap(
+                            sumstats=ld_ol, ld_matrix=ld_matrix, **kwargs
+                        )
+                        out_sumstats[ColName.PP_FINEMAP] = out_sumstats[ColName.SNPID].map(finemap_pp)
+                    else:
+                        self.logger.warning(f"LD matrix {ld_matrix} does not exist, skip {method}")
+                        out_sumstats[ColName.PP_FINEMAP] = np.nan
                 elif method == "paintor":
-                    paintor_pp = self.run_paintor(sumstats=fm_input_ol, ld_matrix=ld_matrix, **kwargs)
-                    out_sumstats[ColName.PP_PAINTOR] = out_sumstats[ColName.SNPID].map(paintor_pp)
+                    if os.path.exists(ld_matrix):
+                        paintor_pp = self.run_paintor(
+                            sumstats=ld_ol, ld_matrix=ld_matrix, **kwargs
+                        )
+                        out_sumstats[ColName.PP_PAINTOR] = out_sumstats[ColName.SNPID].map(paintor_pp)
+                    else:
+                        self.logger.warning(f"LD matrix {ld_matrix} does not exist, skip {method}")
+                        out_sumstats[ColName.PP_PAINTOR] = np.nan
                 elif method == "caviarbf":
-                    caviarbf_pp = self.run_caviarbf(sumstats=fm_input_ol, ld_matrix=ld_matrix, **kwargs)
-                    out_sumstats[ColName.PP_CAVIARBF] = out_sumstats[ColName.SNPID].map(caviarbf_pp)
+                    if os.path.exists(ld_matrix):
+                        caviarbf_pp = self.run_caviarbf(
+                            sumstats=ld_ol, ld_matrix=ld_matrix, **kwargs
+                        )
+                        out_sumstats[ColName.PP_CAVIARBF] = out_sumstats[ColName.SNPID].map(caviarbf_pp)
+                    else:
+                        self.logger.warning(f"LD matrix {ld_matrix} does not exist, skip {method}")
+                        out_sumstats[ColName.PP_CAVIARBF] = np.nan
                 elif method == "susie":
-                    susie_pp = self.run_susie(sumstats=fm_input_ol, ld_matrix=ld_matrix, **kwargs)
-                    out_sumstats[ColName.PP_SUSIE] = out_sumstats[ColName.SNPID].map(susie_pp)
+                    if os.path.exists(ld_matrix):
+                        susie_pp = self.run_susie(sumstats=ld_ol, ld_matrix=ld_matrix, **kwargs)
+                        out_sumstats[ColName.PP_SUSIE] = out_sumstats[ColName.SNPID].map(susie_pp)
+                    else:
+                        self.logger.warning(f"LD matrix {ld_matrix} does not exist, skip {method}")
+                        out_sumstats[ColName.PP_SUSIE] = np.nan
                 elif method == "polyfun_finemap":
-                    polyfun_finemap_pp = self.run_finemap(sumstats=fm_input_ol, ld_matrix=ld_matrix, **kwargs)
-                    out_sumstats[ColName.PP_POLYFUN_FINEMAP] = out_sumstats[ColName.SNPID].map(polyfun_finemap_pp)
+                    if os.path.exists(ld_matrix):
+                        polyfun_finemap_pp = self.run_finemap(
+                            sumstats=ld_ol, ld_matrix=ld_matrix, **kwargs
+                        )
+                        out_sumstats[ColName.PP_POLYFUN_FINEMAP] = out_sumstats[ColName.SNPID].map(
+                            polyfun_finemap_pp
+                        )
+                    else:
+                        self.logger.warning(f"LD matrix {ld_matrix} does not exist, skip {method}")
+                        out_sumstats[ColName.PP_POLYFUN_FINEMAP] = np.nan
                 elif method == "polyfun_susie":
-                    polyfun_susie_pp = self.run_susie(sumstats=fm_input_ol, ld_matrix=ld_matrix, **kwargs)
-                    out_sumstats[ColName.PP_POLYFUN_SUSIE] = out_sumstats[ColName.SNPID].map(polyfun_susie_pp)
+                    if os.path.exists(ld_matrix):
+                        polyfun_susie_pp = self.run_susie(
+                            sumstats=ld_ol, ld_matrix=ld_matrix, **kwargs
+                        )
+                        out_sumstats[ColName.PP_POLYFUN_SUSIE] = out_sumstats[ColName.SNPID].map(
+                            polyfun_susie_pp
+                        )
+                    else:
+                        self.logger.warning(f"LD matrix {ld_matrix} does not exist, skip {method}")
+                        out_sumstats[ColName.PP_POLYFUN_SUSIE] = np.nan
             else:
                 raise ValueError(f"Method {method} is not supported")
 
@@ -763,14 +875,22 @@ class EasyFinemap(object):
             Number of threads, by default 1
         """
         # sumstats = sg.make_SNPID_unique(sumstats, ColName.CHR, ColName.BP, ColName.EA, ColName.NEA)
-        if credible_threshold and credible_method is None and methods != ["all"] and len(methods) == 1:
+        if (
+            credible_threshold
+            and credible_method is None
+            and methods != ["all"]
+            and len(methods) == 1
+        ):
             credible_method = methods[0]
         kwargs_list = []
-        for chrom, start, end, lead_snp in loci[[ColName.CHR, ColName.START, ColName.END, ColName.LEAD_SNP]].values:
-            locus_sumstats = sg.export_sumstats(sumstats, chrom, start, end)
-            locus_sumstats = sg.make_SNPID_unique(locus_sumstats, ColName.CHR, ColName.BP, ColName.EA, ColName.NEA)
+        for chrom, start, end, lead_snp in loci[
+            [ColName.CHR, ColName.START, ColName.END, ColName.LEAD_SNP]
+        ].values:
             kwargs = {
-                "sumstats": locus_sumstats,
+                "sumstats": sumstats,
+                "chrom": chrom,
+                "start": start,
+                "end": end,
                 "lead_snp": lead_snp,
                 "lead_snps": lead_snps,
                 "methods": methods,

@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.2] - 2023-10-23
+
+### Added
+
+### Changed
+- load sumstat after multiprocessing
+- aviod error when no intersection ldref with input sumstat
+- fix bugs in cojo cond
+
+### Fixed
+
+
 ## [0.4.1] - 2023-10-15
 
 ### Added
