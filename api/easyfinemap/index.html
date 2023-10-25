@@ -1727,20 +1727,7 @@
 
           <details class="quote">
             <summary>Source code in <code>easyfinemap/easyfinemap.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">820</span>
-<span class="normal">821</span>
-<span class="normal">822</span>
-<span class="normal">823</span>
-<span class="normal">824</span>
-<span class="normal">825</span>
-<span class="normal">826</span>
-<span class="normal">827</span>
-<span class="normal">828</span>
-<span class="normal">829</span>
-<span class="normal">830</span>
-<span class="normal">831</span>
-<span class="normal">832</span>
-<span class="normal">833</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">833</span>
 <span class="normal">834</span>
 <span class="normal">835</span>
 <span class="normal">836</span>
@@ -1850,7 +1837,20 @@
 <span class="normal">940</span>
 <span class="normal">941</span>
 <span class="normal">942</span>
-<span class="normal">943</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">finemap_all_loci</span><span class="p">(</span>
+<span class="normal">943</span>
+<span class="normal">944</span>
+<span class="normal">945</span>
+<span class="normal">946</span>
+<span class="normal">947</span>
+<span class="normal">948</span>
+<span class="normal">949</span>
+<span class="normal">950</span>
+<span class="normal">951</span>
+<span class="normal">952</span>
+<span class="normal">953</span>
+<span class="normal">954</span>
+<span class="normal">955</span>
+<span class="normal">956</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">finemap_all_loci</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">loci</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -2278,7 +2278,20 @@
 <span class="normal">799</span>
 <span class="normal">800</span>
 <span class="normal">801</span>
-<span class="normal">802</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/easyfinemap&#39;</span><span class="p">)</span>
+<span class="normal">802</span>
+<span class="normal">803</span>
+<span class="normal">804</span>
+<span class="normal">805</span>
+<span class="normal">806</span>
+<span class="normal">807</span>
+<span class="normal">808</span>
+<span class="normal">809</span>
+<span class="normal">810</span>
+<span class="normal">811</span>
+<span class="normal">812</span>
+<span class="normal">813</span>
+<span class="normal">814</span>
+<span class="normal">815</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/easyfinemap&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">finemap_locus</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -2324,8 +2337,17 @@
     <span class="n">locus_sumstats</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">make_SNPID_unique</span><span class="p">(</span>
         <span class="n">locus_sumstats</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">BP</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">EA</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">NEA</span>
     <span class="p">)</span>
+    <span class="n">locus_sumstats</span> <span class="o">=</span> <span class="n">locus_sumstats</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">locus_sumstats</span> <span class="o">=</span> <span class="n">locus_sumstats</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finemap </span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">start</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">end</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of SNPs: </span><span class="si">{</span><span class="n">locus_sumstats</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">locus_sumstats</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5000</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+            <span class="s2">&quot;The number of SNPs is greater than 5000, reduce the number of SNPs to 5000&quot;</span>
+        <span class="p">)</span>
+        <span class="n">locus_sumstats</span> <span class="o">=</span> <span class="n">locus_sumstats</span><span class="p">[</span>
+            <span class="n">locus_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">P</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">locus_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">P</span><span class="p">]</span><span class="o">.</span><span class="n">nsmallest</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">conditional</span><span class="p">:</span>
         <span class="n">cond_res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cond_sumstat</span><span class="p">(</span><span class="n">sumstats</span><span class="o">=</span><span class="n">locus_sumstats</span><span class="p">,</span> <span class="n">lead_snp</span><span class="o">=</span><span class="n">lead_snp</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">fm_input</span> <span class="o">=</span> <span class="n">cond_res</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -2370,7 +2392,9 @@
         <span class="n">fm_input_ol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotate_prior</span><span class="p">(</span><span class="n">fm_input_ol</span><span class="p">,</span> <span class="n">prior_file</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">methods</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">methods_required_ld</span><span class="p">)))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="c1"># TODO: reduce the number of SNPs when using paintor and caviarbf in multiple causal variant mode</span>
-        <span class="n">ld_ol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_ld_matrix</span><span class="p">(</span><span class="n">sumstats</span><span class="o">=</span><span class="n">fm_input_ol</span><span class="p">,</span> <span class="n">outprefix</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/intersc&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">ld_ol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_ld_matrix</span><span class="p">(</span>
+            <span class="n">sumstats</span><span class="o">=</span><span class="n">fm_input_ol</span><span class="p">,</span> <span class="n">outprefix</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/intersc&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
     <span class="c1"># if os.path.exists(f&quot;{temp_dir}/intersc.ld&quot;):</span>
     <span class="c1">#     fm_input_ol = ld_ol.copy()</span>
     <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">methods</span><span class="p">:</span>
@@ -2381,19 +2405,19 @@
             <span class="n">ld_matrix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/intersc.ld&quot;</span>
             <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;finemap&quot;</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">ld_matrix</span><span class="p">):</span>
-                    <span class="n">finemap_pp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_finemap</span><span class="p">(</span>
-                        <span class="n">sumstats</span><span class="o">=</span><span class="n">ld_ol</span><span class="p">,</span> <span class="n">ld_matrix</span><span class="o">=</span><span class="n">ld_matrix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+                    <span class="n">finemap_pp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_finemap</span><span class="p">(</span><span class="n">sumstats</span><span class="o">=</span><span class="n">ld_ol</span><span class="p">,</span> <span class="n">ld_matrix</span><span class="o">=</span><span class="n">ld_matrix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                    <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">PP_FINEMAP</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+                        <span class="n">finemap_pp</span>
                     <span class="p">)</span>
-                    <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">PP_FINEMAP</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">finemap_pp</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;LD matrix </span><span class="si">{</span><span class="n">ld_matrix</span><span class="si">}</span><span class="s2"> does not exist, skip </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                     <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">PP_FINEMAP</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
             <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;paintor&quot;</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">ld_matrix</span><span class="p">):</span>
-                    <span class="n">paintor_pp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_paintor</span><span class="p">(</span>
-                        <span class="n">sumstats</span><span class="o">=</span><span class="n">ld_ol</span><span class="p">,</span> <span class="n">ld_matrix</span><span class="o">=</span><span class="n">ld_matrix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+                    <span class="n">paintor_pp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_paintor</span><span class="p">(</span><span class="n">sumstats</span><span class="o">=</span><span class="n">ld_ol</span><span class="p">,</span> <span class="n">ld_matrix</span><span class="o">=</span><span class="n">ld_matrix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                    <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">PP_PAINTOR</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+                        <span class="n">paintor_pp</span>
                     <span class="p">)</span>
-                    <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">PP_PAINTOR</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">paintor_pp</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;LD matrix </span><span class="si">{</span><span class="n">ld_matrix</span><span class="si">}</span><span class="s2"> does not exist, skip </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                     <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">PP_PAINTOR</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
@@ -2402,7 +2426,9 @@
                     <span class="n">caviarbf_pp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_caviarbf</span><span class="p">(</span>
                         <span class="n">sumstats</span><span class="o">=</span><span class="n">ld_ol</span><span class="p">,</span> <span class="n">ld_matrix</span><span class="o">=</span><span class="n">ld_matrix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
                     <span class="p">)</span>
-                    <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">PP_CAVIARBF</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">caviarbf_pp</span><span class="p">)</span>
+                    <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">PP_CAVIARBF</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+                        <span class="n">caviarbf_pp</span>
+                    <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;LD matrix </span><span class="si">{</span><span class="n">ld_matrix</span><span class="si">}</span><span class="s2"> does not exist, skip </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                     <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">PP_CAVIARBF</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
@@ -2519,21 +2545,21 @@
 
           <details class="quote">
             <summary>Source code in <code>easyfinemap/easyfinemap.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">804</span>
-<span class="normal">805</span>
-<span class="normal">806</span>
-<span class="normal">807</span>
-<span class="normal">808</span>
-<span class="normal">809</span>
-<span class="normal">810</span>
-<span class="normal">811</span>
-<span class="normal">812</span>
-<span class="normal">813</span>
-<span class="normal">814</span>
-<span class="normal">815</span>
-<span class="normal">816</span>
-<span class="normal">817</span>
-<span class="normal">818</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">finemap_locus_parallel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">817</span>
+<span class="normal">818</span>
+<span class="normal">819</span>
+<span class="normal">820</span>
+<span class="normal">821</span>
+<span class="normal">822</span>
+<span class="normal">823</span>
+<span class="normal">824</span>
+<span class="normal">825</span>
+<span class="normal">826</span>
+<span class="normal">827</span>
+<span class="normal">828</span>
+<span class="normal">829</span>
+<span class="normal">830</span>
+<span class="normal">831</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">finemap_locus_parallel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Perform finemapping for a locus in parallel.</span>
 

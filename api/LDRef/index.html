@@ -1001,9 +1001,7 @@
 
           <details class="quote">
             <summary>Source code in <code>easyfinemap/ldref.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">515</span>
-<span class="normal">516</span>
-<span class="normal">517</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">517</span>
 <span class="normal">518</span>
 <span class="normal">519</span>
 <span class="normal">520</span>
@@ -1066,7 +1064,9 @@
 <span class="normal">577</span>
 <span class="normal">578</span>
 <span class="normal">579</span>
-<span class="normal">580</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/ldref&#39;</span><span class="p">)</span>
+<span class="normal">580</span>
+<span class="normal">581</span>
+<span class="normal">582</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/ldref&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">annotate_r2</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstat</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -1398,7 +1398,9 @@
 <span class="normal">510</span>
 <span class="normal">511</span>
 <span class="normal">512</span>
-<span class="normal">513</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/ldref&#39;</span><span class="p">)</span>
+<span class="normal">513</span>
+<span class="normal">514</span>
+<span class="normal">515</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/ldref&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">cojo_cond</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -1439,7 +1441,7 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">use_ref_EAF</span> <span class="ow">and</span> <span class="n">ColName</span><span class="o">.</span><span class="n">EAF</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sumstats</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ColName</span><span class="o">.</span><span class="n">EAF</span><span class="si">}</span><span class="s2"> is not in the sumstats, please set use_ref_EAF to True&quot;</span><span class="p">)</span>
     <span class="n">chrom</span> <span class="o">=</span> <span class="n">sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">ld</span> <span class="o">=</span> <span class="n">LDRef</span><span class="p">()</span>
+    <span class="c1"># ld = LDRef()</span>
     <span class="c1"># all_sumstats = pd.concat([sumstats, cond_snps], ignore_index=True)</span>
     <span class="c1"># all_sumstats.drop_duplicates(subset=[ColName.SNPID], inplace=True)</span>
     <span class="c1"># all_sumstats.sort_values(by=[ColName.CHR, ColName.BP], inplace=True)</span>
@@ -1474,6 +1476,8 @@
         <span class="n">ldref</span><span class="p">,</span>
         <span class="s2">&quot;--cojo-file&quot;</span><span class="p">,</span>
         <span class="n">cojo_p_file</span><span class="p">,</span>
+        <span class="s2">&quot;--diff-freq&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;1&quot;</span><span class="p">,</span>
         <span class="s2">&quot;--cojo-cond&quot;</span><span class="p">,</span>
         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/cojo_cond_</span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">.snps&quot;</span><span class="p">,</span>
         <span class="s2">&quot;--out&quot;</span><span class="p">,</span>
