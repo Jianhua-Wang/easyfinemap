@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.3] - 2023-10-25
+
+### Added
+
+### Changed
+- env add data.table
+- fix inf beta and se in sumstats
+
+### Fixed
+
+
+
 ## [0.4.2] - 2023-10-23
 
 ### Added

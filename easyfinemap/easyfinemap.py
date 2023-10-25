@@ -683,8 +683,17 @@ class EasyFinemap(object):
         locus_sumstats = sg.make_SNPID_unique(
             locus_sumstats, ColName.CHR, ColName.BP, ColName.EA, ColName.NEA
         )
+        locus_sumstats = locus_sumstats.replace(np.inf, 100)
+        locus_sumstats = locus_sumstats.replace(-np.inf, -100)
         self.logger.info(f"Finemap {chrom}:{start}-{end}")
         self.logger.info(f"Number of SNPs: {locus_sumstats.shape[0]}")
+        if len(locus_sumstats) > 5000:
+            self.logger.warning(
+                "The number of SNPs is greater than 5000, reduce the number of SNPs to 5000"
+            )
+            locus_sumstats = locus_sumstats[
+                locus_sumstats[ColName.P] < locus_sumstats[ColName.P].nsmallest(5000).iloc[-1]
+            ].copy()
         if conditional:
             cond_res = self.cond_sumstat(sumstats=locus_sumstats, lead_snp=lead_snp, **kwargs)
             fm_input = cond_res.copy()
@@ -729,7 +738,9 @@ class EasyFinemap(object):
             fm_input_ol = self.annotate_prior(fm_input_ol, prior_file)
         if len(set(methods).intersection(set(methods_required_ld))) > 0:
             # TODO: reduce the number of SNPs when using paintor and caviarbf in multiple causal variant mode
-            ld_ol = self.prepare_ld_matrix(sumstats=fm_input_ol, outprefix=f"{temp_dir}/intersc", **kwargs)
+            ld_ol = self.prepare_ld_matrix(
+                sumstats=fm_input_ol, outprefix=f"{temp_dir}/intersc", **kwargs
+            )
         # if os.path.exists(f"{temp_dir}/intersc.ld"):
         #     fm_input_ol = ld_ol.copy()
         for method in methods:
@@ -740,19 +751,19 @@ class EasyFinemap(object):
                 ld_matrix = f"{temp_dir}/intersc.ld"
                 if method == "finemap":
                     if os.path.exists(ld_matrix):
-                        finemap_pp = self.run_finemap(
-                            sumstats=ld_ol, ld_matrix=ld_matrix, **kwargs
+                        finemap_pp = self.run_finemap(sumstats=ld_ol, ld_matrix=ld_matrix, **kwargs)
+                        out_sumstats[ColName.PP_FINEMAP] = out_sumstats[ColName.SNPID].map(
+                            finemap_pp
                         )
-                        out_sumstats[ColName.PP_FINEMAP] = out_sumstats[ColName.SNPID].map(finemap_pp)
                     else:
                         self.logger.warning(f"LD matrix {ld_matrix} does not exist, skip {method}")
                         out_sumstats[ColName.PP_FINEMAP] = np.nan
                 elif method == "paintor":
                     if os.path.exists(ld_matrix):
-                        paintor_pp = self.run_paintor(
-                            sumstats=ld_ol, ld_matrix=ld_matrix, **kwargs
+                        paintor_pp = self.run_paintor(sumstats=ld_ol, ld_matrix=ld_matrix, **kwargs)
+                        out_sumstats[ColName.PP_PAINTOR] = out_sumstats[ColName.SNPID].map(
+                            paintor_pp
                         )
-                        out_sumstats[ColName.PP_PAINTOR] = out_sumstats[ColName.SNPID].map(paintor_pp)
                     else:
                         self.logger.warning(f"LD matrix {ld_matrix} does not exist, skip {method}")
                         out_sumstats[ColName.PP_PAINTOR] = np.nan
@@ -761,7 +772,9 @@ class EasyFinemap(object):
                         caviarbf_pp = self.run_caviarbf(
                             sumstats=ld_ol, ld_matrix=ld_matrix, **kwargs
                         )
-                        out_sumstats[ColName.PP_CAVIARBF] = out_sumstats[ColName.SNPID].map(caviarbf_pp)
+                        out_sumstats[ColName.PP_CAVIARBF] = out_sumstats[ColName.SNPID].map(
+                            caviarbf_pp
+                        )
                     else:
                         self.logger.warning(f"LD matrix {ld_matrix} does not exist, skip {method}")
                         out_sumstats[ColName.PP_CAVIARBF] = np.nan

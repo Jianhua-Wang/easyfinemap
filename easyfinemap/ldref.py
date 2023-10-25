@@ -457,7 +457,7 @@ class LDRef:
         if not use_ref_EAF and ColName.EAF not in sumstats.columns:
             raise ValueError(f"{ColName.EAF} is not in the sumstats, please set use_ref_EAF to True")
         chrom = sumstats[ColName.CHR].iloc[0]
-        ld = LDRef()
+        # ld = LDRef()
         # all_sumstats = pd.concat([sumstats, cond_snps], ignore_index=True)
         # all_sumstats.drop_duplicates(subset=[ColName.SNPID], inplace=True)
         # all_sumstats.sort_values(by=[ColName.CHR, ColName.BP], inplace=True)
@@ -492,6 +492,8 @@ class LDRef:
             ldref,
             "--cojo-file",
             cojo_p_file,
+            "--diff-freq",
+            "1",
             "--cojo-cond",
             f"{temp_dir}/cojo_cond_{chrom}.snps",
             "--out",

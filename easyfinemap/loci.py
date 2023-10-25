@@ -502,7 +502,7 @@ class Loci:
         if cojo_input.empty:
             self.logger.warning(f"No SNPs in LD reference for chromosome {temp_dir}/cojo_input_{chrom}")
             self.logger.warning("Use the most significant SNP as the independent lead SNP.")
-            cojo_snps = sumstats.loc[sumstats[ColName.P] == sumstats[ColName.P].min()].copy()
+            cojo_snps = sumstats.loc[sumstats.index == sumstats[ColName.P].idxmin()].copy()
         else:
             cojo_input[ColName.N] = sample_size
             cojo_input = cojo_input[
