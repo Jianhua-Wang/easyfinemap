@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.4.4] - 2023-11-09
+
+### Added
+
+### Changed
+- discard progress bar, because it is not compatible with multiprocessing
+
+### Fixed
+- fix bugs in cojo cond
+
+
 ## [0.4.3] - 2023-10-25
 
 ### Added

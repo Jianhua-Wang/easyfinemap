@@ -21,6 +21,8 @@ import os
 from pathlib import Path
 from subprocess import PIPE, run
 from typing import List, Optional
+from multiprocessing import Pool
+from tqdm import tqdm
 
 import numpy as np
 import pandas as pd
@@ -935,20 +937,31 @@ class EasyFinemap(object):
         #             progress.update(task, advance=1)
         #             progress.refresh()
         #             output.append(res.get())
-        with ProcessPoolExecutor(max_workers=threads) as executor:
+        # with ProcessPoolExecutor(max_workers=threads) as executor:
+        #     output = []
+        #     with Progress(
+        #         TextColumn("{task.description}"),
+        #         BarColumn(),
+        #         MofNCompleteColumn(),
+        #         TimeElapsedColumn(),
+        #         auto_refresh=True,
+        #     ) as progress:
+        #         task = progress.add_task("Perform Fine-mapping...", total=len(kwargs_list))
+        #         for _ in executor.map(ef.finemap_locus_parallel, kwargs_list):
+        #             progress.update(task, advance=1)
+        #             progress.refresh()
+        #             output.append(_)
+        # output_df = pd.concat(output, ignore_index=True)
+        with Pool(threads) as p:
             output = []
-            with Progress(
-                TextColumn("{task.description}"),
-                BarColumn(),
-                MofNCompleteColumn(),
-                TimeElapsedColumn(),
-                auto_refresh=True,
-            ) as progress:
-                task = progress.add_task("Perform Fine-mapping...", total=len(kwargs_list))
-                for _ in executor.map(ef.finemap_locus_parallel, kwargs_list):
-                    progress.update(task, advance=1)
-                    progress.refresh()
-                    output.append(_)
+            for result in tqdm(
+                p.imap(ef.finemap_locus_parallel, kwargs_list),
+                total=len(kwargs_list),
+                position=0,
+                leave=True,
+                desc="Perform Fine-mapping...",
+            ):
+                output.append(result)
         output_df = pd.concat(output, ignore_index=True)
         if outfile:
             output_df.to_csv(outfile, sep="\t", index=False, float_format="%0.6g")

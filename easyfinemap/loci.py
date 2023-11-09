@@ -421,6 +421,7 @@ class Loci:
                     in_df = sig_df[sig_df[ColName.CHR] == chrom]
                 else:
                     in_df = sumstats[sumstats[ColName.CHR] == chrom]
+                # in_df = in_df[in_df[ColName.P] <= 0.05]
                 args_list.append(
                     (
                         in_df,

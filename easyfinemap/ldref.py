@@ -494,6 +494,8 @@ class LDRef:
             cojo_p_file,
             "--diff-freq",
             "1",
+            "--cojo-collinear",
+            "0.99",
             "--cojo-cond",
             f"{temp_dir}/cojo_cond_{chrom}.snps",
             "--out",
