@@ -1001,9 +1001,7 @@
 
           <details class="quote">
             <summary>Source code in <code>easyfinemap/ldref.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">517</span>
-<span class="normal">518</span>
-<span class="normal">519</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">519</span>
 <span class="normal">520</span>
 <span class="normal">521</span>
 <span class="normal">522</span>
@@ -1066,7 +1064,9 @@
 <span class="normal">579</span>
 <span class="normal">580</span>
 <span class="normal">581</span>
-<span class="normal">582</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/ldref&#39;</span><span class="p">)</span>
+<span class="normal">582</span>
+<span class="normal">583</span>
+<span class="normal">584</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/ldref&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">annotate_r2</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstat</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -1400,7 +1400,9 @@
 <span class="normal">512</span>
 <span class="normal">513</span>
 <span class="normal">514</span>
-<span class="normal">515</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/ldref&#39;</span><span class="p">)</span>
+<span class="normal">515</span>
+<span class="normal">516</span>
+<span class="normal">517</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/ldref&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">cojo_cond</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -1478,6 +1480,8 @@
         <span class="n">cojo_p_file</span><span class="p">,</span>
         <span class="s2">&quot;--diff-freq&quot;</span><span class="p">,</span>
         <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;--cojo-collinear&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;0.99&quot;</span><span class="p">,</span>
         <span class="s2">&quot;--cojo-cond&quot;</span><span class="p">,</span>
         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/cojo_cond_</span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">.snps&quot;</span><span class="p">,</span>
         <span class="s2">&quot;--out&quot;</span><span class="p">,</span>

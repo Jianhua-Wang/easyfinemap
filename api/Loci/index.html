@@ -1384,8 +1384,7 @@
 
           <details class="quote">
             <summary>Source code in <code>easyfinemap/loci.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">454</span>
-<span class="normal">455</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">455</span>
 <span class="normal">456</span>
 <span class="normal">457</span>
 <span class="normal">458</span>
@@ -1502,7 +1501,8 @@
 <span class="normal">569</span>
 <span class="normal">570</span>
 <span class="normal">571</span>
-<span class="normal">572</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s2">&quot;./tmp/loci&quot;</span><span class="p">)</span>
+<span class="normal">572</span>
+<span class="normal">573</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="s2">&quot;./tmp/loci&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">cojo_slct</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -2441,7 +2441,8 @@ choose from ["distance", "clumping", "conditional"]</p>
 <span class="normal">449</span>
 <span class="normal">450</span>
 <span class="normal">451</span>
-<span class="normal">452</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">452</span>
+<span class="normal">453</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">indep_snps_by_conditional</span><span class="p">(</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">ldref</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -2525,6 +2526,7 @@ choose from ["distance", "clumping", "conditional"]</p>
                 <span class="n">in_df</span> <span class="o">=</span> <span class="n">sig_df</span><span class="p">[</span><span class="n">sig_df</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">]</span> <span class="o">==</span> <span class="n">chrom</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">in_df</span> <span class="o">=</span> <span class="n">sumstats</span><span class="p">[</span><span class="n">sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">CHR</span><span class="p">]</span> <span class="o">==</span> <span class="n">chrom</span><span class="p">]</span>
+            <span class="c1"># in_df = in_df[in_df[ColName.P] &lt;= 0.05]</span>
             <span class="n">args_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="p">(</span>
                     <span class="n">in_df</span><span class="p">,</span>
@@ -3086,8 +3088,7 @@ choose from ["distance", "clumping", "conditional"]</p>
 
           <details class="quote">
             <summary>Source code in <code>easyfinemap/loci.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">574</span>
-<span class="normal">575</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">575</span>
 <span class="normal">576</span>
 <span class="normal">577</span>
 <span class="normal">578</span>
@@ -3136,7 +3137,8 @@ choose from ["distance", "clumping", "conditional"]</p>
 <span class="normal">621</span>
 <span class="normal">622</span>
 <span class="normal">623</span>
-<span class="normal">624</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="normal">624</span>
+<span class="normal">625</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">leadsnp2loci</span><span class="p">(</span>
     <span class="n">lead_snps</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="nb">range</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">if_merge</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">ldblock</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
