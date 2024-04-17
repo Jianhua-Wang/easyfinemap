@@ -1073,10 +1073,7 @@
 
           <details class="quote">
             <summary>Source code in <code>easyfinemap/easyfinemap.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">599</span>
-<span class="normal">600</span>
-<span class="normal">601</span>
-<span class="normal">602</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">602</span>
 <span class="normal">603</span>
 <span class="normal">604</span>
 <span class="normal">605</span>
@@ -1114,7 +1111,10 @@
 <span class="normal">637</span>
 <span class="normal">638</span>
 <span class="normal">639</span>
-<span class="normal">640</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">annotate_prior</span><span class="p">(</span>
+<span class="normal">640</span>
+<span class="normal">641</span>
+<span class="normal">642</span>
+<span class="normal">643</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">annotate_prior</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">prior_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1318,8 +1318,7 @@
 
           <details class="quote">
             <summary>Source code in <code>easyfinemap/easyfinemap.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">447</span>
-<span class="normal">448</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">448</span>
 <span class="normal">449</span>
 <span class="normal">450</span>
 <span class="normal">451</span>
@@ -1390,7 +1389,10 @@
 <span class="normal">516</span>
 <span class="normal">517</span>
 <span class="normal">518</span>
-<span class="normal">519</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/easyfinemap&#39;</span><span class="p">)</span>
+<span class="normal">519</span>
+<span class="normal">520</span>
+<span class="normal">521</span>
+<span class="normal">522</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/easyfinemap&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">cond_sumstat</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -1459,6 +1461,8 @@
         <span class="n">cojo_input</span> <span class="o">=</span> <span class="n">ld</span><span class="o">.</span><span class="n">intersect</span><span class="p">(</span>
             <span class="n">all_sumstats</span><span class="p">,</span> <span class="n">ldref</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/cojo_input_</span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">use_ref_EAF</span>
         <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Lead SNP: </span><span class="si">{</span><span class="n">lead_snp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Conditional SNPs: </span><span class="si">{</span><span class="n">cond_snps</span><span class="p">[</span><span class="s1">&#39;SNPID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">cond_res</span> <span class="o">=</span> <span class="n">ld</span><span class="o">.</span><span class="n">cojo_cond</span><span class="p">(</span>
             <span class="n">cojo_input</span><span class="p">,</span> <span class="n">cond_snps</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/cojo_input_</span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sample_size</span><span class="p">,</span> <span class="n">use_ref_EAF</span>
         <span class="p">)</span>  <span class="c1"># type: ignore</span>
@@ -1727,15 +1731,7 @@
 
           <details class="quote">
             <summary>Source code in <code>easyfinemap/easyfinemap.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">835</span>
-<span class="normal">836</span>
-<span class="normal">837</span>
-<span class="normal">838</span>
-<span class="normal">839</span>
-<span class="normal">840</span>
-<span class="normal">841</span>
-<span class="normal">842</span>
-<span class="normal">843</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">843</span>
 <span class="normal">844</span>
 <span class="normal">845</span>
 <span class="normal">846</span>
@@ -1861,7 +1857,15 @@
 <span class="normal">966</span>
 <span class="normal">967</span>
 <span class="normal">968</span>
-<span class="normal">969</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">finemap_all_loci</span><span class="p">(</span>
+<span class="normal">969</span>
+<span class="normal">970</span>
+<span class="normal">971</span>
+<span class="normal">972</span>
+<span class="normal">973</span>
+<span class="normal">974</span>
+<span class="normal">975</span>
+<span class="normal">976</span>
+<span class="normal">977</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">finemap_all_loci</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">loci</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -2138,10 +2142,7 @@
 
           <details class="quote">
             <summary>Source code in <code>easyfinemap/easyfinemap.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">642</span>
-<span class="normal">643</span>
-<span class="normal">644</span>
-<span class="normal">645</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">645</span>
 <span class="normal">646</span>
 <span class="normal">647</span>
 <span class="normal">648</span>
@@ -2313,7 +2314,15 @@
 <span class="normal">814</span>
 <span class="normal">815</span>
 <span class="normal">816</span>
-<span class="normal">817</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/easyfinemap&#39;</span><span class="p">)</span>
+<span class="normal">817</span>
+<span class="normal">818</span>
+<span class="normal">819</span>
+<span class="normal">820</span>
+<span class="normal">821</span>
+<span class="normal">822</span>
+<span class="normal">823</span>
+<span class="normal">824</span>
+<span class="normal">825</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/easyfinemap&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">finemap_locus</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -2412,6 +2421,7 @@
     <span class="n">fm_input_ol</span> <span class="o">=</span> <span class="n">fm_input</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">prior_file</span><span class="p">:</span>
         <span class="n">fm_input_ol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotate_prior</span><span class="p">(</span><span class="n">fm_input_ol</span><span class="p">,</span> <span class="n">prior_file</span><span class="p">)</span>
+        <span class="n">out_sumstats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotate_prior</span><span class="p">(</span><span class="n">out_sumstats</span><span class="p">,</span> <span class="n">prior_file</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">methods</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">methods_required_ld</span><span class="p">)))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="c1"># TODO: reduce the number of SNPs when using paintor and caviarbf in multiple causal variant mode</span>
         <span class="n">ld_ol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_ld_matrix</span><span class="p">(</span>
@@ -2427,7 +2437,9 @@
             <span class="n">ld_matrix</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/intersc.ld&quot;</span>
             <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;finemap&quot;</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">ld_matrix</span><span class="p">):</span>
-                    <span class="n">finemap_pp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_finemap</span><span class="p">(</span><span class="n">sumstats</span><span class="o">=</span><span class="n">ld_ol</span><span class="p">,</span> <span class="n">ld_matrix</span><span class="o">=</span><span class="n">ld_matrix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                    <span class="n">finemap_pp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_finemap</span><span class="p">(</span>
+                        <span class="n">sumstats</span><span class="o">=</span><span class="n">ld_ol</span><span class="p">,</span> <span class="n">ld_matrix</span><span class="o">=</span><span class="n">ld_matrix</span><span class="p">,</span> <span class="n">prior_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+                    <span class="p">)</span>
                     <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">PP_FINEMAP</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
                         <span class="n">finemap_pp</span>
                     <span class="p">)</span>
@@ -2456,7 +2468,9 @@
                     <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">PP_CAVIARBF</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
             <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;susie&quot;</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">ld_matrix</span><span class="p">):</span>
-                    <span class="n">susie_pp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_susie</span><span class="p">(</span><span class="n">sumstats</span><span class="o">=</span><span class="n">ld_ol</span><span class="p">,</span> <span class="n">ld_matrix</span><span class="o">=</span><span class="n">ld_matrix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                    <span class="n">susie_pp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_susie</span><span class="p">(</span>
+                        <span class="n">sumstats</span><span class="o">=</span><span class="n">ld_ol</span><span class="p">,</span> <span class="n">ld_matrix</span><span class="o">=</span><span class="n">ld_matrix</span><span class="p">,</span> <span class="n">prior_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+                    <span class="p">)</span>
                     <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">PP_SUSIE</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">susie_pp</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;LD matrix </span><span class="si">{</span><span class="n">ld_matrix</span><span class="si">}</span><span class="s2"> does not exist, skip </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -2464,7 +2478,7 @@
             <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;polyfun_finemap&quot;</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">ld_matrix</span><span class="p">):</span>
                     <span class="n">polyfun_finemap_pp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_finemap</span><span class="p">(</span>
-                        <span class="n">sumstats</span><span class="o">=</span><span class="n">ld_ol</span><span class="p">,</span> <span class="n">ld_matrix</span><span class="o">=</span><span class="n">ld_matrix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+                        <span class="n">sumstats</span><span class="o">=</span><span class="n">ld_ol</span><span class="p">,</span> <span class="n">ld_matrix</span><span class="o">=</span><span class="n">ld_matrix</span><span class="p">,</span> <span class="n">prior_file</span><span class="o">=</span><span class="n">prior_file</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
                     <span class="p">)</span>
                     <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">PP_POLYFUN_FINEMAP</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
                         <span class="n">polyfun_finemap_pp</span>
@@ -2475,7 +2489,7 @@
             <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;polyfun_susie&quot;</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">ld_matrix</span><span class="p">):</span>
                     <span class="n">polyfun_susie_pp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_susie</span><span class="p">(</span>
-                        <span class="n">sumstats</span><span class="o">=</span><span class="n">ld_ol</span><span class="p">,</span> <span class="n">ld_matrix</span><span class="o">=</span><span class="n">ld_matrix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+                        <span class="n">sumstats</span><span class="o">=</span><span class="n">ld_ol</span><span class="p">,</span> <span class="n">ld_matrix</span><span class="o">=</span><span class="n">ld_matrix</span><span class="p">,</span> <span class="n">prior_file</span><span class="o">=</span><span class="n">prior_file</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
                     <span class="p">)</span>
                     <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">PP_POLYFUN_SUSIE</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_sumstats</span><span class="p">[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
                         <span class="n">polyfun_susie_pp</span>
@@ -2567,21 +2581,21 @@
 
           <details class="quote">
             <summary>Source code in <code>easyfinemap/easyfinemap.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">819</span>
-<span class="normal">820</span>
-<span class="normal">821</span>
-<span class="normal">822</span>
-<span class="normal">823</span>
-<span class="normal">824</span>
-<span class="normal">825</span>
-<span class="normal">826</span>
-<span class="normal">827</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">827</span>
 <span class="normal">828</span>
 <span class="normal">829</span>
 <span class="normal">830</span>
 <span class="normal">831</span>
 <span class="normal">832</span>
-<span class="normal">833</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">finemap_locus_parallel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
+<span class="normal">833</span>
+<span class="normal">834</span>
+<span class="normal">835</span>
+<span class="normal">836</span>
+<span class="normal">837</span>
+<span class="normal">838</span>
+<span class="normal">839</span>
+<span class="normal">840</span>
+<span class="normal">841</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">finemap_locus_parallel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Perform finemapping for a locus in parallel.</span>
 
@@ -2716,10 +2730,7 @@
 
           <details class="quote">
             <summary>Source code in <code>easyfinemap/easyfinemap.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">555</span>
-<span class="normal">556</span>
-<span class="normal">557</span>
-<span class="normal">558</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">558</span>
 <span class="normal">559</span>
 <span class="normal">560</span>
 <span class="normal">561</span>
@@ -2758,7 +2769,10 @@
 <span class="normal">594</span>
 <span class="normal">595</span>
 <span class="normal">596</span>
-<span class="normal">597</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_credset</span><span class="p">(</span>
+<span class="normal">597</span>
+<span class="normal">598</span>
+<span class="normal">599</span>
+<span class="normal">600</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_credset</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">finemap_res</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">max_causal</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -2921,10 +2935,7 @@
 
           <details class="quote">
             <summary>Source code in <code>easyfinemap/easyfinemap.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">521</span>
-<span class="normal">522</span>
-<span class="normal">523</span>
-<span class="normal">524</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">524</span>
 <span class="normal">525</span>
 <span class="normal">526</span>
 <span class="normal">527</span>
@@ -2953,7 +2964,10 @@
 <span class="normal">550</span>
 <span class="normal">551</span>
 <span class="normal">552</span>
-<span class="normal">553</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">prepare_ld_matrix</span><span class="p">(</span>
+<span class="normal">553</span>
+<span class="normal">554</span>
+<span class="normal">555</span>
+<span class="normal">556</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">prepare_ld_matrix</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">ldref</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -4324,7 +4338,8 @@ and 0.2 for binary traits.</p>
 <span class="normal">442</span>
 <span class="normal">443</span>
 <span class="normal">444</span>
-<span class="normal">445</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/easyfinemap&#39;</span><span class="p">)</span>
+<span class="normal">445</span>
+<span class="normal">446</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@io_in_tempdir</span><span class="p">(</span><span class="s1">&#39;./tmp/easyfinemap&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">run_susie</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">sumstats</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -4362,9 +4377,10 @@ and 0.2 for binary traits.</p>
         <span class="n">susie_input</span><span class="p">[</span><span class="s1">&#39;SNPVAR&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">susie_input</span><span class="p">[</span><span class="s1">&#39;SNPVAR&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">susie_input</span><span class="p">[</span><span class="s1">&#39;SNPVAR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">susie_input</span><span class="p">[</span><span class="s1">&#39;SNPVAR&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">susie_input</span><span class="p">)</span>
-    <span class="n">susie_input</span><span class="p">[[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">Z</span><span class="p">]]</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+    <span class="n">susie_input</span><span class="p">[[</span><span class="n">ColName</span><span class="o">.</span><span class="n">SNPID</span><span class="p">,</span> <span class="n">ColName</span><span class="o">.</span><span class="n">Z</span><span class="p">,</span> <span class="s1">&#39;SNPVAR&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/susie.input&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;run SuSiE: </span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s2">/susie.input, prior_file: </span><span class="si">{</span><span class="n">prior_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="kn">import</span> <span class="nn">rpy2.robjects</span> <span class="k">as</span> <span class="nn">ro</span>
     <span class="kn">from</span> <span class="nn">rpy2.rinterface_lib.callbacks</span> <span class="kn">import</span> <span class="n">logger</span> <span class="k">as</span> <span class="n">rpy2_logger</span>
@@ -4379,7 +4395,7 @@ and 0.2 for binary traits.</p>
 <span class="s1">            z = df$Z</span>
 <span class="s1">            prior = df$SNPVAR</span>
 <span class="s1">            library(&#39;susieR&#39;)</span>
-<span class="s1">            res = susie_rss(z, ld, n=</span><span class="si">{</span><span class="n">sample_size</span><span class="si">}</span><span class="s1">, L = </span><span class="si">{</span><span class="n">max_causal</span><span class="si">}</span><span class="s1">)</span>
+<span class="s1">            res = susie_rss(z, ld, n=</span><span class="si">{</span><span class="n">sample_size</span><span class="si">}</span><span class="s1">, L = </span><span class="si">{</span><span class="n">max_causal</span><span class="si">}</span><span class="s1">, prior_weights = prior)</span>
 <span class="s1">            pip = res$pip&#39;&#39;&#39;</span>
     <span class="p">)</span>
     <span class="n">susie_input</span><span class="p">[</span><span class="s1">&#39;pip&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ro</span><span class="o">.</span><span class="n">r</span><span class="p">(</span><span class="s1">&#39;pip&#39;</span><span class="p">)</span>
