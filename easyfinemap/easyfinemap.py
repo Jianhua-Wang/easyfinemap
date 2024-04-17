@@ -514,6 +514,8 @@ class EasyFinemap(object):
             cojo_input = ld.intersect(
                 all_sumstats, ldref, f"{temp_dir}/cojo_input_{chrom}", use_ref_EAF
             )
+            self.logger.debug(f"Lead SNP: {lead_snp}")
+            self.logger.debug(f"Conditional SNPs: {cond_snps['SNPID'].tolist()}")
             cond_res = ld.cojo_cond(
                 cojo_input, cond_snps, f"{temp_dir}/cojo_input_{chrom}", sample_size, use_ref_EAF
             )  # type: ignore

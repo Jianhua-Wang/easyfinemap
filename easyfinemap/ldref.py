@@ -38,7 +38,9 @@ class LDRef:
             self.tmp_root.mkdir(parents=True)
 
     @io_in_tempdir(dir='./tmp/ldref')
-    def _clean_per_chr(self, inprefix: str, outprefix: str, mac: int = 10, temp_dir: Optional[str] = None) -> None:
+    def _clean_per_chr(
+        self, inprefix: str, outprefix: str, mac: int = 10, temp_dir: Optional[str] = None
+    ) -> None:
         """
         Clean the extracted LD reference per chromosome.
 
@@ -199,7 +201,9 @@ class LDRef:
                     raise FileNotFoundError(f"{inprefix}.bed not found.")
                 else:
                     # check if chrom is in the bim file
-                    res = check_output(f'grep "^{chrom}[[:space:]]" {inprefix}.bim | head -n 1', shell=True)
+                    res = check_output(
+                        f'grep "^{chrom}[[:space:]]" {inprefix}.bim | head -n 1', shell=True
+                    )
                     if len(res.decode()) == 0:
                         self.logger.warning(f"Chrom {chrom} not found in {inprefix}.bim")
                         continue
@@ -359,7 +363,9 @@ class LDRef:
                 #     raise RuntimeError(res.stderr)
                 freq = pd.read_csv(f"{temp_dir}/freq.frq", delim_whitespace=True)
                 freq['A2_frq'] = 1 - freq['MAF']
-                overlap_sumstat['EAF'] = freq['A2_frq'].where(freq['A2'] == overlap_sumstat['EA'], freq['MAF'])
+                overlap_sumstat['EAF'] = freq['A2_frq'].where(
+                    freq['A2'] == overlap_sumstat['EA'], freq['MAF']
+                )
                 overlap_sumstat['MAF'] = freq['MAF']
             return overlap_sumstat
 
@@ -455,7 +461,9 @@ class LDRef:
             The updated summary statistics.
         """
         if not use_ref_EAF and ColName.EAF not in sumstats.columns:
-            raise ValueError(f"{ColName.EAF} is not in the sumstats, please set use_ref_EAF to True")
+            raise ValueError(
+                f"{ColName.EAF} is not in the sumstats, please set use_ref_EAF to True"
+            )
         chrom = sumstats[ColName.CHR].iloc[0]
         # ld = LDRef()
         # all_sumstats = pd.concat([sumstats, cond_snps], ignore_index=True)
@@ -466,7 +474,16 @@ class LDRef:
         cojo_input = sumstats.copy()
         cojo_input[ColName.N] = sample_size
         cojo_input = cojo_input[
-            [ColName.SNPID, ColName.EA, ColName.NEA, ColName.EAF, ColName.BETA, ColName.SE, ColName.P, ColName.N]
+            [
+                ColName.SNPID,
+                ColName.EA,
+                ColName.NEA,
+                ColName.EAF,
+                ColName.BETA,
+                ColName.SE,
+                ColName.P,
+                ColName.N,
+            ]
         ]
         cojo_input.rename(
             columns={
@@ -504,17 +521,82 @@ class LDRef:
         self.logger.debug(f"conditional analysis: {' '.join(cmd)}")
         res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
         if res.returncode != 0:
-            self.logger.error(res.stderr)
-            raise RuntimeError(res.stderr)
-        else:
-            cond_res = pd.read_csv(f"{cojo_outfile}.cma.cojo", sep="\t", usecols=["SNP", "bC", "bC_se", "pC"])
+            except_error = 'Error: there is a collinearity problem of the given list of SNPs.'
+            if except_error in res.stdout and os.path.exists(
+                f"{temp_dir}/cojo_{chrom}.cond.given.cojo"
+            ):
+                self.logger.warning(
+                    'there is a collinearity problem of the given list of SNPs. Try slct again'
+                )
+                cojo_input[cojo_input['SNP'].isin(cond_snps[ColName.SNPID])].to_csv(
+                    f"{temp_dir}/cojo_{chrom}.reslct.ma", sep=" ", index=False
+                )
+                cmd = [
+                    self.gcta,
+                    "--bfile",
+                    ldref,
+                    "--cojo-file",
+                    f"{temp_dir}/cojo_{chrom}.reslct.ma",
+                    "--diff-freq",
+                    "1",
+                    "--cojo-collinear",
+                    "0.9",
+                    "--cojo-slct",
+                    "--out",
+                    f"{temp_dir}/cojo_{chrom}.reslct",
+                ]
+                self.logger.debug(f"slct again: {' '.join(cmd)}")
+                res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+                if res.returncode != 0:
+                    self.logger.error(res.stdout)
+                    raise RuntimeError(res.stdout)
+                else:
+                    new_conds = pd.read_csv(
+                        f"{temp_dir}/cojo_{chrom}.reslct.jma.cojo", delim_whitespace=True
+                    )
+                    new_conds = new_conds[new_conds['pJ'] < 5e-8]['SNP'].values
+                    with open(f"{temp_dir}/cojo_cond_{chrom}.snps", "w") as f:
+                        f.write('\n'.join(new_conds))
+                    cmd = [
+                        self.gcta,
+                        "--bfile",
+                        ldref,
+                        "--cojo-file",
+                        cojo_p_file,
+                        "--diff-freq",
+                        "1",
+                        "--cojo-collinear",
+                        "0.99",
+                        "--cojo-cond",
+                        f"{temp_dir}/cojo_cond_{chrom}.snps",
+                        "--out",
+                        cojo_outfile,
+                    ]
+                    self.logger.debug(f"conditional analysis: {' '.join(cmd)}")
+                    res = run(cmd, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+                    if res.returncode != 0:
+                        self.logger.error(res.stdout)
+                        raise RuntimeError(res.stdout)
+            # self.logger.error(res.stdout)
+            # raise RuntimeError(res.stdout)
+        if os.path.exists(f"{cojo_outfile}.cma.cojo"):
+            cond_res = pd.read_csv(
+                f"{cojo_outfile}.cma.cojo", sep="\t", usecols=["SNP", "bC", "bC_se", "pC"]
+            )
             cond_res.rename(
-                columns={"SNP": ColName.SNPID, "bC": ColName.COJO_BETA, "bC_se": ColName.COJO_SE, "pC": ColName.COJO_P},
+                columns={
+                    "SNP": ColName.SNPID,
+                    "bC": ColName.COJO_BETA,
+                    "bC_se": ColName.COJO_SE,
+                    "pC": ColName.COJO_P,
+                },
                 inplace=True,
             )
             output = sumstats.merge(cond_res, on=ColName.SNPID, how="left")
             output = output.dropna(subset=[ColName.COJO_P, ColName.COJO_BETA, ColName.COJO_SE])
             return output
+        else:
+            return sumstats
 
     @io_in_tempdir('./tmp/ldref')
     def annotate_r2(
@@ -547,7 +629,9 @@ class LDRef:
             raise ValueError("Only one chromosome is allowed.")
         chrom = sumstat[ColName.CHR].iloc[0]
         if len(sumstat) > 100000:
-            self.logger.warning("The sumstats is large, it may take a long time to annotate the r2.")
+            self.logger.warning(
+                "The sumstats is large, it may take a long time to annotate the r2."
+            )
         ld = LDRef()
         r2_df = sumstat.copy()
         r2_input = ld.intersect(sumstat, ldref.format(chrom=chrom), f"{temp_dir}/r2_input_{chrom}")
