@@ -4,7 +4,7 @@ easyfinemap is a Python package that can be installed directly using pip. Howeve
 
 1. Download the environment configuration file:
    ```bash
-   wget https://github.com/Jianhua-Wang/easyfinemap/blob/main/environment.yml
+   wget https://raw.githubusercontent.com/Jianhua-Wang/easyfinemap/main/environment.yml
    ```
 2. Create a conda environment:
    ```bash

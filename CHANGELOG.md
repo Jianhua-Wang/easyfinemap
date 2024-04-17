@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.4.4] - 2024-04-17
+
+### Added
+
+### Changed
+
+### Fixed
+- fix bugs in polyfun+finemap and polyfun+susie
+
+
 ## [0.4.4] - 2023-11-09
 
 ### Added

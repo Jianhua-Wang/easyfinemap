@@ -420,9 +420,10 @@ class EasyFinemap(object):
             susie_input['SNPVAR'] = susie_input['SNPVAR'] / susie_input['SNPVAR'].sum()
         else:
             susie_input['SNPVAR'] = 1 / len(susie_input)
-        susie_input[[ColName.SNPID, ColName.Z]].to_csv(
+        susie_input[[ColName.SNPID, ColName.Z, 'SNPVAR']].to_csv(
             f"{temp_dir}/susie.input", sep=" ", index=False, header=True
         )
+        self.logger.debug(f"run SuSiE: {temp_dir}/susie.input, prior_file: {prior_file}")
 
         import rpy2.robjects as ro
         from rpy2.rinterface_lib.callbacks import logger as rpy2_logger
@@ -437,7 +438,7 @@ class EasyFinemap(object):
                 z = df$Z
                 prior = df$SNPVAR
                 library('susieR')
-                res = susie_rss(z, ld, n={sample_size}, L = {max_causal})
+                res = susie_rss(z, ld, n={sample_size}, L = {max_causal}, prior_weights = prior)
                 pip = res$pip'''
         )
         susie_input['pip'] = ro.r('pip')
@@ -738,6 +739,7 @@ class EasyFinemap(object):
         fm_input_ol = fm_input.copy()
         if prior_file:
             fm_input_ol = self.annotate_prior(fm_input_ol, prior_file)
+            out_sumstats = self.annotate_prior(out_sumstats, prior_file)
         if len(set(methods).intersection(set(methods_required_ld))) > 0:
             # TODO: reduce the number of SNPs when using paintor and caviarbf in multiple causal variant mode
             ld_ol = self.prepare_ld_matrix(
@@ -753,7 +755,9 @@ class EasyFinemap(object):
                 ld_matrix = f"{temp_dir}/intersc.ld"
                 if method == "finemap":
                     if os.path.exists(ld_matrix):
-                        finemap_pp = self.run_finemap(sumstats=ld_ol, ld_matrix=ld_matrix, **kwargs)
+                        finemap_pp = self.run_finemap(
+                            sumstats=ld_ol, ld_matrix=ld_matrix, prior_file=None, **kwargs
+                        )
                         out_sumstats[ColName.PP_FINEMAP] = out_sumstats[ColName.SNPID].map(
                             finemap_pp
                         )
@@ -782,7 +786,9 @@ class EasyFinemap(object):
                         out_sumstats[ColName.PP_CAVIARBF] = np.nan
                 elif method == "susie":
                     if os.path.exists(ld_matrix):
-                        susie_pp = self.run_susie(sumstats=ld_ol, ld_matrix=ld_matrix, **kwargs)
+                        susie_pp = self.run_susie(
+                            sumstats=ld_ol, ld_matrix=ld_matrix, prior_file=None, **kwargs
+                        )
                         out_sumstats[ColName.PP_SUSIE] = out_sumstats[ColName.SNPID].map(susie_pp)
                     else:
                         self.logger.warning(f"LD matrix {ld_matrix} does not exist, skip {method}")
@@ -790,7 +796,7 @@ class EasyFinemap(object):
                 elif method == "polyfun_finemap":
                     if os.path.exists(ld_matrix):
                         polyfun_finemap_pp = self.run_finemap(
-                            sumstats=ld_ol, ld_matrix=ld_matrix, **kwargs
+                            sumstats=ld_ol, ld_matrix=ld_matrix, prior_file=prior_file, **kwargs
                         )
                         out_sumstats[ColName.PP_POLYFUN_FINEMAP] = out_sumstats[ColName.SNPID].map(
                             polyfun_finemap_pp
@@ -801,7 +807,7 @@ class EasyFinemap(object):
                 elif method == "polyfun_susie":
                     if os.path.exists(ld_matrix):
                         polyfun_susie_pp = self.run_susie(
-                            sumstats=ld_ol, ld_matrix=ld_matrix, **kwargs
+                            sumstats=ld_ol, ld_matrix=ld_matrix, prior_file=prior_file, **kwargs
                         )
                         out_sumstats[ColName.PP_POLYFUN_SUSIE] = out_sumstats[ColName.SNPID].map(
                             polyfun_susie_pp
