@@ -222,12 +222,13 @@ class EasyFinemap(object):
             self.logger.error(res.stderr)
             raise RuntimeError(res.stderr)
         else:
-            # if max_causal == 1:
-            finemap_res = pd.read_csv(f"{temp_dir}/finemap.snp", sep=" ", usecols=["rsid", "prob"])
-            finemap_res = pd.Series(finemap_res["prob"].values, index=finemap_res["rsid"].values)  # type: ignore
-            # else:
-            #     raise NotImplementedError
-            return finemap_res
+            if os.path.getsize(f"{temp_dir}/finemap.snp") == 0:
+                self.logger.warning("FINEMAP output is empty.")
+                return pd.Series(index=finemap_input["rsid"].values)
+            else:
+                finemap_res = pd.read_csv(f"{temp_dir}/finemap.snp", sep=" ", usecols=["rsid", "prob"])
+                finemap_res = pd.Series(finemap_res["prob"].values, index=finemap_res["rsid"].values)  # type: ignore
+                return finemap_res
 
     @io_in_tempdir('./tmp/easyfinemap')
     def run_paintor(
@@ -741,7 +742,6 @@ class EasyFinemap(object):
         fm_input_ol = fm_input.copy()
         if prior_file:
             fm_input_ol = self.annotate_prior(fm_input_ol, prior_file)
-            out_sumstats = self.annotate_prior(out_sumstats, prior_file)
         if len(set(methods).intersection(set(methods_required_ld))) > 0:
             # TODO: reduce the number of SNPs when using paintor and caviarbf in multiple causal variant mode
             ld_ol = self.prepare_ld_matrix(

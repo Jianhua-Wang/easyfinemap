@@ -1,13 +1,9 @@
 # Changelog
 
-## [0.4.6] - 2024-04-17
-
-### Added
-
-### Changed
+## [0.4.7] - 2025-03-09
 
 ### Fixed
-- fix bugs in cojo cond
+- fix bugs in finemap failed
 
 ## [0.4.5] - 2024-04-17
 
